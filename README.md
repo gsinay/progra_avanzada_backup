@@ -10,7 +10,7 @@ Todo el proceso de recolección de tareas y actividades está automatizado, por 
 
 | Nombre | Mail UC | Usuario Discord |
 | :-: | :-: | :-: |
-| {Tu nombre} | {Tu correo UC} | {Tu usuario Discord} |
+| Gabriel Sinay Codner | gsinay@uc.cl | Discord: GaboS#4792 |
 
 ## Sobre las entregas
 
