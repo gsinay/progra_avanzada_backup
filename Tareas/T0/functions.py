@@ -1,5 +1,6 @@
 # Agregar los imports que estimen necesarios
 import os
+from traceback import print_tb
 
 
 def cargar_tablero(nombre_archivo: str) -> list:
@@ -16,6 +17,15 @@ def cargar_tablero(nombre_archivo: str) -> list:
 
 
 def guardar_tablero(nombre_archivo: str, tablero: list) -> None:
+    dimension = str(len(tablero))
+    data_a_guardar = str(dimension + ",") #empezamos armando la string a guardar con el formato especificado
+    for fila in tablero:
+        for columna in fila:
+            data_a_guardar += str(columna) +"," #concatenamos la data de la cordenada (fila, columna) a la string
+    data_a_guardar = data_a_guardar[:-1] #borramos el ultimo coma 
+    
+
+
     pass
 
 
@@ -59,3 +69,7 @@ if __name__ == "__main__":
 
     resultado = verificar_tortugas(tablero_2x2_sol)
     print(resultado)  # Debería ser 0
+
+
+
+    
