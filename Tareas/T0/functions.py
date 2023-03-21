@@ -1,8 +1,18 @@
 # Agregar los imports que estimen necesarios
+import os
 
 
 def cargar_tablero(nombre_archivo: str) -> list:
-    pass
+    with open(os.path.join( "Archivos", nombre_archivo), "r") as lectura_de_archivo:
+        lineas = lectura_de_archivo.readlines()
+        dimension = int(lineas[0][0]) #dimension del tablero dado por el primer elemento
+        lineas = lineas[0][2:] #limpia la linea de data para excluir la informacion de la dimension del tablero
+        lista_general = lineas.split(",") #splita la string a una lista de dimension n^2x1
+        lista_final = []
+        for i in range(0, len(lista_general), dimension): #cambia la lista a lista de listas cuadrada de dimensión del tablero
+            posicion = i
+            lista_final.append(lista_general[posicion : posicion + dimension])
+        return lista_final
 
 
 def guardar_tablero(nombre_archivo: str, tablero: list) -> None:
