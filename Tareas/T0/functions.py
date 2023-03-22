@@ -113,50 +113,14 @@ def verificar_validad(tablero: list) -> bool:
             elif verificar_tortugas(tablero) > 0:
                 return False
         return True
-
-def limpiar_tablero(tablero: list, coordenadas: tuple, skip: bool) -> list:
-    for fila in range(coordenadas[0], len(tablero)):
-        for columna in range(coordenadas[1], len(tablero)):
-            if skip:
-                skip = False 
-                continue
-            if tablero[fila][columna] == "-":
-                tablero[fila][columna] = "T"
-                if verificar_validad(tablero) == False:
-                    tablero[fila][columna] = "-" 
-    return tablero
-    
- 
+           
 def solucionar_tablero(tablero: list) -> list:
-    tablero = limpiar_tablero(tablero, (0,0), False)
-    imprimir_tablero(tablero)
-    for fila in range(len(tablero) -1, -1, -1):
-        for columna in range(len(tablero) - 1, -1, -1):
-            if tablero[fila][columna] == "T":
-                tablero[fila][columna] == "-"
-                if verificar_validad(tablero):
-                    tablero = limpiar_tablero(tablero, (fila, columna), True)
-                    imprimir_tablero(tablero)
-                else:
-                    tablero[fila][columna] == "T"
-            elif tablero[fila][columna] == "-":
-                tablero[fila][columna] = "T"
-                if verificar_validad(tablero):
-                    tablero = limpiar_tablero(tablero, (fila, columna), True)
-                    imprimir_tablero(tablero)
-                else:
-                    tablero[fila][columna] = "-"
-    return tablero
-                    
-                    
+    pass
+    
             
 
 
-#hola = solucionar_tablero([["3", "-", "-", "-"], ["-", "-", "-", "-"], ["-", "-", "4", "-"], ["2", "-", "-", "4"]])
-#imprimir_tablero(hola)
 
-hola = solucionar_tablero([["-", "3", "-"], ["-", "-", "2"], ["-", "-", "-"]])
-imprimir_tablero(hola)
             
 
 if __name__ == "__main__":
