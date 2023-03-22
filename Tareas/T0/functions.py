@@ -1,6 +1,29 @@
 # Agregar los imports que estimen necesarios
 import os
-from traceback import print_tb
+
+def valor_derecha(tablero: list, posicion : tuple) -> str: #retorna valor de la derecha de la celda
+    return str(tablero[posicion[0]][posicion[1] + 1])
+
+def valor_izquierda(tablero: list, posicion : tuple) -> str: #retorna valor de la izquierda de la celda
+    return tablero[posicion[0]][posicion[1] - 1]
+
+def valor_abajo(tablero: list, posicion : tuple) -> str: #retorna valor de abajo de la celda
+    return tablero[posicion[0] + 1][posicion[1]]
+def valor_abajo(tablero: list, posicion : tuple) -> str: #retorna valor de arriba de la celda
+    return tablero[posicion[0] - 1][posicion[1]]
+
+def encontrar_indices_vecinos(fila, columna, dimension):
+    indices = []
+    if fila > 0:
+        indices.append((fila-1, columna))
+    elif fila + 1 < dimension:
+        indices.append((fila + 1, columna))
+    if columna > 0:
+        indices.append((fila, columna-1))
+    elif columna + 1 < dimension:
+        indices.append((fila, columna + 1))
+    return indices
+
 
 
 def cargar_tablero(nombre_archivo: str) -> list:
@@ -37,7 +60,7 @@ def verificar_valor_bombas(tablero: list) -> int:
 
 def verificar_alcance_bomba(tablero: list, coordenada: tuple) -> int:
     valor = tablero[coordenada[0]][coordenada[1]]
-    cuenta_vertical, cuenta_horizontal = 0, 0 
+    cuenta_vertical, cuenta_horizontal = 0, 0 #variables auxilar que cuentan tortugas 
     if str(valor).isnumeric():
         #primero checkeamos verticalmente
         for numero_fila in range(len(tablero)):
@@ -58,15 +81,33 @@ def verificar_alcance_bomba(tablero: list, coordenada: tuple) -> int:
     else:
         return 0 
 
-        
+
+def verificar_tortugas(tablero: list) -> int: 
+    count = 0
+    for fila in range(len(tablero)):
+        for columna in range(len(tablero)):
+            count_vecinos = 0 #contador de tortugas en indices vecinos
+            elementos_vecinos = []
+            if tablero[fila][columna] == "T":
+                indices_vecinos = encontrar_indices_vecinos(fila, columna, len(tablero))
+                for elemento in indices_vecinos:
+                    if tablero[elemento[0]][elemento[1]] == "T":
+                        count_vecinos += 1
+            if count_vecinos > 1:
+                count += 1
+    return count
 
 
-def verificar_tortugas(tablero: list) -> int:
-    pass
+            
+    
+                
+
 
 
 def solucionar_tablero(tablero: list) -> list:
     pass
+            
+
 
 
 if __name__ == "__main__":
