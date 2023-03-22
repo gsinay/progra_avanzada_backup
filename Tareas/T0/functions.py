@@ -1,5 +1,6 @@
 # Agregar los imports que estimen necesarios
 import os
+from tablero import imprimir_tablero
 
 def valor_derecha(tablero: list, posicion : tuple) -> str: #retorna valor de la derecha de la celda
     return str(tablero[posicion[0]][posicion[1] + 1])
@@ -16,11 +17,11 @@ def encontrar_indices_vecinos(fila, columna, dimension):
     indices = []
     if fila > 0:
         indices.append((fila-1, columna))
-    elif fila + 1 < dimension:
+    if fila + 1 < dimension:
         indices.append((fila + 1, columna))
     if columna > 0:
-        indices.append((fila, columna-1))
-    elif columna + 1 < dimension:
+        indices.append((fila, columna - 1))
+    if columna + 1 < dimension:
         indices.append((fila, columna + 1))
     return indices
 
@@ -77,6 +78,7 @@ def verificar_alcance_bomba(tablero: list, coordenada: tuple) -> int:
                 else: cuenta_horizontal= 1 #restauramos pues tenemos una tortuga hacia la celda
             elif numero_columna > coordenada[1]:
                 if str(tablero[coordenada[0]][numero_columna]) != "T": cuenta_horizontal += 1
+                else: break
         return cuenta_horizontal + cuenta_vertical + 1 #sumamos 1 para contar la celda misma
     else:
         return 0 
@@ -93,22 +95,69 @@ def verificar_tortugas(tablero: list) -> int:
                 for elemento in indices_vecinos:
                     if tablero[elemento[0]][elemento[1]] == "T":
                         count_vecinos += 1
-            if count_vecinos > 1:
+            if count_vecinos >= 1:
                 count += 1
     return count
 
+def verificar_validad(tablero: list) -> bool:
+    '''
+    Esta funcion determina si el tablero viola las reglas:
+    1.) relacionado al posicionamiento de tortugas
+    2.) el alcanze de las bombas (sin contar si se ha quedado largo, solo si se restringio demasiado )
+    '''
+    for fila in range(len(tablero)):
+        for columna in range(len(tablero)):
+            if str(tablero[fila][columna]).isnumeric():
+                if verificar_alcance_bomba(tablero, (fila, columna)) < int(tablero[fila][columna]):
+                    return False
+            elif verificar_tortugas(tablero) > 0:
+                return False
+        return True
 
-            
+def limpiar_tablero(tablero: list, coordenadas: tuple, skip: bool) -> list:
+    for fila in range(coordenadas[0], len(tablero)):
+        for columna in range(coordenadas[1], len(tablero)):
+            if skip:
+                skip = False 
+                continue
+            if tablero[fila][columna] == "-":
+                tablero[fila][columna] = "T"
+                if verificar_validad(tablero) == False:
+                    tablero[fila][columna] = "-" 
+    return tablero
     
-                
-
-
-
+ 
 def solucionar_tablero(tablero: list) -> list:
-    pass
+    tablero = limpiar_tablero(tablero, (0,0), False)
+    imprimir_tablero(tablero)
+    for fila in range(len(tablero) -1, -1, -1):
+        for columna in range(len(tablero) - 1, -1, -1):
+            if tablero[fila][columna] == "T":
+                tablero[fila][columna] == "-"
+                if verificar_validad(tablero):
+                    tablero = limpiar_tablero(tablero, (fila, columna), True)
+                    imprimir_tablero(tablero)
+                else:
+                    tablero[fila][columna] == "T"
+            elif tablero[fila][columna] == "-":
+                tablero[fila][columna] = "T"
+                if verificar_validad(tablero):
+                    tablero = limpiar_tablero(tablero, (fila, columna), True)
+                    imprimir_tablero(tablero)
+                else:
+                    tablero[fila][columna] = "-"
+    return tablero
+                    
+                    
             
 
 
+#hola = solucionar_tablero([["3", "-", "-", "-"], ["-", "-", "-", "-"], ["-", "-", "4", "-"], ["2", "-", "-", "4"]])
+#imprimir_tablero(hola)
+
+hola = solucionar_tablero([["-", "3", "-"], ["-", "-", "2"], ["-", "-", "-"]])
+imprimir_tablero(hola)
+            
 
 if __name__ == "__main__":
     tablero_2x2 = [
