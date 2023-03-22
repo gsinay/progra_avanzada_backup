@@ -15,7 +15,7 @@ def cargar_tablero(nombre_archivo: str) -> list:
         return lista_final
 
 
-def guardar_tablero(nombre_archivo: str, tablero: list) -> None:
+def guardar_tablero(nombre_archivo: str, tablero: list) -> None: ##ME FALTA ESCRIBIR ARCHIVO
     dimension = str(len(tablero))
     data_a_guardar = str(dimension + ",") #empezamos armando la string con el formato especificado
     for fila in tablero:
@@ -30,13 +30,35 @@ def verificar_valor_bombas(tablero: list) -> int:
         for elemento in fila:
             if str(elemento).isnumeric(): #checkeando si es bomba
                 if int(elemento) < 2 or elemento > (2*len(tablero)) - 1:
-                    cantidad_bombas_invalidas += 1
+                    cantidad_bombas_invalidas += 1 #sumando si se pasa de largo
     return cantidad_bombas_invalidas
 
 
 
 def verificar_alcance_bomba(tablero: list, coordenada: tuple) -> int:
-    pass
+    valor = tablero[coordenada[0]][coordenada[1]]
+    cuenta_vertical, cuenta_horizontal = 0, 0 
+    if str(valor).isnumeric():
+        #primero checkeamos verticalmente
+        for numero_fila in range(len(tablero)):
+            if numero_fila < coordenada[0]: #vemos si estamos arriba del caracter
+                if str(tablero[numero_fila][coordenada[1]]) != "T": cuenta_vertical += 1
+                else: cuenta_vertical = 1 #restauramos pues tenemos una tortuga hacia la celda
+            elif numero_fila > coordenada[0]:
+                if str(tablero[numero_fila][coordenada[1]]) != "T": cuenta_vertical += 1
+                else: break
+        #ahora checkeamos para los lados
+        for numero_columna in range(len(tablero)):
+            if numero_columna < coordenada[1]: #vemos si estamos a la izquierda del caracter
+                if str(tablero[coordenada[0]][numero_columna]) != "T": cuenta_horizontal += 1
+                else: cuenta_horizontal= 1 #restauramos pues tenemos una tortuga hacia la celda
+            elif numero_columna > coordenada[1]:
+                if str(tablero[coordenada[0]][numero_columna]) != "T": cuenta_horizontal += 1
+        return cuenta_horizontal + cuenta_vertical + 1 #sumamos 1 para contar la celda misma
+    else:
+        return 0 
+
+        
 
 
 def verificar_tortugas(tablero: list) -> int:
