@@ -11,9 +11,7 @@ Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **
 
 ## Consideraciones generales :octocat:
 
-<Descripción de lo que hace y que **_no_** hace la tarea que entregaron junto
-con detalles de último minuto y consideraciones como por ejemplo cambiar algo
-en cierta línea del código o comentar una función>
+La tarea logra todos los objetivos planteados. En funciones.py se completaron las funciones pedidas en el enunciado con la ayuda de otras funciones. El funcionamiento de aquellas esta comentado adentro del codigo. La mas importante a recalcar es la funcion solucionar, que retorna True o False dependiendo de si se puede o no solucionar el tablero, modificandolo al mismo tiempo pues es una función de recursion tipo backtracking. 
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
