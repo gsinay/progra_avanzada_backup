@@ -56,7 +56,7 @@ No se ocuparon librerias externas, solamente el modulo os.
 
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:
-No se crearon modulos nuevos. TODAS las funciones estan en functioms.py el cual no exede las 200 lineas.
+No se crearon modulos nuevos. TODAS las funciones estan en functions.py el cual no exede las 200 lineas.
 
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
