@@ -179,9 +179,7 @@ def obtener_solucion(tablero: list, columna: int, fila: int) -> bool:
 
             
 
-
-
-         
+      
 
 if __name__ == "__main__":
     tablero_2x2 = [

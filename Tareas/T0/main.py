@@ -53,7 +53,6 @@ while menu_principal:
                     print("Se ha terminado el programa. Si quiere volver a ocuparlo corralo nuevamente")
                     menu_acciones = False
                     menu_principal = False
-
     else:
         print('''
         No se encontró ese archivo, verifica que existe en la carpeta Archivos y que 

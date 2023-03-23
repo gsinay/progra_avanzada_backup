@@ -11,70 +11,59 @@ Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **
 
 ## Consideraciones generales :octocat:
 
-<Descripción de lo que hace y que **_no_** hace la tarea que entregaron junto
-con detalles de último minuto y consideraciones como por ejemplo cambiar algo
-en cierta línea del código o comentar una función>
+La tarea logra todos los objetivos planteados. En funciones.py se completaron las funciones pedidas en el enunciado con la ayuda de otras funciones. El funcionamiento de aquellas esta comentado adentro del codigo. La mas importante a recalcar es la funcion solucionar, que retorna True o False dependiendo de si se puede o no solucionar el tablero, modificandolo al mismo tiempo pues es una función de recursion tipo backtracking. 
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
 Explicación: mantén el emoji correspondiente, de manera honesta, para cada item. Si quieres, también puedes agregarlos a los títulos:
-- ❌ si **NO** completaste lo pedido
-- ✅ si completaste **correctamente** lo pedido
-- 🟠 si el item está **incompleto** o tiene algunos errores
+
 #### Menú de Inicio (5 pts) (7%)
-##### ❌✅🟠 Seleccionar Archivo
-##### ❌✅🟠 Validar Archivos
+##### ✅ Seleccionar Archivo
+##### ✅ Validar Archivos
 #### Menú de Acciones (11 pts) (15%) 
-##### ❌✅🟠 Opciones
-##### ❌✅🟠 Mostrar tablero 
-##### ❌✅🟠 Validar bombas y tortugas
-##### ❌✅🟠 Revisar solución
-##### ❌✅🟠 Solucionar tablero
-##### ❌✅🟠 Salir
+##### ✅ Opciones
+##### ✅ Mostrar tablero 
+##### ✅ Validar bombas y tortugas
+##### ✅ Revisar solución
+##### ✅ Solucionar tablero
+##### ✅ Salir
 #### Funciones (34 pts) (45%)
-##### ❌✅🟠 Cargar tablero
-##### ❌✅🟠 Guardar tablero
-##### ❌✅🟠 Valor bombas
-##### ❌✅🟠 Alcance bomba
-##### ❌✅🟠 Verificar tortugas
-##### ❌✅🟠 Solucionar tablero
+##### ✅ Cargar tablero
+##### ✅ Guardar tablero
+##### ✅ Valor bombas
+##### ✅ Alcance bomba
+##### ✅ Verificar tortugas
+##### ✅ Solucionar tablero
 #### General: (19 pts) (25%)
-##### ❌✅🟠 Manejo de Archivos
-##### ❌✅🟠 Menús
-##### ❌✅🟠 tablero.py
-##### ❌✅🟠 Módulos
-##### ❌✅🟠 PEP-8
+##### ✅ Manejo de Archivos
+##### ✅ Menús
+##### ✅ tablero.py
+##### ✅ Módulos
+##### 🟠 PEP-8
 #### Bonus: 6 décimas
-##### ❌✅🟠 Funciones atómicas
-##### ❌✅🟠 Regla 5
+##### 🟠 Funciones atómicas (todas menos 2)
+##### ❌ Regla 5
 ## Ejecución :computer:
-El módulo principal de la tarea a ejecutar es  ```archivo.py```. Además se debe crear los siguientes archivos y directorios adicionales:
-1. ```archivo.ext``` en ```ubicación```
-2. ```directorio``` en ```ubicación```
-3. ...
+El módulo principal de la tarea a ejecutar es  ```main.py```. No se deben crear mas archivos. Es mas, si el archivo archivo_sol.txt falta, el codigo lo crea. Todos los archivos que se pueden seleccionar son los de la carpeta archivos y se guardan ahi mismo
+
+### IMPORTANTE: PARA EJECUTAR EL CODIGO ES CONDICIÓN NECESARIA QUE EL TERMINAL ESTÉ UBICADO ADENTRO DE LA CARPETA T0 PUES LOS PATHS SON RELATIVOS DESDE AHÍ
+
 
 
 ## Librerías :books:
 ### Librerías externas utilizadas
-La lista de librerías externas que utilicé fue la siguiente:
-
-1. ```librería_1```: ```función() / módulo```
-2. ```librería_2```: ```función() / módulo``` (debe instalarse)
-3. ...
+No se ocuparon librerias externas, solamente el modulo os.
 
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:
-
-1. ```librería_1```: Contiene a ```ClaseA```, ```ClaseB```, (ser general, tampoco es necesario especificar cada una)...
-2. ```librería_2```: Hecha para <insertar descripción **breve** de lo que hace o qué contiene>
-3. ...
+No se crearon modulos nuevos. TODAS las funciones estan en functions.py el cual no exede las 200 lineas.
 
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
 
-1. <Descripción/consideración 1 y justificación del por qué es válido/a> 
-2. <Descripción/consideración 2 y justificación del por qué es válido/a>
-3. ...
+1. Al salir del programa en el menú de acciones, no se vuelve al menu principal sino que se termina el codigo y para acceder a este hay que correrlo denuevo.
+2. Al ingresar incorrectamente el nombre de un archivo en el menú principal, el programa se cierra y para intentar nuevamente hay que correr el programa denuevo.
+3. Si existe una solucion para un acrhivo en la carpeta Archivos y luego se soluciona el mismo tablero con otra solucion, al guardarla, se pierde la solucion anterior (es decir, si existe el archivo _nombre.txt_ y _nombre_sol.txt_ al decedir solucionar _nombre.txt_ nuevamente, el acrhivo _nombre_sol.txt_ es sobreescrito con la nueva solucion)
 
 PD: <una última consideración (de ser necesaria) o comentario hecho anteriormente que se quiera **recalcar**>
 
