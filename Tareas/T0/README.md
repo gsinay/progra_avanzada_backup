@@ -111,7 +111,7 @@ Lo importante es que expliquen qué hace la función y que si saben que alguna p
 ## Referencias de código externo :book:
 
 Para realizar mi tarea saqué código de:
-1. \https://stackoverflow.com/questions/51657128/how-to-access-the-adjacent-cells-of-each-elements-of-matrix-in-python: esto hace facil saber los indices adyacentes de los elementos del tablero (2 si es equina, 3 si es muralla, 4 si está al medio) y está implementado en el archivo functions.py en las líneas 15-.
+1. \https://stackoverflow.com/questions/51657128/how-to-access-the-adjacent-cells-of-each-elements-of-matrix-in-python: esto hace facil saber los indices adyacentes de los elementos del tablero (2 si es equina, 3 si es muralla, 4 si está al medio) y está implementado en el archivo functions.py en las líneas 4-14.
 
 
 
