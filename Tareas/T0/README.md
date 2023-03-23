@@ -42,7 +42,7 @@ Explicación: mantén el emoji correspondiente, de manera honesta, para cada ite
 ##### 🟠 PEP-8
 #### Bonus: 6 décimas
 ##### 🟠 Funciones atómicas (todas menos 2)
-##### ❌✅🟠 Regla 5
+##### ❌ Regla 5
 ## Ejecución :computer:
 El módulo principal de la tarea a ejecutar es  ```main.py```. No se deben crear mas archivos. Es mas, si el archivo archivo_sol.txt falta, el codigo lo crea. Todos los archivos que se pueden seleccionar son los de la carpeta archivos y se guardan ahi mismo
 
