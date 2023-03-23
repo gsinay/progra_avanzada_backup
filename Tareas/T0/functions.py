@@ -2,6 +2,13 @@
 import os
 
 def encontrar_indices_vecinos(fila, columna, dimension):
+    '''
+    Funcion que retorna los indices vecinos de una posicion del tablero.
+    Ej, si le paso los argumentos fila = 1, columna = 1, dimension = 5
+    retorna [(0,1), (0,2), (1,0), (1,2)]
+    Está citada en el readme de adonde la implementé
+
+    '''
     indices = []
     if fila > 0:
         indices.append((fila-1, columna))
@@ -12,7 +19,6 @@ def encontrar_indices_vecinos(fila, columna, dimension):
     if columna + 1 < dimension:
         indices.append((fila, columna + 1))
     return indices
-
 
 
 def cargar_tablero(nombre_archivo: str) -> list:
@@ -34,17 +40,15 @@ def guardar_tablero(nombre_archivo: str, tablero: list) -> None:
         for columna in fila:
             data_a_guardar += str(columna) +"," #concatenamos la data de la cordenada (fila, columna) a la string
     data_a_guardar = data_a_guardar[:-1] #borramos el ultimo coma 
-    with open(os.path.join("Archivos", nombre_archivo), "w") as datos:
+    with open(os.path.join("Archivos", nombre_archivo[:nombre_archivo.rfind(".")]+"_sol.txt"), "w") as datos:
         datos.write(data_a_guardar)
-
-    
 
 def verificar_valor_bombas(tablero: list) -> int:
     cantidad_bombas_invalidas = 0
     for fila in tablero:
         for elemento in fila:
             if str(elemento).isnumeric(): #checkeando si es bomba
-                if int(elemento) < 2 or elemento > (2*len(tablero)) - 1:
+                if int(elemento) < 2 or int(elemento) > (2*len(tablero)) - 1:
                     cantidad_bombas_invalidas += 1 #sumando si se pasa de largo
     return cantidad_bombas_invalidas
 
