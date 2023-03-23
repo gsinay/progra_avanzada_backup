@@ -46,7 +46,7 @@ Explicación: mantén el emoji correspondiente, de manera honesta, para cada ite
 ## Ejecución :computer:
 El módulo principal de la tarea a ejecutar es  ```main.py```. No se deben crear mas archivos. Es mas, si el archivo archivo_sol.txt falta, el codigo lo crea. Todos los archivos que se pueden seleccionar son los de la carpeta archivos y se guardan ahi mismo
 
-### IMPORTANTE: PARA EJECUTAR EL CODIGO DEBE UIBCARSE ADENTRO DE LA CARPETA T0 PUES LOS PATHS SON RELATIVOS DESDE AHÍ
+### IMPORTANTE: PARA EJECUTAR EL CODIGO ES CONDICIÓN NECESARIA QUE EL TERMINAL ESTÉ UBICADO ADENTRO DE LA CARPETA T0 PUES LOS PATHS SON RELATIVOS DESDE AHÍ
 
 
 
