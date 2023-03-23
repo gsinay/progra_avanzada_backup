@@ -13,7 +13,7 @@ Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **
 
 La tarea logra todos los objetivos planteados. En funciones.py se completaron las funciones pedidas en el enunciado con la ayuda de otras funciones. El funcionamiento de aquellas esta comentado adentro del codigo. La mas importante a recalcar es la funcion solucionar, que retorna True o False dependiendo de si se puede o no solucionar el tablero, modificandolo al mismo tiempo pues es una función de recursion tipo backtracking.
 
-Notar que para solucionar el tablero, el metodo recursivo de backtracking es del tipo fuerza bruta. Es decir, ve uno por uno las posilibidades del tablero hasta llegar a una que sirva. Notar que por cada dimension del tablero que subimos, hay 2^dimiension-dimension_anterior mas posibilidades que recorrer que antes. Por ende, si prueban con tableros altos, el codigo va a demorar un rato en correr (procuren tener bateria y el computador en un lugar frio :))
+Notar que para solucionar el tablero, el metodo recursivo de backtracking es del tipo _fuerza bruta_. Es decir, ve uno por uno las posilibidades del tablero hasta llegar a una que sirva. Notar que por cada dimension del tablero que subimos, hay 2^(dimiension-dimension_anterior) mas posibilidades que recorrer que antes. Por ende, si prueban con tableros altos, el codigo va a demorar un rato en correr (procuren tener bateria y el computador en un lugar frio :))
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
