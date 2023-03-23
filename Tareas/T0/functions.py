@@ -16,7 +16,7 @@ def encontrar_indices_vecinos(fila, columna, dimension):
 
 
 def cargar_tablero(nombre_archivo: str) -> list:
-    with open(os.path.join( "Archivos", nombre_archivo), "r") as lectura_de_archivo:
+    with open(os.path.join("Archivos", nombre_archivo), "r") as lectura_de_archivo:
         lineas = lectura_de_archivo.readlines()
         dimension = int(lineas[0][0]) #dimension del tablero dado por el primer elemento
         lista_general = lineas[0][2:].split(",") #data sin primer elemento dimension y en format lista
@@ -27,13 +27,16 @@ def cargar_tablero(nombre_archivo: str) -> list:
         return lista_final
 
 
-def guardar_tablero(nombre_archivo: str, tablero: list) -> None: ##ME FALTA ESCRIBIR ARCHIVO
+def guardar_tablero(nombre_archivo: str, tablero: list) -> None: 
     dimension = str(len(tablero))
     data_a_guardar = str(dimension + ",") #empezamos armando la string con el formato especificado
     for fila in tablero:
         for columna in fila:
             data_a_guardar += str(columna) +"," #concatenamos la data de la cordenada (fila, columna) a la string
     data_a_guardar = data_a_guardar[:-1] #borramos el ultimo coma 
+    with open(os.path.join("Archivos", nombre_archivo), "w") as datos:
+        datos.write(data_a_guardar)
+
     
 
 def verificar_valor_bombas(tablero: list) -> int:
@@ -118,9 +121,8 @@ def verificar_validad(tablero: list) -> bool:
         return True
 
 def solucionar_tablero(tablero: list) -> list:
-    if solucionar(tablero, 0, 0):
+    if obtener_solucion(tablero, 0, 0):
         return tablero
-    
     return None
 
 def checkear_solucion(tablero: list) -> bool:
@@ -141,7 +143,7 @@ def avanzar_posicion(tablero:list, fila: int, columna: int) -> tuple:
     else:
         return (fila, columna + 1)
 
-def solucionar(tablero: list, columna: int, fila: int) -> bool:
+def obtener_solucion(tablero: list, columna: int, fila: int) -> bool:
     ''' funcion recursiva para solucionar tablero o establecer si no se puede'''
     #casos base
     if not verificar_validad(tablero):
@@ -156,17 +158,17 @@ def solucionar(tablero: list, columna: int, fila: int) -> bool:
     if tablero[fila][columna] == "-":
         tablero[fila][columna] = 'T'
         #cambiamos un vacio a tortuga y llamamos recursion ahora con ese tablero
-        if solucionar(tablero, columna_proxima, fila_proxima):
+        if obtener_solucion(tablero, columna_proxima, fila_proxima):
             return True
         # si llega a un caso base falso, no era valido y cambiamos a vacio
         tablero[fila][columna] = '-'
         #si se cambia a vacio y tampoco se puede, retornamos falso ya que no hay solucion
-        if solucionar(tablero, columna_proxima, fila_proxima):
+        if obtener_solucion(tablero, columna_proxima, fila_proxima):
             return True
         return False
     #este else en caso que nos encontremos sobre tortuga o numero (no se pueden sobreponer elementos)
     else:
-        return solucionar(tablero, columna_proxima, fila_proxima)
+        return obtener_solucion(tablero, columna_proxima, fila_proxima)
 
             
 
