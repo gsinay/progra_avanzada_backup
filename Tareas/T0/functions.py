@@ -10,7 +10,7 @@ def valor_izquierda(tablero: list, posicion : tuple) -> str: #retorna valor de l
 
 def valor_abajo(tablero: list, posicion : tuple) -> str: #retorna valor de abajo de la celda
     return tablero[posicion[0] + 1][posicion[1]]
-def valor_abajo(tablero: list, posicion : tuple) -> str: #retorna valor de arriba de la celda
+def valor_arriba(tablero: list, posicion : tuple) -> str: #retorna valor de arriba de la celda
     return tablero[posicion[0] - 1][posicion[1]]
 
 def encontrar_indices_vecinos(fila, columna, dimension):
@@ -58,31 +58,64 @@ def verificar_valor_bombas(tablero: list) -> int:
     return cantidad_bombas_invalidas
 
 
-
 def verificar_alcance_bomba(tablero: list, coordenada: tuple) -> int:
-    valor = tablero[coordenada[0]][coordenada[1]]
-    cuenta_vertical, cuenta_horizontal = 0, 0 #variables auxilar que cuentan tortugas 
+    fila = coordenada[0]
+    columna = coordenada[1]
+
+    valor = tablero[fila][columna]
+    # if str(valor).isnumeric():
+    #     # primero checkeamos verticalmente
+    #     for numero_fila in range(len(tablero)):
+    #         if numero_fila < fila: #vemos si estamos arriba del caracter
+    #             if str(tablero[numero_fila][columna]) != "T": cuenta_vertical += 1
+    #             else: cuenta_vertical = 0 #restauramos pues tenemos una tortuga hacia la celda
+    #         elif numero_fila > fila:
+    #             if str(tablero[numero_fila][columna]) != "T": cuenta_vertical += 1
+    #             else: break
+    #     #ahora checkeamos para los lados
+    #     for numero_columna in range(len(tablero)):
+    #         if numero_columna < columna: #vemos si estamos a la izquierda del caracter
+    #             if str(tablero[fila][numero_columna]) != "T": cuenta_horizontal += 1
+    #             else: cuenta_horizontal= 0 #restauramos pues tenemos una tortuga hacia la celda
+    #         elif numero_columna > columna:
+    #             if str(tablero[fila][numero_columna]) != "T": cuenta_horizontal += 1
+    #             else: break
+    #     return cuenta_horizontal + cuenta_vertical + 1 #sumamos 1 para contar la celda misma
     if str(valor).isnumeric():
-        #primero checkeamos verticalmente
-        for numero_fila in range(len(tablero)):
-            if numero_fila < coordenada[0]: #vemos si estamos arriba del caracter
-                if str(tablero[numero_fila][coordenada[1]]) != "T": cuenta_vertical += 1
-                else: cuenta_vertical = 1 #restauramos pues tenemos una tortuga hacia la celda
-            elif numero_fila > coordenada[0]:
-                if str(tablero[numero_fila][coordenada[1]]) != "T": cuenta_vertical += 1
-                else: break
-        #ahora checkeamos para los lados
-        for numero_columna in range(len(tablero)):
-            if numero_columna < coordenada[1]: #vemos si estamos a la izquierda del caracter
-                if str(tablero[coordenada[0]][numero_columna]) != "T": cuenta_horizontal += 1
-                else: cuenta_horizontal= 1 #restauramos pues tenemos una tortuga hacia la celda
-            elif numero_columna > coordenada[1]:
-                if str(tablero[coordenada[0]][numero_columna]) != "T": cuenta_horizontal += 1
-                else: break
-        return cuenta_horizontal + cuenta_vertical + 1 #sumamos 1 para contar la celda misma
+        valor_vertical_arriba = fila - 1
+        valor_vertical_abajo = fila + 1
+        valor_horizontal_derecha = columna + 1
+        valor_horizontal_izquierda = columna -1
+
+        conteo = 0
+
+        while valor_vertical_arriba >= 0:
+            if tablero[valor_vertical_arriba][columna] == "T":
+                break
+            conteo += 1
+            valor_vertical_arriba -= 1
+
+        while valor_vertical_abajo < len(tablero):
+            if tablero[valor_vertical_abajo][columna] == "T":
+                break
+            conteo += 1
+            valor_vertical_abajo += 1
+        
+        while valor_horizontal_derecha < len(tablero):
+            if tablero[fila][valor_horizontal_derecha] == "T":
+                break
+            conteo += 1
+            valor_horizontal_derecha += 1
+
+        while valor_horizontal_izquierda >= 0:
+            if tablero[fila][valor_horizontal_izquierda] == "T":
+                break
+            conteo += 1
+            valor_horizontal_izquierda -= 1
+        
+        return conteo + 1
     else:
         return 0 
-
 
 def verificar_tortugas(tablero: list) -> int: 
     count = 0
@@ -113,15 +146,54 @@ def verificar_validad(tablero: list) -> bool:
             elif verificar_tortugas(tablero) > 0:
                 return False
         return True
-           
+
 def solucionar_tablero(tablero: list) -> list:
-    pass
-    
+    solucionar(tablero, 0, 0)
+    return tablero
+
+def checkear_solucion(tablero):
+    for fila in range(len(tablero)):
+        for columna in range(len(tablero)):
+            if str(tablero[fila][columna]).isnumeric():
+                if verificar_alcance_bomba(tablero, (fila, columna)) != int(tablero[fila][columna]):
+                    return False
+    return True
+
+def avanzar_posicion(tablero:list, fila: int, columna: int) -> tuple:
+    if columna == len(tablero) - 1:
+        return (fila + 1, 0)
+    else:
+        return (fila, columna + 1)
+
+def solucionar(tablero: list, columna: int, fila: int) -> bool:
+    if not verificar_validad(tablero):
+        return False
+    if checkear_solucion(tablero):
+        return True
+    if fila == len(tablero):
+        return False
+
+    fila_proxima, columna_proxima = avanzar_posicion(tablero, fila, columna)
+
+    if tablero[fila][columna] == "-":
+        tablero[fila][columna] = 'T'
+
+        if solucionar(tablero, columna_proxima, fila_proxima):
+            return True
+
+        tablero[fila][columna] = '-'
+
+        if solucionar(tablero, columna_proxima, fila_proxima):
+            return True
+        return False
+    else:
+        return solucionar(tablero, columna_proxima, fila_proxima)
+
             
 
 
 
-            
+         
 
 if __name__ == "__main__":
     tablero_2x2 = [
