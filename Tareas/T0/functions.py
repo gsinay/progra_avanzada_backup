@@ -41,7 +41,7 @@ def guardar_tablero(nombre_archivo: str, tablero: list) -> None:
             data_a_guardar += str(columna) +"," #concatenamos la data de la cordenada (fila, columna) a la string
     data_a_guardar = data_a_guardar[:-1] #borramos el ultimo coma 
     #en la siguiente linea ocupamos .rfind para no repetir la extension .txt
-    with open(os.path.join("Archivos", nombre_archivo[:nombre_archivo.rfind(".")]+"_sol.txt"), "w") as datos:
+    with open(os.path.join("Archivos", nombre_archivo[ : nombre_archivo.rfind(".")]+"_sol.txt"), "w") as datos:
         datos.write(data_a_guardar)
 
 def verificar_valor_bombas(tablero: list) -> int:
@@ -57,7 +57,9 @@ def verificar_valor_bombas(tablero: list) -> int:
 def verificar_alcance_bomba(tablero: list, coordenada: tuple) -> int:
     fila = coordenada[0]
     columna = coordenada[1]
-
+    if fila < 0 or fila > (len(tablero) - 1) or columna < 0  or columna > (len(tablero-1)):
+        print("ingresaste una coordenada invalida")
+        return
     valor = tablero[fila][columna]
     if str(valor).isnumeric():
         valor_vertical_arriba = fila - 1
@@ -66,7 +68,7 @@ def verificar_alcance_bomba(tablero: list, coordenada: tuple) -> int:
         valor_horizontal_izquierda = columna -1
 
         conteo = 0
-        #vamos a checkera los cuatro casos hasta que se tope a la celda o una tortuga
+        #vamos a checkear los cuatro casos hasta que se tope a la celda o una tortuga
         while valor_vertical_arriba >= 0: 
             if tablero[valor_vertical_arriba][columna] == "T":
                 break

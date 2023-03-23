@@ -62,11 +62,3 @@ while menu_principal:
         ''')
         menu_principal = False
     
-
-    
-
-
-  
-
-#with open(os.path.join("Archivos", "probandoo.txt"), "w") as datos:
-    #datos.write("oopsies")
