@@ -1,17 +1,5 @@
 # Agregar los imports que estimen necesarios
 import os
-from tablero import imprimir_tablero
-
-def valor_derecha(tablero: list, posicion : tuple) -> str: #retorna valor de la derecha de la celda
-    return str(tablero[posicion[0]][posicion[1] + 1])
-
-def valor_izquierda(tablero: list, posicion : tuple) -> str: #retorna valor de la izquierda de la celda
-    return tablero[posicion[0]][posicion[1] - 1]
-
-def valor_abajo(tablero: list, posicion : tuple) -> str: #retorna valor de abajo de la celda
-    return tablero[posicion[0] + 1][posicion[1]]
-def valor_arriba(tablero: list, posicion : tuple) -> str: #retorna valor de arriba de la celda
-    return tablero[posicion[0] - 1][posicion[1]]
 
 def encontrar_indices_vecinos(fila, columna, dimension):
     indices = []
@@ -63,24 +51,6 @@ def verificar_alcance_bomba(tablero: list, coordenada: tuple) -> int:
     columna = coordenada[1]
 
     valor = tablero[fila][columna]
-    # if str(valor).isnumeric():
-    #     # primero checkeamos verticalmente
-    #     for numero_fila in range(len(tablero)):
-    #         if numero_fila < fila: #vemos si estamos arriba del caracter
-    #             if str(tablero[numero_fila][columna]) != "T": cuenta_vertical += 1
-    #             else: cuenta_vertical = 0 #restauramos pues tenemos una tortuga hacia la celda
-    #         elif numero_fila > fila:
-    #             if str(tablero[numero_fila][columna]) != "T": cuenta_vertical += 1
-    #             else: break
-    #     #ahora checkeamos para los lados
-    #     for numero_columna in range(len(tablero)):
-    #         if numero_columna < columna: #vemos si estamos a la izquierda del caracter
-    #             if str(tablero[fila][numero_columna]) != "T": cuenta_horizontal += 1
-    #             else: cuenta_horizontal= 0 #restauramos pues tenemos una tortuga hacia la celda
-    #         elif numero_columna > columna:
-    #             if str(tablero[fila][numero_columna]) != "T": cuenta_horizontal += 1
-    #             else: break
-    #     return cuenta_horizontal + cuenta_vertical + 1 #sumamos 1 para contar la celda misma
     if str(valor).isnumeric():
         valor_vertical_arriba = fila - 1
         valor_vertical_abajo = fila + 1
@@ -88,8 +58,8 @@ def verificar_alcance_bomba(tablero: list, coordenada: tuple) -> int:
         valor_horizontal_izquierda = columna -1
 
         conteo = 0
-
-        while valor_vertical_arriba >= 0:
+        #vamos a checkera los cuatro casos hasta que se tope a la celda o una tortuga
+        while valor_vertical_arriba >= 0: 
             if tablero[valor_vertical_arriba][columna] == "T":
                 break
             conteo += 1
@@ -148,10 +118,14 @@ def verificar_validad(tablero: list) -> bool:
         return True
 
 def solucionar_tablero(tablero: list) -> list:
-    solucionar(tablero, 0, 0)
-    return tablero
+    if solucionar(tablero, 0, 0):
+        return tablero
+    
+    return None
 
-def checkear_solucion(tablero):
+def checkear_solucion(tablero: list) -> bool:
+    '''Esta funcion auxiliar chequea si el tablero se encuentra resuelto o no
+    en cuanto al requerimiento de las bombas.'''
     for fila in range(len(tablero)):
         for columna in range(len(tablero)):
             if str(tablero[fila][columna]).isnumeric():
@@ -160,12 +134,16 @@ def checkear_solucion(tablero):
     return True
 
 def avanzar_posicion(tablero:list, fila: int, columna: int) -> tuple:
+    '''Esta funcion toma la posicion en el tablero y retorna la siguiente moviendose
+    primero horizontalmente y luego verticalmente'''
     if columna == len(tablero) - 1:
         return (fila + 1, 0)
     else:
         return (fila, columna + 1)
 
 def solucionar(tablero: list, columna: int, fila: int) -> bool:
+    ''' funcion recursiva para solucionar tablero o establecer si no se puede'''
+    #casos base
     if not verificar_validad(tablero):
         return False
     if checkear_solucion(tablero):
@@ -177,15 +155,16 @@ def solucionar(tablero: list, columna: int, fila: int) -> bool:
 
     if tablero[fila][columna] == "-":
         tablero[fila][columna] = 'T'
-
+        #cambiamos un vacio a tortuga y llamamos recursion ahora con ese tablero
         if solucionar(tablero, columna_proxima, fila_proxima):
             return True
-
+        # si llega a un caso base falso, no era valido y cambiamos a vacio
         tablero[fila][columna] = '-'
-
+        #si se cambia a vacio y tampoco se puede, retornamos falso ya que no hay solucion
         if solucionar(tablero, columna_proxima, fila_proxima):
             return True
         return False
+    #este else en caso que nos encontremos sobre tortuga o numero (no se pueden sobreponer elementos)
     else:
         return solucionar(tablero, columna_proxima, fila_proxima)
 
