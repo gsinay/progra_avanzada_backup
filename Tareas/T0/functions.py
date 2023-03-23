@@ -40,6 +40,7 @@ def guardar_tablero(nombre_archivo: str, tablero: list) -> None:
         for columna in fila:
             data_a_guardar += str(columna) +"," #concatenamos la data de la cordenada (fila, columna) a la string
     data_a_guardar = data_a_guardar[:-1] #borramos el ultimo coma 
+    #en la siguiente linea ocupamos .rfind para no repetir la extension .txt
     with open(os.path.join("Archivos", nombre_archivo[:nombre_archivo.rfind(".")]+"_sol.txt"), "w") as datos:
         datos.write(data_a_guardar)
 
