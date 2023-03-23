@@ -8,10 +8,12 @@ menu_acciones = True #variable para ver si estamos dentro del menu de archivo es
 
 while menu_principal:
     lista_de_archivos = os.listdir("Archivos")
-    print(lista_de_archivos)
+
     print('''
-    Bienvenido al menú de Inicio. ingrese el nombre del archivo a cargar incluyendo su extensión! \n
+    Bienvenido al menú de Inicio. ingrese el nombre del archivo a cargar incluyendo su extensión! 
+    Debe ser alguno de los siguientes: \n
     ''')
+    print(lista_de_archivos)
     nombre_archivo = input()
     if nombre_archivo in lista_de_archivos:
         tablero = cargar_tablero(nombre_archivo)
@@ -46,9 +48,12 @@ while menu_principal:
                         print("\n El tablero esta solucionado, no hay nada que hacer")
                     else:
                         tablero_solucionado = solucionar_tablero(tablero)
-                        guardar_tablero(nombre_archivo, tablero_solucionado)
-                        print(f"¡Hay solucion! Se ha guardado en la carpeta Archivos y se ve así:")
-                        imprimir_tablero(tablero_solucionado)
+                        if tablero_solucionado!= None:
+                            guardar_tablero(nombre_archivo, tablero_solucionado)
+                            print(f"¡Hay solucion! Se ha guardado en la carpeta Archivos y se ve así:")
+                            imprimir_tablero(tablero_solucionado)
+                        else:
+                            print("No hay solucion :(. Favor cargar otro tablero")
                 elif accion == 5:
                     print("Se ha terminado el programa. Si quiere volver a ocuparlo corralo nuevamente")
                     menu_acciones = False

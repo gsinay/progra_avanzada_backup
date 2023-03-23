@@ -57,9 +57,10 @@ def verificar_valor_bombas(tablero: list) -> int:
 def verificar_alcance_bomba(tablero: list, coordenada: tuple) -> int:
     fila = coordenada[0]
     columna = coordenada[1]
-    if fila < 0 or fila > (len(tablero) - 1) or columna < 0  or columna > (len(tablero-1)):
-        print("ingresaste una coordenada invalida")
-        return
+    if fila < 0 or fila > (len(tablero) - 1):
+        if columna < 0  or columna > (len(tablero-1)):
+            print("ingresaste una coordenada invalida")
+            return
     valor = tablero[fila][columna]
     if str(valor).isnumeric():
         valor_vertical_arriba = fila - 1
