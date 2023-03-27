@@ -180,32 +180,32 @@ def obtener_solucion(tablero: list, columna: int, fila: int) -> bool:
 
             
 
-      
+#código de prueba     
+# if __name__ == "__main__":
+#     tablero_2x2 = [
+#         ['-', 2],
+#         ['-', '-']
+#     ]
+#     resultado = verificar_valor_bombas(tablero_2x2)
+#     print(resultado)  # Debería ser 0
 
-if __name__ == "__main__":
-    tablero_2x2 = [
-        ['-', 2],
-        ['-', '-']
-    ]
-    resultado = verificar_valor_bombas(tablero_2x2)
-    print(resultado)  # Debería ser 0
+#     resultado = verificar_alcance_bomba(tablero_2x2, (0, 1))
+#     print(resultado)  # Debería ser 3
 
-    resultado = verificar_alcance_bomba(tablero_2x2, (0, 1))
-    print(resultado)  # Debería ser 3
+#     tablero_resuelto = solucionar_tablero(tablero_2x2)
+#     print(tablero_resuelto)
 
-    tablero_resuelto = solucionar_tablero(tablero_2x2)
-    print(tablero_resuelto)
+#     tablero_2x2_sol = [
+#         ['T', 2],
+#         ['-', '-']
+#     ]
 
-    tablero_2x2_sol = [
-        ['T', 2],
-        ['-', '-']
-    ]
+#     resultado = verificar_alcance_bomba(tablero_2x2, (0, 1))
+#     print(resultado)  # Debería ser 2
 
-    resultado = verificar_alcance_bomba(tablero_2x2, (0, 1))
-    print(resultado)  # Debería ser 2
+#     resultado = verificar_tortugas(tablero_2x2_sol)
+#     print(resultado)  # Debería ser 0
 
-    resultado = verificar_tortugas(tablero_2x2_sol)
-    print(resultado)  # Debería ser 0
 
 
 
