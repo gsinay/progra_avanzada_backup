@@ -73,11 +73,8 @@ Los supuestos que realicé durante la tarea son los siguientes:
 4. Los archivos que serán cargados serán todos en archivos .txt y subidos a la carpeta Archivos dentro de T0, y son todos en el formato:
    ##### Dimension, n <sub>1</sub>, ... , n<sub>dimension<sup>2<sup></sub>
 5. Los tableros cargados no serán de dimension "grandes" i.e. del orden 10, pues la complejidad del problema crece al orden de 2<sup>n<sup>2</sup></sup>. Con un tablero 7x7 de el código demora aprox 7 minutos en solucionar, desconozco en dimensiones mayores.
+6. Los archivos a probar serán subidos antes de correr el main al directorio Archivos. El programa solamente muestra los archivos en este directorio y solamente puede leer / solucionar los archivos de este directorio. Si el archivo no se encuentra en la carpeta Archivos, se considerará que exte no existe (ver punto 2.)
 
-PD: <una última consideración (de ser necesaria) o comentario hecho anteriormente que se quiera **recalcar**>
-
-
--------
 
 
 
