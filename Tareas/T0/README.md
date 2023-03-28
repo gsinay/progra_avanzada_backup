@@ -36,7 +36,7 @@ Notar que para solucionar el tablero, el metodo recursivo de backtracking es del
 ##### ✅ Módulos
 ##### 🟠 PEP-8. Puede ser que se me pasó alguna indentación a espacio y no tab. Algunas lineas de mas de 100 carácteres si se cuenta comentarios informativos.
 #### Bonus: 6 décimas
-##### 🟠 Funciones atómicas: todas menos 2 (obtener_solucion y verificar_alcance_bombas)
+##### 🟠 Funciones atómicas: todas menos 1 (verificar_alcance_bombas)
 ##### ❌ Regla 5
 ## Ejecución :computer:
 El módulo principal de la tarea a ejecutar es  ```main.py```. No se deben crear mas archivos. Es mas, si el archivo archivo_sol.txt falta en la carepata Archivos (lo cual sucede cuando se está probando un tablero nuevo, por ejemplo, con un nombre nuevo expecífico) el codigo lo crea. Todos los archivos que se pueden seleccionar son los de la carpeta archivos y se guardan ahi mismo. Por esto mismo, para el correcto uso del código, se deben seguir los siguientes pasos:
