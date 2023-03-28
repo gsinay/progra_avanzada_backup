@@ -1,6 +1,6 @@
 import os
 from functions import cargar_tablero, guardar_tablero, verificar_valor_bombas 
-from functions import verificar_alcance_bomba, verificar_tortugas, solucionar_tablero, checkear_solucion
+from functions import verificar_tortugas, solucionar_tablero, checkear_solucion
 from tablero import imprimir_tablero
 
 menu_principal = True #variable para ver si estamos corriendo el programa
@@ -10,10 +10,11 @@ while menu_principal:
     lista_de_archivos = os.listdir("Archivos")
 
     print('''
-    Bienvenido al menú de Inicio. ingrese el nombre del archivo a cargar incluyendo su extensión! 
+    Bienvenido al menú de Inicio. ingrese el nombre del archivo a cargar incluyendo su extensión
     Debe ser alguno de los siguientes: \n
     ''')
-    print(lista_de_archivos)
+    for archivo in lista_de_archivos:
+        print(archivo, end=", ")
     nombre_archivo = input()
     if nombre_archivo in lista_de_archivos:
         tablero = cargar_tablero(nombre_archivo)

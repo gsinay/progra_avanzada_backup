@@ -50,7 +50,6 @@ Por defecto imprimir_tablero tiene el parametro utf8 en True, por lo que
 en caso de que no se pueda visualizar bien en consola, se debera cambiar
 el valor de utf8 a False.
 '''
-
 # Cambiar utf8=False si no se puede visualizar bien en consola
 def imprimir_tablero(tablero, utf8=True):
     if utf8:

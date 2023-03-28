@@ -1,4 +1,3 @@
-# Agregar los imports que estimen necesarios
 import os
 
 def encontrar_indices_vecinos(fila, columna, dimension):
