@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 class Animal(ABC):
     
     def __init__(self, peso, nombre, *args, **kwargs):
-        super().__init__(*kwargs, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__energia = 100
         self.peso = peso
         self.nombre = nombre
@@ -16,15 +16,15 @@ class Animal(ABC):
         return self.__energia
     
     @energia.setter
-    def energia(self, cambio_energia):
-        if self.__energia - cambio_energia < 0:
+    def energia(self, nueva_energia):
+        if nueva_energia < 0:
             self.__energia = 0
         else:
-            self.__energia -= cambio_energia
+            self.__energia = nueva_energia
 
 
 class Terrestre(Animal, ABC):
-    def __init__(self, cantidad_patas = None, *args, **kwargs):
+    def __init__(self, cantidad_patas, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.cantidad_patas = cantidad_patas
 
@@ -33,22 +33,20 @@ class Terrestre(Animal, ABC):
     
     def desplazarse(self) -> str:
        valor = self.energia_gastada_por_desplazamiento()
-       self.energia -= valor
+       self.energia = self.energia - valor
        return "caminando..."
 
       
 
     
 class Acuatico(Animal, ABC):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     def energia_gastada_por_desplazamiento(self) -> int:
         return self.peso * 2
     
     def desplazarse(self) -> str:
         valor = self.energia_gastada_por_desplazamiento()
-        self.__energia = self.__energia - valor
+        self.energia = self.energia - valor
         return "nadando..."
 
 
@@ -56,7 +54,7 @@ class Perro(Terrestre):
     def __init__(self, raza, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.raza = raza
-        self.cantidad_patas = 4
+        
 
     def ladrar(self):
         return "guau guau"
@@ -65,10 +63,20 @@ class Pez(Acuatico):
     def __init__(self, color, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.color = color
+    
+    def nadar(self):
+        return "moviendo aleta"
 
 class Ornitorrinco(Acuatico, Terrestre):
-    def __init__ (self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+   
+    def desplazarse(self) -> str:
+        valor_tierra =  Terrestre.energia_gastada_por_desplazamiento(self)
+        valor_agua = Acuatico.energia_gastada_por_desplazamiento(self)
+        promedio = round((valor_tierra + valor_agua) / 2)
+        self.energia = self.energia - promedio
+        return "caminando...nadando..." 
+
+
 
     
     
@@ -77,13 +85,13 @@ class Ornitorrinco(Acuatico, Terrestre):
 
 
 if __name__ == '__main__':
-    perro = Perro(nombre='Pongo', cantidad_patas=4, raza='Dalmata', peso=3)
+    perro = Perro(nombre='Pongo', raza='Dalmata', peso=3, cantidad_patas = 4)
     pez = Pez(nombre='Nemo', color='rojo', peso=1)
-    ornitorrinco = Ornitorrinco(nombre='Perry', peso=2)
-
+    ornitorrinco = Ornitorrinco(nombre='Perry', peso=2, cantidad_patas = 6)
     print(perro.energia)
-    alo = perro.desplazarse()
+    print(perro.energia_gastada_por_desplazamiento())
+    hola = perro.desplazarse()
     print(perro.energia)
-   
-   #pez.desplazarse()
-    #ornitorrinco.desplazarse()
+    chao = pez.desplazarse()
+    hello = ornitorrinco.desplazarse()
+    print(hola, chao, hello)
