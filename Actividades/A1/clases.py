@@ -40,6 +40,8 @@ class Terrestre(Animal, ABC):
 
     
 class Acuatico(Animal, ABC):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     def energia_gastada_por_desplazamiento(self) -> int:
         return self.peso * 2
@@ -67,7 +69,9 @@ class Pez(Acuatico):
     def nadar(self):
         return "moviendo aleta"
 
-class Ornitorrinco(Acuatico, Terrestre):
+class Ornitorrinco(Terrestre, Acuatico):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
    
     def desplazarse(self) -> str:
         valor_tierra =  Terrestre.energia_gastada_por_desplazamiento(self)
@@ -77,21 +81,14 @@ class Ornitorrinco(Acuatico, Terrestre):
         return "caminando...nadando..." 
 
 
-
-    
-    
-    
     
 
 
 if __name__ == '__main__':
+
+   
+
     perro = Perro(nombre='Pongo', raza='Dalmata', peso=3, cantidad_patas = 4)
     pez = Pez(nombre='Nemo', color='rojo', peso=1)
     ornitorrinco = Ornitorrinco(nombre='Perry', peso=2, cantidad_patas = 6)
-    print(perro.energia)
-    print(perro.energia_gastada_por_desplazamiento())
-    hola = perro.desplazarse()
-    print(perro.energia)
-    chao = pez.desplazarse()
-    hello = ornitorrinco.desplazarse()
-    print(hola, chao, hello)
+    
