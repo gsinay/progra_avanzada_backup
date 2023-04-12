@@ -1,11 +1,15 @@
 from abc import abstractmethod, ABC
 class Animal(ABC):
+
+    id = 0
     
     def __init__(self, peso, nombre, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__energia = 100
         self.peso = peso
         self.nombre = nombre
+        self.identificador = Animal.id
+        Animal.id += 1
 
     @abstractmethod
     def desplazarse(self):
