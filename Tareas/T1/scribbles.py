@@ -100,7 +100,7 @@ class ExcavadorDocencio(Excavador):
     def cavar(self):
         if self.descansando == False:
             metros_cavados = round((30/self.edad + (self.felicidad + 2*self.fuerza)/10) * \
-                                    (1/10 * self.arena_actual.dificultad_arena), 2) #ojo con esto mas adelante
+                                    (1/10 * 5), 2) #ojo con esto mas adelante
             self.energia -= self.gastar_energia()
             self.felicidad += FELICIDAD_ADICIONAL_DOCENCIO
             self.fuerza += FUERZA_ADICIONAL_DOCENCIO
@@ -122,7 +122,7 @@ class ExcavadorTareo(Excavador):
         super().__init__(*args, **kwargs)
 
     def cavar(self):
-        if self.descansando == False:
+        if self.descandando == False:
             metros_cavados = round((30/self.__edad + (self.felicidad + 2*self.fuerza)/10) * \
                                     (1/10 * self.arena_actual.dificultad_arena), 2) #ojo con esto mas adelante
             self.energia -= self.gastar_energia()
@@ -140,18 +140,16 @@ class ExcavadorHibrido(ExcavadorDocencio, ExcavadorTareo):
         super().__init__(*args, **kwargs)
 
     def cavar(self):
-        metros_cavados = round((30/self.edad + (self.felicidad + 2*self.fuerza)/10) * \
-                                (1/10 * self.arena_actual.dificultad_arena), 2) #ojo con esto mas adelante
         perdida_energia = int((ExcavadorDocencio.calcular_gasto_energia_total(self) + \
                             ExcavadorTareo.gastar_energia(self)) / 2)
-        if self.energia - perdida_energia < 20:
-            self.energia = 20
-        else:
-            self.energia -= perdida_energia
+        self.energia -= perdida_energia
+        metros_cavados = round((30/self.edad + (self.felicidad + 2*self.fuerza)/10) * \
+                                (1/10 * self.arena_actual.dificultad_arena), 2) #ojo con esto mas adelante
         return metros_cavados
 
+gabe = ExcavadorDocencio(Nombre = "Gabe", Edad = 60, Fuerza = 10, Suerte = 10, Felicidad = 10, Energia = 30, Arena_actual = "seca")
+for i in range (0,40):
+    print(gabe.energia)
+    print(f"se han cavado {gabe.cavar()} metros y la energia ahora es {gabe.energia}")
 
 
-
-
-    
