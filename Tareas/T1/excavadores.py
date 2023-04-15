@@ -4,7 +4,7 @@ FELICIDAD_ADICIONAL_DOCENCIO, FUERZA_ADICIONAL_DOCENCIO, ENERGIA_PERDIDA_DOCENCI
 SUERTE_ADICIONAL_TAREO, EDAD_ADICIONAL_TAREO, FELICIDAD_PERDIDA_TAREO
 from items import Tesoro, Consumible
 from random import choices, randint
-from datos import tesoros, consumibles
+from datos import  lista_items
 
 class Excavador(ABC):
     def __init__(self, Nombre, Edad, Energia, Fuerza, Suerte, \
@@ -85,30 +85,15 @@ class Excavador(ABC):
             encontrar_consumible = choices([True, False], \
                             weights=[PROB_ENCONTRAR_CONSUMIBLE, 1-PROB_ENCONTRAR_CONSUMIBLE], k=1)[0] 
             if encontrar_consumible:
-                numero_random = randint(0, len(consumibles)-1)
+                numero_random = randint(0, len(lista_items[0])-1)
                 #leyendo los datos del consumible random:
-                nombre = consumibles[numero_random][0]
-                tipo = "Consumible"
-                descripcion = consumibles[numero_random][1]
-                energia = consumibles[numero_random][2]
-                fuerza = consumibles[numero_random][3]
-                suerte = consumibles[numero_random][4]
-                felicidad = consumibles[numero_random][5]
                 #retorna un objeto consumible
-                return Consumible(Nombre= nombre, Tipo =tipo, Descripcion = descripcion, \
-                                  Energia =  energia, Fuerza = fuerza, \
-                                    Suerte = suerte, Felicidad = felicidad)
+                return lista_items[0][numero_random]
             else:
-                numero_random = randint(0, len(tesoros)-1)
-                tipo = "Tesoro"
-                nombre = tesoros[numero_random][0]
-                descripcion = tesoros[numero_random][1]
-                calidad = tesoros[numero_random][2]
-                cambio = tesoros[numero_random][3]
-                return Tesoro(Nombre = nombre, Tipo = tipo, Descripcion = descripcion, \
-                                Calidad = calidad, Cambio = cambio)
+                numero_random = randint(0, len(lista_items[1])-1)
+                return lista_items[1][numero_random]
         else:
-            print("No encontraste ningun Item :(")
+            return None
 
             
     def gastar_energia(self):
