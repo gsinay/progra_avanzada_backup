@@ -12,5 +12,6 @@ with open("tesoros.csv", "r") as archivo: #haciendo lista de listas de los tesor
         tesoros.append(linea_limpia.split(","))
 
 if __name__=="__main__":
-    print(consumibles)
     print(tesoros)
+    print(consumibles)
+  
