@@ -1,25 +1,27 @@
 from  arenas import Arena, Arena_normal, Arena_mojada, Arena_rocosa, Arena_magnetica
-from excavadores import Excavador, ExcavadorDocencio, ExcavadorHibrido, ExcavadorTareo
-from items import Item, Consumible, Tesoro
-from datos import tesoros, consumibles, arenas_mojadas, arenas_rocosas, arenas_magneticas,\
+from excavadores import ExcavadorDocencio, ExcavadorHibrido, ExcavadorTareo
+from datos import arenas_mojadas, arenas_rocosas, arenas_magneticas,\
 arenas_normales, excavadores
 from parametros import PROB_LLUVIA, PROB_TERREMOTO, PROB_DERRUMBE, METROS_PERDIDOS_DERRUMBE, \
-PROB_INICIAR_EVENTO
+PROB_INICIAR_EVENTO, DIAS_TOTALES_TORNEO, METROS_META, ARENA_INICIAL, EXCAVADORES_INICIALES
 from random import choices, randint, choice
+from funciones_auxiliares import filtrar
+
+
 
 class Torneo:
     def __init__(self, Arena: Arena, Eventos: set, Equipo: set, \
-                 Mochila: list, Metros_cavados: float, Meta: float, \
-                 Dias_transcurridos: int, Dias_totales: int,  \
+                 Mochila: list, Metros_cavados: float,  \
+                 Dias_transcurridos: int,  \
                  *args, **kwargs) -> None: 
         self.arena = Arena
         self.eventos = Eventos
         self.equipo = Equipo
         self.mochila = Mochila
         self.metros_cavados = Metros_cavados
-        self.meta = Meta
+        self.meta = METROS_META
         self.dias_transcurridos = Dias_transcurridos
-        self.dias_totales = Dias_totales
+        self.dias_totales = DIAS_TOTALES_TORNEO
 
     def simular_dia(self):
         print(f" Dia {self.dias_transcurridos} de {self.dias_totales} ")
@@ -85,7 +87,7 @@ class Torneo:
     def abrir_tesoro(self, tesoro):
         if tesoro.calidad == "1": #vamos a agregar un trabajador
             if tesoro.cambio.lower() == "docencio":
-                excavadores_filtrados = [excavador for excavador in excavadores if excavadores[3] == "docencio"]
+                excavadores_filtrados = filtrar(excavadores, "docencio")
                 excavador_random = choice(excavadores_filtrados)
                 self.equipo.add(ExcavadorDocencio(Nombre = excavador_random[0], \
                                                  Tipo = excavador_random[1], \
@@ -96,9 +98,9 @@ class Torneo:
                                                             felicidad = excavador_random[6]))
                 excavadores.remove(excavador_random)
             elif tesoro.cambio.lower() == "tareo":
-                excavadores_filtrados = [excavador for excavador in excavadores if excavadores[3] == "tareo"]
+                excavadores_filtrados = filtrar(excavadores, "tareo")
                 excavador_random = choice(excavadores_filtrados)
-                self.equipo.add(ExcavadorDocencio(Nombre = excavador_random[0], \
+                self.equipo.add(ExcavadorTareo(Nombre = excavador_random[0], \
                                                  Tipo = excavador_random[1], \
                                                     edad = excavador_random[2], \
                                                     energia = excavador_random[3], \
@@ -106,9 +108,9 @@ class Torneo:
                                                         suerte = excavador_random[5], \
                                                             felicidad = excavador_random[6]))
             elif tesoro.cambio.lower() == "hibrido":
-                excavadores_filtrados = [excavador for excavador in excavadores if excavadores[3] == "hibrido"]
+                excavadores_filtrados = filtrar(excavadores, "hibrido")
                 excavador_random = choice(excavadores_filtrados)
-                self.equipo.add(ExcavadorDocencio(Nombre = excavador_random[0], \
+                self.equipo.add(ExcavadorHibrido(Nombre = excavador_random[0], \
                                                  Tipo = excavador_random[1], \
                                                     edad = excavador_random[2], \
                                                     energia = excavador_random[3], \
@@ -117,7 +119,7 @@ class Torneo:
                                                             felicidad = excavador_random[6]))
 
         else:
-            if tesoro.cambio .lower()== "normal":
+            if tesoro.cambio.lower()== "normal":
                 arena_random = choice(arenas_normales)
                 self.arena = Arena_normal(Nombre = arena_random[0], \
                                             Tipo = arena_random[1], \
@@ -205,4 +207,6 @@ class Torneo:
                                         Estatica = arenas_normales[numero_random][5])
             print(f"La arena se ha vuelto normal y la nueva arena es {self.arena.nombre}")
 
+    def __str__(self):
+        return (f"jugando en Arena: {self.arena.nombre}, con {self.mochila} en la mochila y el {self.equipo} equipo ")
  

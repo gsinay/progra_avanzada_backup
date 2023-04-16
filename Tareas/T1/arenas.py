@@ -69,4 +69,5 @@ class Arena_magnetica(Arena):
     def randomizer(self):
         self.humedad = randint(1, 10)
         self.dureza = randint(1, 10)
-arenaaaa = Arena_rocosa("Arena rocosa", "Roca", 5, 5, 5, 5)
+
+

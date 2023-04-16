@@ -63,4 +63,4 @@ for item_tesoro in tesoros:
 
 lista_items = [lista_consumibles, lista_tesoros] #lista de lista de items
 
-print(arenas_normales)
+
