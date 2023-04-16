@@ -1,0 +1,12 @@
+arena,Arena pesada,magnetica,8,8,10,8
+excavador,Emolaba,hibrido, 18,66,8,9,10
+excavador,Mpia_vf,docencio, 21,45,10,5,10
+excavador,MatiasMasjuan,docencio, 32,8,10,5,10
+excavador,Lily614,docencio, 60,0,9,0,10
+item, Botella
+item, Empanada
+item, Bebida energética
+item, Botella
+metros_cavados,25.33
+meta, 100
+dias_transcurridos, 4

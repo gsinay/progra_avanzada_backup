@@ -19,7 +19,7 @@ class Torneo:
         self.eventos = Eventos
         self.equipo = Equipo
         self.mochila = Mochila
-        self.metros_cavados = Metros_cavados 
+        self.__metros_cavados = Metros_cavados 
         self.meta = METROS_META
         self.dias_transcurridos = Dias_transcurridos
         self.dias_totales = DIAS_TOTALES_TORNEO
@@ -56,8 +56,8 @@ class Torneo:
                 elif item.tipo == "Consumible":
                     suma_consumibles += 1
                 self.mochila.append(item)
-        self.metros_cavados += round(suma_metros, 2)
-        print(f"Se han cavado {suma_metros} metros en total")
+        self.metros_cavados += suma_metros
+        print(f"Se han cavado {round(suma_metros, 2)} metros en total")
         print(f"Se han encontrado {suma_tesoros + suma_consumibles} items en total")
         print(f"- {suma_consumibles} consumibles")
         print(f"- {suma_tesoros} tesoros")

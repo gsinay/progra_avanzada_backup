@@ -15,33 +15,33 @@ class Arena(ABC):
         self.__estatica = Estatica
         self.items = lista_items 
 
-        @property 
-        def rareza(self):
-            return self.__rareza
-        @rareza.setter
-        def rareza(self, rareza_nueva):
-            self.__rareza = min(10, max(1, rareza_nueva))
+    @property 
+    def rareza(self):
+        return self.__rareza
+    @rareza.setter
+    def rareza(self, rareza_nueva):
+        self.__rareza = min(10, max(1, rareza_nueva))
         
-        @property
-        def humedad(self):
-            return self.__humedad
-        @humedad.setter
-        def humedad(self, humedad_nueva):
-            self.__humedad = min(10, max(1, humedad_nueva))
+    @property
+    def humedad(self):
+        return self.__humedad
+    @humedad.setter
+    def humedad(self, humedad_nueva):
+        self.__humedad = min(10, max(1, humedad_nueva))
 
-        @property
-        def dureza(self):
-            return self.__dureza
-        @dureza.setter
-        def dureza(self, dureza_nueva):
-            self.__dureza = min(10, max(1, dureza_nueva))
+    @property
+    def dureza(self):
+        return self.__dureza
+    @dureza.setter
+    def dureza(self, dureza_nueva):
+        self.__dureza = min(10, max(1, dureza_nueva))
 
-        @property
-        def estatica(self):
-            return self.__estatica
-        @estatica.setter
-        def estatica(self, estatica_nueva):
-            self.__estatica = min(10, max(1, estatica_nueva))
+    @property
+    def estatica(self):
+        return self.__estatica
+    @estatica.setter
+    def estatica(self, estatica_nueva):
+        self.__estatica = min(10, max(1, estatica_nueva))
 
     def dificultad_arena(self):
         return round((self.__rareza + self.__humedad + self.__dureza + self.__estatica) / 40, 2)

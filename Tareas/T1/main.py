@@ -1,8 +1,8 @@
 from funciones_auxiliares import generar_arena_inicial, generar_excavadores_iniciales
-from parametros import EXCAVADORES_INICIALES
-from datos import excavadores
-from random import choice
 from torneo import Torneo
+from guardar_cargar import guardar_torneo, cargar_torneo
+
+
 
 # def menu_inicio():
 def menu_inicio():
@@ -27,7 +27,8 @@ def menu_inicio():
         Partida = generar_torneo()
         menu_acciones(Partida)
     elif int(input_usuario) == 2:
-        print("Cargar partida")
+        torneo = cargar_torneo()
+        menu_acciones(torneo)
     elif int(input_usuario) == 3:
         print("Abandonar juego, para cargar nuevamente el menú de inicio, ejecute el archivo main.py")
 
@@ -40,7 +41,7 @@ def menu_acciones(torneo):
     print("[2]. Mostrar estado")
     print("[3]. Ver mochila")
     print("[4]. Guardar partida")
-    print("[5]. Volver al menú de inicio")
+    print("[5]. Volver al menú de inicio. RECUERDE GUARDAR SU PARTIDA O PERDERA EL PROGRESO!")
     print("[x]. Salir del programa")
     while True:
         try:
@@ -52,6 +53,16 @@ def menu_acciones(torneo):
             print("Opción no válida, intentelo nuevamente")
     if input_usuario == "1":
         torneo.simular_dia()
+        if torneo.dias_transcurridos == torneo.dias_totales:
+            print("El torneo ha terminado!")
+            if torneo.metros_cavados >= torneo.meta:
+                print("Felicidades, has ganado el torneo!")
+                print(f" Has cavado {torneo.metros_cavados} metros, y la meta era {torneo.meta} metros")
+            else:
+                print(f"Has perdido el torneo, la meta era {torneo.meta} metros y has cavado {torneo.metros_cavados} metros")
+                print("Vuelve a intentarlo!")
+            #agregar carcar una vez que tenga funcion definida
+            menu_inicio()
         menu_acciones(torneo)
     elif input_usuario == "2":
         torneo.mostrar_estado()
@@ -59,7 +70,8 @@ def menu_acciones(torneo):
     elif input_usuario == "3":
         menu_mochila(torneo)
     elif input_usuario == "4":
-        return
+        guardar_torneo(torneo)
+        menu_inicio()
     elif input_usuario == "5":
         menu_inicio()
     elif input_usuario == "x":

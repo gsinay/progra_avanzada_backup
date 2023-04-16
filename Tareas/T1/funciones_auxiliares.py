@@ -62,8 +62,9 @@ def generar_excavadores_iniciales(Arena_inicio):
 def obtener_excavador_inutilizado(lista_excavadores_posibles, set_excavadores_en_uso):
     nuevo_objeto = None
     while not nuevo_objeto:
+        #elegimos un excavador random hasta que lleguemos a uno que no este en uso
         excavador_random = choice(lista_excavadores_posibles)
-        if excavador_random[0] not in {obj.nombre for obj in set_excavadores_en_uso}:
+        if excavador_random[0] not in {obj.nombre for obj in set_excavadores_en_uso}: 
             return excavador_random
         
 def instanciar_excavador(excavador, arena):
