@@ -68,6 +68,7 @@ class Excavador(ABC):
         dias_a_descansar  = int(self.__edad / 20)
         if self.__energia == 0 and self.descansando == False: #si la energia es 0, se descansa
             self.descansando = True
+            print(f"{self.nombre} partirá su descanso en la siguiente ronda")
         if self.descansando == True and self.dias_descanso < dias_a_descansar: 
             #si se esta descansando y no se han cumplido los dias a descansar, se aumenta el contador de dias de descanso
             self.dias_descanso += 1
@@ -76,6 +77,7 @@ class Excavador(ABC):
             self.dias_descanso = 0
             self.descansando = False
             self.__energia = 100
+            print(f"{self.nombre} ha terminado su descanso")
 
     def encontrar_item(self):
         prob_item = PROB_ENCONTRAR_ITEM * (self.__suerte / 10)
@@ -105,11 +107,12 @@ class Excavador(ABC):
 class ExcavadorDocencio(Excavador):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        self.tipo = "docencio"
 
     def cavar(self):
         if self.descansando == False:
-            metros_cavados = round((30/self.edad + (self.felicidad + 2*self.fuerza)/10) * \
-                                    (1/10 * self.arena_actual.dificultad_arena), 2) #ojo con esto mas adelante
+            metros_cavados = round(((30/self.edad) + ((self.felicidad + 2*self.fuerza)/10)) * \
+                                    (1/(10 * self.arena_actual.dificultad_arena())), 2) 
             self.energia -= self.gastar_energia()
             self.felicidad += FELICIDAD_ADICIONAL_DOCENCIO
             self.fuerza += FUERZA_ADICIONAL_DOCENCIO
@@ -118,6 +121,7 @@ class ExcavadorDocencio(Excavador):
             return metros_cavados
         else:
             self.descansar() #si se esta descansando, se sigue descansando o se termina de descansar
+            print(f"{self.nombre} está descansando")
             return 0
     
     def calcular_gasto_energia_total(self):
@@ -134,16 +138,18 @@ class ExcavadorDocencio(Excavador):
 class ExcavadorTareo(Excavador):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        self.tipo = "tareo"
 
     def cavar(self):
         if self.descansando == False:
-            metros_cavados = round((30/self.edad + (self.felicidad + 2*self.fuerza)/10) * \
-                                    (1/10 * self.arena_actual.dificultad_arena), 2) #ojo con esto mas adelante
+            metros_cavados = round(((30/self.edad) + ((self.felicidad + 2*self.fuerza)/10)) * \
+                                    (1/(10 * self.arena_actual.dificultad_arena())), 2) 
             self.energia -= self.gastar_energia()
             self.descansar() #se checkea si se tiene que partir descansando
             return metros_cavados
         else:
             self.descansar() #si se esta descansando, se sigue descansando o se termina de descansar
+            print(f"{self.nombre} está descansando")
             return 0 
         
     def consumir(self, consumible: Consumible): #completar cuando esté items listos
@@ -161,10 +167,11 @@ class ExcavadorTareo(Excavador):
 class ExcavadorHibrido(ExcavadorDocencio, ExcavadorTareo):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        self.tipo = "hibrido"
 
     def cavar(self):
-        metros_cavados = round((30/self.edad + (self.felicidad + 2*self.fuerza)/10) * \
-                                (1/10 * self.arena_actual.dificultad_arena), 2) #ojo con esto mas adelante
+        metros_cavados = round(((30/self.edad) + ((self.felicidad + 2*self.fuerza)/10)) * \
+                                    (1/(10 * self.arena_actual.dificultad_arena())), 2) 
         perdida_energia = int((ExcavadorDocencio.calcular_gasto_energia_total(self) + \
                             ExcavadorTareo.gastar_energia(self)) / 2)
         if self.energia - perdida_energia < 20:

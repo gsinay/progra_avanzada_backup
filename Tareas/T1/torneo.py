@@ -5,7 +5,8 @@ arenas_normales, excavadores
 from parametros import PROB_LLUVIA, PROB_TERREMOTO, PROB_DERRUMBE, METROS_PERDIDOS_DERRUMBE, \
 PROB_INICIAR_EVENTO, DIAS_TOTALES_TORNEO, METROS_META, ARENA_INICIAL, EXCAVADORES_INICIALES
 from random import choices, randint, choice
-from funciones_auxiliares import filtrar
+from funciones_auxiliares import filtrar, obtener_excavador_inutilizado, instanciar_excavador, \
+instanciar_arena
 
 
 
@@ -18,10 +19,20 @@ class Torneo:
         self.eventos = Eventos
         self.equipo = Equipo
         self.mochila = Mochila
-        self.metros_cavados = Metros_cavados
+        self.metros_cavados = Metros_cavados 
         self.meta = METROS_META
         self.dias_transcurridos = Dias_transcurridos
         self.dias_totales = DIAS_TOTALES_TORNEO
+
+    @property
+    def metros_cavados(self):
+        return self.__metros_cavados
+    @metros_cavados.setter
+    def metros_cavados(self, metros_nuevos):
+        if metros_nuevos < 0:
+            self.metros_cavados = 0
+        else:
+            self.__metros_cavados = metros_nuevos
 
     def simular_dia(self):
         print(f" Dia {self.dias_transcurridos} de {self.dias_totales} ")
@@ -29,19 +40,13 @@ class Torneo:
         if self.arena.tipo == "magnetica": #enunciado las arenas magneticas no tienen eventos especiales
             self.arena.randomizer()
         suma_metros = 0
-        for excavador in self.equipo: #se recorre el equipo en cuanto a sus metros cavados
+        suma_consumibles = 0
+        suma_tesoros = 0
+        for excavador in self.equipo: #se recorre el equipo 
             metros_cavados = excavador.cavar()
-            if excavador.descasando == True:
-                print(f"{excavador.nombre} se encuentra descansando")
-            else:
-                print(f"{excavador.nombre} ha cavado {metros_cavados} metros")
+            print(f"{excavador.nombre} ha cavado {metros_cavados} metros")
             suma_metros += metros_cavados
-        print(f"Se han cavado {suma_metros} metros en total")
-
-        for excavador in self.equipo:
             item = excavador.encontrar_item()
-            suma_consumibles = 0
-            suma_tesoros = 0
             if item != None:
                 print(f"{excavador.nombre} ha encontrado un {item.nombre}")
                 print(f"el item es un {item.nombre} de tipo {item.tipo}")
@@ -49,14 +54,20 @@ class Torneo:
                     suma_tesoros += 1
                 elif item.tipo == "Consumible":
                     suma_consumibles += 1
+                self.mochila.append(item)
+        self.metros_cavados += round(suma_metros, 2)
+        print(f"Se han cavado {suma_metros} metros en total")
+        print(f"Se han encontrado {suma_tesoros + suma_consumibles} items en total")
+        print(f"- {suma_consumibles} consumibles")
+        print(f"- {suma_tesoros} tesoros")
 
-            print(f"Se han encontrado {suma_tesoros + suma_consumibles} items en total")
-            print(f"- {suma_consumibles} consumibles")
-            print(f"- {suma_tesoros} tesoros")
 
         evento = choices([True, False], weights=[PROB_INICIAR_EVENTO, 1-PROB_INICIAR_EVENTO], k=1)[0]
         if evento == True:
             self.iniciar_evento()
+        
+        self.dias_transcurridos += 1
+        
 
     def mostrar_estado(self):
         print(("*** Estado Torneo ***").center(85))
@@ -67,17 +78,18 @@ class Torneo:
         print("-"*85)
         print(("*** Excavadores ***").center(85))
         print("-"*85)
-        print(f"   NOMBRE    |    TIPO      |   ENERGIA    |   FUERZA     |   SUERTE     |  FELICIDAD ")
+        print(f"   NOMBRE     |    TIPO      |   ENERGIA    |   FUERZA     |   SUERTE     |  FELICIDAD ")
         for excavador in self.equipo:
-            print(f"{excavador.nombre: ^12s} | {excavador.tipo: ^12s} | {excavador.energia: ^12d} | {excavador.fuerza: ^12d} | {excavador.suerte: ^12d} | {excavador.felicidad} ")
+            print(f"{excavador.nombre: ^13s} | {excavador.tipo: ^12s} | {excavador.energia: ^12d} | {excavador.fuerza: ^12d} | {excavador.suerte: ^12d} | {excavador.felicidad} ")
         
     def ver_mochila(self):
+        print(self.mochila)
         print(("*** Menu Items ***").center(100))
         print("-"*100)
-        print(f"          NOMBRE                 |      TIPO      |                            DESCRIPCION                            ")
+        print(f"          NOMBRE                  |      TIPO      |                            DESCRIPCION                            ")
         print("-"*100)
-        for indice_item in range(0,len(self.mochila) - 1):
-            print(f"[{indice_item + 1}] {self.mochila[indice_item].nombre: ^28s} | {self.mochila[indice_item].tipo: ^14s} | {self.mochila[indice_item].descripcion: ^64s}")
+        for indice_item in range(0,len(self.mochila)):
+            print(f"[{indice_item + 1}] {self.mochila[indice_item].nombre: ^29s} | {self.mochila[indice_item].tipo: ^14s} | {self.mochila[indice_item].descripcion: ^64s}")
 
     def usar_consumible(self, consumible):
         for excavador in self.equipo:
@@ -88,69 +100,29 @@ class Torneo:
         if tesoro.calidad == "1": #vamos a agregar un trabajador
             if tesoro.cambio.lower() == "docencio":
                 excavadores_filtrados = filtrar(excavadores, "docencio")
-                excavador_random = choice(excavadores_filtrados)
-                self.equipo.add(ExcavadorDocencio(Nombre = excavador_random[0], \
-                                                 Tipo = excavador_random[1], \
-                                                    edad = excavador_random[2], \
-                                                    energia = excavador_random[3], \
-                                                    fuerza = excavador_random[4], \
-                                                        suerte = excavador_random[5], \
-                                                            felicidad = excavador_random[6]))
-                excavadores.remove(excavador_random)
+                excavador_random = obtener_excavador_inutilizado(excavadores_filtrados)
+                self.equipo.add(instanciar_excavador(excavador_random, self.arena))
             elif tesoro.cambio.lower() == "tareo":
                 excavadores_filtrados = filtrar(excavadores, "tareo")
-                excavador_random = choice(excavadores_filtrados)
-                self.equipo.add(ExcavadorTareo(Nombre = excavador_random[0], \
-                                                 Tipo = excavador_random[1], \
-                                                    edad = excavador_random[2], \
-                                                    energia = excavador_random[3], \
-                                                    fuerza = excavador_random[4], \
-                                                        suerte = excavador_random[5], \
-                                                            felicidad = excavador_random[6]))
+                excavador_random = obtener_excavador_inutilizado(excavadores_filtrados)
+                self.equipo.add(instanciar_excavador(excavador_random, self.arena))
             elif tesoro.cambio.lower() == "hibrido":
                 excavadores_filtrados = filtrar(excavadores, "hibrido")
-                excavador_random = choice(excavadores_filtrados)
-                self.equipo.add(ExcavadorHibrido(Nombre = excavador_random[0], \
-                                                 Tipo = excavador_random[1], \
-                                                    edad = excavador_random[2], \
-                                                    energia = excavador_random[3], \
-                                                    fuerza = excavador_random[4], \
-                                                        suerte = excavador_random[5], \
-                                                            felicidad = excavador_random[6]))
-
+                excavador_random = obtener_excavador_inutilizado(excavadores_filtrados)
+                self.equipo.add(instanciar_excavador(excavador_random, self.arena))
         else:
             if tesoro.cambio.lower()== "normal":
                 arena_random = choice(arenas_normales)
-                self.arena = Arena_normal(Nombre = arena_random[0], \
-                                            Tipo = arena_random[1], \
-                                                Rareza = arena_random[2], \
-                                                    Humedad = arena_random[3], \
-                                                        Dureza = arena_random[4], \
-                                                            Estatica = arena_random[5])
+                self.arena = instanciar_arena(arena_random)
             elif tesoro.cambio.lower() == "mojada":
                 arena_random = choice(arenas_mojadas)
-                self.arena = Arena_mojada(Nombre = arena_random[0], \
-                                            Tipo = arena_random[1], \
-                                                Rareza = arena_random[2], \
-                                                    Humedad = arena_random[3], \
-                                                        Dureza = arena_random[4], \
-                                                            Estatica = arena_random[5])
+                self.arena = instanciar_arena(arena_random)
             elif tesoro.cambio.lower() == "rocosa":
                 arena_random = choice(arenas_rocosas)
-                self.arena = Arena_rocosa(Nombre = arena_random[0], \
-                                            Tipo = arena_random[1], \
-                                                Rareza = arena_random[2], \
-                                                    Humedad = arena_random[3], \
-                                                        Dureza = arena_random[4], \
-                                                            Estatica = arena_random[5])
+                self.arena = instanciar_arena(arena_random)
             elif tesoro.cambio.lower() == "magnetica":
                 arena_random = choice(arenas_magneticas)
-                self.arena = Arena_magnetica(Nombre = arena_random[0], \
-                                            Tipo = arena_random[1], \
-                                                Rareza = arena_random[2], \
-                                                    Humedad = arena_random[3], \
-                                                        Dureza = arena_random[4], \
-                                                            Estatica = arena_random[5])
+                self.arena = instanciar_arena(arena_random)
         self.mochila.remove(tesoro)
 
 

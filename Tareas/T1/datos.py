@@ -26,7 +26,7 @@ with open("arenas.csv", "r") as archivo: #haciendo lista de listas de las arenas
         linea_limpia = linea.strip("\n")
         arenas.append(linea_limpia.split(","))
 
-#vamos a hacer lista de listas con los tipos de arenas instanciadas
+#vamos a hacer sub-listas con los tipos de arena
 
 arenas_normales = []
 arenas_mojadas = []
