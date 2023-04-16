@@ -3,6 +3,7 @@ from arenas import Arena_magnetica, Arena_mojada, Arena_normal, Arena_rocosa
 from excavadores import ExcavadorDocencio, ExcavadorTareo, ExcavadorHibrido
 from random import choice
 from parametros import ARENA_INICIAL, EXCAVADORES_INICIALES
+import os
 
 def filtrar(lista, filtro):
     lista_a_retornar = []
@@ -102,4 +103,9 @@ def instanciar_arena(arena):
                                     Dureza = int(arena[4]), Estatica = int(arena[5]))
     return instancia_arena
 
+def guardar_torneo():
+    with open(os.path.join("DCCavaCava.txt"), "w") as datos:
+        datos.write("2,2,2\n")
+        datos.write("3,3,3")
+        
 

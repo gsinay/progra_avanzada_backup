@@ -50,15 +50,15 @@ for item_consumible in consumibles:
     lista_consumibles.append(Consumible(Nombre = item_consumible[0], \
                                   Descripcion = item_consumible[1], \
                                   Tipo = "Consumible", \
-                                  Energia = item_consumible[2], \
-                                  Fuerza = item_consumible[3], \
-                                  Suerte = item_consumible[4], \
-                                  Felicidad = item_consumible[5]))
+                                  Energia = int(item_consumible[2]), \
+                                  Fuerza = int(item_consumible[3]), \
+                                  Suerte = int(item_consumible[4]), \
+                                  Felicidad = int(item_consumible[5])))
 for item_tesoro in tesoros:
     lista_tesoros.append(Tesoro(Nombre = item_tesoro[0], \
                               Tipo = "Tesoro", \
                               Descripcion = item_tesoro[1], \
-                              Calidad = item_tesoro[2], \
+                              Calidad = int(item_tesoro[2]), \
                               Cambio = item_tesoro[3]))
 
 lista_items = [lista_consumibles, lista_tesoros] #lista de lista de items
