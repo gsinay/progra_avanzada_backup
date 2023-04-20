@@ -1,10 +1,10 @@
-from random import random, randint
+from random import random, randint, choices
 from threading import Event, Lock, Thread
 from time import sleep
 
 
 # Completar
-class Corredor:
+class Corredor(Thread):
 
     TIEMPO_ESPERA = 0.5  # Tiempo entre avances del corredor
     PORCENTAJE_MIN = 70  # Mínimo avance del corredor
@@ -27,7 +27,7 @@ class Corredor:
         self.__correr = True
 
         # Completar
-        self.daemon = 'COMPLETAR'
+        self.daemon = True #se debe terminar cuando el programa principal termina
 
     @property
     def posicion(self) -> float:
@@ -51,46 +51,59 @@ class Corredor:
 
     def avanzar(self) -> None:
         # Completar
-        
+        porcentaje_avanze = randint(self.PORCENTAJE_MIN,self.PORCENTAJE_MAX) / 100
+        self.posicion += porcentaje_avanze * self.velocidad
         # Luego de avanzar impime su posición y duerme
         print(f'{self.name}: Avancé a {self.posicion:.2f}')
         sleep(self.TIEMPO_ESPERA)
 
     def intentar_capturar_tortuga(self) -> None:
         # Completar
-
+        if self.lock_tortuga.acquire(blocking = False):
+            self.tiene_tortuga = True
         # Si logra la captura, imprime un mensaje
         if self.tiene_tortuga:
             print(f'{self.name}: ¡Capturé la tortuga!')
 
     def perder_tortuga(self) -> None:
-        # Completar
-
+        self.tiene_tortuga = False
         print(f'{self.name}: Perdí la tortuga :(')
+        self.lock_tortuga.release()
     
     def robar_tortuga(self) -> bool:
         # PROBABILIDAD_ROBAR de robar la tortuga
         if random() < self.PROBABILIDAD_ROBAR:
-            # Completar
-
+            self.notificar_robo()
+            self.lock_tortuga.acquire(blocking = True)
+            self.tiene_tortuga = True
             print(f'{self.name}: ¡Robé la tortuga!')
-            return 'COMPLETAR'
+            return True
         else:
-            return 'COMPLETAR'
+            return False
             
     def correr_primera_mitad(self):
         while self.posicion < 50:
-            # Completar
-            pass
+           self.avanzar()
 
     def correr_segunda_mitad(self) -> bool:
         while self.__correr:
-            # Completar
-            pass
+            with self.lock_verificar_tortuga:
+                if self.senal_fin.is_set():
+                    return False
+                if self.tiene_tortuga == True and self.posicion >= 100:
+                    self.senal_fin.set()
+                    self.lock_tortuga.release()
+                    return True
+                if self.tiene_tortuga == False:
+                    self.intentar_capturar_tortuga()
+            self.avanzar()
+        
 
     def run(self) -> None:
-        # Completar
-        pass
+        self.senal_inicio.wait()
+        self.correr_primera_mitad()
+        self.intentar_capturar_tortuga()
+        self.correr_segunda_mitad()
 
 
 # Completar
