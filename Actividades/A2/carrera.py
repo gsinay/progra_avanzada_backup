@@ -59,8 +59,8 @@ class Corredor(Thread):
 
     def intentar_capturar_tortuga(self) -> None:
         # Completar
-        self.lock_tortuga.acquire(blocking = False)
-        self.tiene_tortuga = True
+        if self.lock_tortuga.acquire(blocking = False):
+            self.tiene_tortuga = True
         # Si logra la captura, imprime un mensaje
         if self.tiene_tortuga:
             print(f'{self.name}: ¡Capturé la tortuga!')
