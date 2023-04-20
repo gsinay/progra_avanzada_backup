@@ -54,13 +54,13 @@ class Corredor(Thread):
         porcentaje_avanze = randint(self.PORCENTAJE_MIN,self.PORCENTAJE_MAX) / 100
         self.posicion += porcentaje_avanze * self.velocidad
         # Luego de avanzar impime su posición y duerme
-        print(f'{self.name}: Avancé a {self.posicion:.2f}')
+        print(f'{self.name}: Avancé a {self.posicion:.2f} y tengo la tortuga: {self.tiene_tortuga}')
         sleep(self.TIEMPO_ESPERA)
 
     def intentar_capturar_tortuga(self) -> None:
         # Completar
-        if self.lock_tortuga.acquire(blocking = False):
-            self.tiene_tortuga = True
+        self.lock_tortuga.acquire(blocking = False)
+        self.tiene_tortuga = True
         # Si logra la captura, imprime un mensaje
         if self.tiene_tortuga:
             print(f'{self.name}: ¡Capturé la tortuga!')
@@ -89,9 +89,11 @@ class Corredor(Thread):
         while self.__correr:
             with self.lock_verificar_tortuga:
                 if self.senal_fin.is_set():
+                    self.__correr = False
                     return False
                 if self.tiene_tortuga == True and self.posicion >= 100:
                     self.senal_fin.set()
+                    self.__correr = False
                     self.lock_tortuga.release()
                     return True
                 if self.tiene_tortuga == False:
@@ -122,15 +124,23 @@ class Carrera:
         corredor_2.asignar_rival(corredor_1.ser_notificado_por_robo)
 
         # Completar
-        self.daemon = 'COMPLETAR'
+        self.daemon = False
     
     # Completar
     def empezar(self) -> str:
-        pass
+        self.run()
+        if self.corredor_1.tiene_tortuga == True:
+            return self.corredor_1.name
+        else:
+            return self.corredor_2.name
 
     # Completar
     def run(self) -> None:
-        pass
+        self.corredor_1.start()
+        self.corredor_2.start()
+        self.senal_inicio.set()
+        self.corredor_1.join()
+        self.corredor_2.join()
 
 
 if __name__ == '__main__':
