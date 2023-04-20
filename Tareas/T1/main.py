@@ -76,7 +76,7 @@ def menu_acciones(torneo):
         menu_inicio()
     elif input_usuario == "x":
         print("Saliendo del programa")
-        return
+        menu_inicio()
 
 def menu_mochila(torneo):
     print("**** {: ^50s} ****".format("MENÚ DE MOCHILA"))

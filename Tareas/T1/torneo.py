@@ -103,16 +103,24 @@ class Torneo:
             if tesoro.cambio.lower() == "docencio":
                 excavadores_filtrados = filtrar(excavadores, "docencio")
                 excavador_random = obtener_excavador_inutilizado(excavadores_filtrados, self.equipo)
-                self.equipo.add(instanciar_excavador(excavador_random, self.arena))
+                if excavador_random == False:
+                    print("No hay mas docencios disponibles :(")
+                else:
+                    self.equipo.add(instanciar_excavador(excavador_random, self.arena))
             elif tesoro.cambio.lower() == "tareo":
                 excavadores_filtrados = filtrar(excavadores, "tareo")
                 excavador_random = obtener_excavador_inutilizado(excavadores_filtrados, self.equipo)
-                self.equipo.add(instanciar_excavador(excavador_random, self.arena))
+                if excavador_random == False:
+                    print("No hay mas tareos disponibles :(")
+                else:
+                    self.equipo.add(instanciar_excavador(excavador_random, self.arena))
             elif tesoro.cambio.lower() == "hibrido":
                 excavadores_filtrados = filtrar(excavadores, "hibrido")
                 excavador_random = obtener_excavador_inutilizado(excavadores_filtrados, self.equipo)
-                self.equipo.add(instanciar_excavador(excavador_random, self.arena))
-        else:
+                if excavador_random == False:
+                    print("No hay mas hibridos disponibles :(")
+                else:
+                    self.equipo.add(instanciar_excavador(excavador_random, self.arena))
             if tesoro.cambio.lower()== "normal":
                 arena_random = choice(arenas_normales)
                 self.arena = instanciar_arena(arena_random)

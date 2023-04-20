@@ -61,7 +61,7 @@ class Arena_rocosa(Arena):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
     def dificultad_arena(self):
-        return round((self.__rareza + self.__humedad + 2*self.__dureza + self.__estatica) / 50, 2)
+        return round((self.rareza + self.humedad + 2*self.dureza + self.estatica) / 50, 2)
     
 class Arena_magnetica(Arena):
     def __init__(self, *args, **kwargs) -> None:

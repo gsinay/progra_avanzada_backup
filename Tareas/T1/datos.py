@@ -64,3 +64,6 @@ for item_tesoro in tesoros:
 lista_items = [lista_consumibles, lista_tesoros] #lista de lista de items
 
 
+for tipo_item in lista_items: #recordar que los items estan instanciados en datos.py
+    for item in tipo_item:
+        print(item.nombre)

@@ -1,12 +1,38 @@
-arena,Arena pesada,magnetica,8,8,10,8
-excavador,Emolaba,hibrido, 18,66,8,9,10
-excavador,Mpia_vf,docencio, 21,45,10,5,10
-excavador,MatiasMasjuan,docencio, 32,8,10,5,10
-excavador,Lily614,docencio, 60,0,9,0,10
-item, Botella
-item, Empanada
-item, Bebida energética
-item, Botella
-metros_cavados,25.33
-meta, 100
-dias_transcurridos, 4
+arena,Arena ferruginosa,magnetica,10,3,5,10
+excavador,Benjeh,tareo,57,45,10,10,9
+excavador,MatiasMasjuan,docencio,32,61,10,6,10
+excavador,jtvaldivia,tareo,60,100,10,10,9
+excavador,Lily614,docencio,60,64,10,6,10
+excavador,Beyoncé,hibrido,46,67,10,10,9
+excavador,Mtaguero,tareo,32,73,8,9,9
+excavador,Emolaba,hibrido,23,79,10,10,9
+excavador,Mpia_vf,docencio,21,78,10,6,10
+item,Cartón de título
+item,Comida rancia
+item,PepaBot
+item,Comida vibracional
+item,PepaBot
+item,PepaBot
+item,Set de Herramientas Hackeado
+item,Bebida energética
+item,Pala de diamante
+item,DCCaboom!!
+item,Veneno
+item,Desloratadina
+item,Completo mojado
+item,Entradas concierto
+item,Veneno
+item,PepaBot
+item,Jarabe
+item,Completo
+item,Quetiapina
+item,Comida vibracional
+item,Pala de diamante
+item,Quetiapina
+item,CL4S5:IIC2233
+item,CL4S5:IIC2233
+item,Duende mágico
+item,Tortuga Dorada
+metros_cavados,608.87
+meta,150
+dias_transcurridos,53

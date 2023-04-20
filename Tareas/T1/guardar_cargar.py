@@ -7,12 +7,12 @@ def guardar_torneo(torneo):
     with open(os.path.join("DCCavaCava.txt"), "w") as datos:
         datos.write(f"arena,{torneo.arena.nombre},{torneo.arena.tipo},{torneo.arena.rareza},{torneo.arena.humedad},{torneo.arena.dureza},{torneo.arena.estatica}\n")
         for excavador in torneo.equipo:
-            datos.write(f"excavador,{excavador.nombre},{excavador.tipo}, {excavador.edad},{excavador.energia},{excavador.fuerza},{excavador.suerte},{excavador.felicidad}\n")
+            datos.write(f"excavador,{excavador.nombre},{excavador.tipo},{excavador.edad},{excavador.energia},{excavador.fuerza},{excavador.suerte},{excavador.felicidad}\n")
         for item in torneo.mochila:
-            datos.write(f"item, {item.nombre}\n")
+            datos.write(f"item,{item.nombre}\n")
         datos.write(f"metros_cavados,{torneo.metros_cavados}\n")
-        datos.write(f"meta, {torneo.meta}\n")
-        datos.write(f"dias_transcurridos, {torneo.dias_transcurridos}")
+        datos.write(f"meta,{torneo.meta}\n")
+        datos.write(f"dias_transcurridos,{torneo.dias_transcurridos}")
 
 def cargar_torneo():
     with open(os.path.join("DCCavaCava.txt"), "r") as datos:
@@ -30,7 +30,7 @@ def cargar_torneo():
             if elemento[0] == "item":
                 for tipo_item in lista_items: #recordar que los items estan instanciados en datos.py
                     for item in tipo_item:
-                        if elemento[1] == item.nombre:
+                        if elemento[1].lower() == item.nombre.lower():
                             mochila.append(item)
             if elemento[0] == "metros_cavados":
                 metros_cavados = float(elemento[1])
