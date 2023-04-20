@@ -109,7 +109,7 @@ class Corredor(Thread):
 
 
 # Completar
-class Carrera:
+class Carrera(Thread):
     def __init__(self, corredor_1: Corredor, corredor_2: Corredor, 
                  senal_inicio: Event, senal_fin: Event) -> None:
         super().__init__()
