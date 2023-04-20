@@ -97,7 +97,7 @@ class Corredor(Thread):
                     self.lock_tortuga.release()
                     return True
                 if self.tiene_tortuga == False:
-                    self.intentar_capturar_tortuga()
+                    self.robar_tortuga()
             self.avanzar()
         
 
