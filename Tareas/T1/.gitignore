@@ -5,10 +5,10 @@
 #
 __pycache__/
 #ignorando los csv
-/arenas.csv
-/consumibles.csv
-/excavadores.csv
-/tesoros.csv
+arenas.csv
+consumibles.csv
+excavadores.csv
+tesoros.csv
 
 *.py[cod]
 
