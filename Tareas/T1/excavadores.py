@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 from parametros import PROB_ENCONTRAR_ITEM, PROB_ENCONTRAR_CONSUMIBLE, PROB_ENCONTRAR_TESORO, \
-FELICIDAD_ADICIONAL_DOCENCIO, FUERZA_ADICIONAL_DOCENCIO, ENERGIA_PERDIDA_DOCENCIO, ENERGIA_ADICIONAL_TAREO, \
-SUERTE_ADICIONAL_TAREO, EDAD_ADICIONAL_TAREO, FELICIDAD_PERDIDA_TAREO
-from items import Tesoro, Consumible
+FELICIDAD_ADICIONAL_DOCENCIO, FUERZA_ADICIONAL_DOCENCIO, ENERGIA_PERDIDA_DOCENCIO,\
+ENERGIA_ADICIONAL_TAREO, SUERTE_ADICIONAL_TAREO, EDAD_ADICIONAL_TAREO, FELICIDAD_PERDIDA_TAREO
+from items import Consumible
 from random import choices, randint
 from datos import  lista_items
-
+                                                                                                    
 class Excavador(ABC):
     def __init__(self, Nombre, Edad, Energia, Fuerza, Suerte, \
                   Felicidad, Arena_actual, *args, **kwargs) -> None:

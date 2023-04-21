@@ -1,4 +1,4 @@
-from funciones_auxiliares import generar_arena_inicial, generar_excavadores_iniciales
+
 from torneo import Torneo
 from guardar_cargar import guardar_torneo, cargar_torneo
 
@@ -42,7 +42,7 @@ def menu_acciones(torneo):
     print("[3]. Ver mochila")
     print("[4]. Guardar partida")
     print("[5]. Volver al menú de inicio. RECUERDE GUARDAR SU PARTIDA O PERDERA EL PROGRESO!")
-    print("[x]. Salir del programa")
+    print("[x]. Salir del programa. RECUERDE GUARDAR SU PARTIDA O PERDERA EL PROGRESO!")
     while True:
         try:
             input_usuario = input("Ingrese una opción para accionar: ")
@@ -75,8 +75,7 @@ def menu_acciones(torneo):
     elif input_usuario == "5":
         menu_inicio()
     elif input_usuario == "x":
-        print("Saliendo del programa")
-        menu_inicio()
+        print("Saliendo del programa. Para cargar nuevamente el menú de inicio, ejecute el archivo main.py")
 
 def menu_mochila(torneo):
     print("**** {: ^50s} ****".format("MENÚ DE MOCHILA"))
@@ -103,18 +102,17 @@ def menu_mochila(torneo):
         item = torneo.mochila[int(input_usuario) - 1]
         if item.tipo == "Tesoro":
             torneo.abrir_tesoro(item)
+            menu_acciones(torneo)
             
         else:
             torneo.usar_consumible(item)
-    menu_acciones(torneo)
+            menu_acciones(torneo)
 
 def generar_torneo():
-    arena_inicial = generar_arena_inicial()
-    excavadores_iniciales = generar_excavadores_iniciales(arena_inicial)
-    torneo = Torneo(Arena = arena_inicial, Equipo = excavadores_iniciales, Mochila = [], \
-                    Eventos = {"Lluvia", "Terremoto", "Derrumbe"}, Metros_cavados = 0, \
-                        Dias_transcurridos = 0)
+    torneo = Torneo(Eventos = {"Lluvia", "Terremoto", "Derrumbe"}, Metros_cavados = 0,
+                        Dias_transcurridos = 0, nuevo=True)
     return torneo
+
 
 menu_inicio()
 

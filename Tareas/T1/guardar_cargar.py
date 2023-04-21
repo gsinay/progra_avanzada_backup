@@ -1,19 +1,22 @@
 import os
-from funciones_auxiliares import generar_arena_inicial, generar_excavadores_iniciales, instanciar_arena, instanciar_excavador
+from funciones_auxiliares import instanciar_arena, instanciar_excavador
 from torneo import Torneo
 from datos import lista_items
 
 def guardar_torneo(torneo):
     with open(os.path.join("DCCavaCava.txt"), "w") as datos:
-        datos.write(f"arena,{torneo.arena.nombre},{torneo.arena.tipo},{torneo.arena.rareza},{torneo.arena.humedad},{torneo.arena.dureza},{torneo.arena.estatica}\n")
+        datos.write(f"arena,{torneo.arena.nombre},{torneo.arena.tipo},{torneo.arena.rareza},"
+                    f"{torneo.arena.humedad},{torneo.arena.dureza},{torneo.arena.estatica}\n")
         for excavador in torneo.equipo:
-            datos.write(f"excavador,{excavador.nombre},{excavador.tipo},{excavador.edad},{excavador.energia},{excavador.fuerza},{excavador.suerte},{excavador.felicidad}\n")
+            datos.write(f"excavador,{excavador.nombre},{excavador.tipo},"
+                        f"{excavador.edad},{excavador.energia},"
+                        f"{excavador.fuerza},{excavador.suerte},{excavador.felicidad}\n")
         for item in torneo.mochila:
             datos.write(f"item,{item.nombre}\n")
         datos.write(f"metros_cavados,{torneo.metros_cavados}\n")
         datos.write(f"meta,{torneo.meta}\n")
         datos.write(f"dias_transcurridos,{torneo.dias_transcurridos}")
-
+                                                                                                    #aca para pep 8 
 def cargar_torneo():
     with open(os.path.join("DCCavaCava.txt"), "r") as datos:
         datos_lista = datos.readlines()
@@ -38,15 +41,11 @@ def cargar_torneo():
                 meta = int(elemento[1])
             if elemento[0] == "dias_transcurridos":
                 dias_transcurridos = int(elemento[1])
-        
-        return Torneo(Arena = arena, Equipo = excavadores, Mochila = mochila, \
-                    Eventos = {"Lluvia", "Terremoto", "Derrumbe"}, Metros_cavados = metros_cavados, \
-                        Dias_transcurridos = dias_transcurridos, Meta = meta)
+
+        torneo = Torneo(Eventos = {"Lluvia", "Terremoto", "Derrumbe"}, Metros_cavados = metros_cavados,
+                        Dias_transcurridos = dias_transcurridos, Meta = meta, nuevo=False)
+        torneo.arena = arena
+        torneo.equipo = excavadores
+        torneo.mochila = mochila
+        return torneo
                       
-def generar_torneo():
-    arena_inicial = generar_arena_inicial()
-    excavadores_iniciales = generar_excavadores_iniciales(arena_inicial)
-    torneo = Torneo(Arena = arena_inicial, Equipo = excavadores_iniciales, Mochila = [], \
-                    Eventos = {"Lluvia", "Terremoto", "Derrumbe"}, Metros_cavados = 0, \
-                        Dias_transcurridos = 0)
-    return torneo

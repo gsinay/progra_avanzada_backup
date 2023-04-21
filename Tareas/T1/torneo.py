@@ -1,7 +1,6 @@
-from  arenas import Arena, Arena_normal, Arena_mojada, Arena_rocosa, Arena_magnetica
-from excavadores import ExcavadorDocencio, ExcavadorHibrido, ExcavadorTareo
+
 from datos import arenas_mojadas, arenas_rocosas, arenas_magneticas,\
-arenas_normales, excavadores
+arenas_normales, arenas, excavadores
 from parametros import PROB_LLUVIA, PROB_TERREMOTO, PROB_DERRUMBE, METROS_PERDIDOS_DERRUMBE, \
 PROB_INICIAR_EVENTO, DIAS_TOTALES_TORNEO, METROS_META, ARENA_INICIAL, EXCAVADORES_INICIALES
 from random import choices, randint, choice
@@ -11,18 +10,29 @@ instanciar_arena
 
 
 class Torneo:
-    def __init__(self, Arena: Arena, Eventos: set, Equipo: set, \
-                 Mochila: list, Metros_cavados: float,  \
-                 Dias_transcurridos: int,  \
+    def __init__(self, Eventos: set, \
+                Metros_cavados: float,\
+                 Dias_transcurridos: int, nuevo: bool, \
                  *args, **kwargs) -> None: 
-        self.arena = Arena
+        
         self.eventos = Eventos
-        self.equipo = Equipo
-        self.mochila = Mochila
+        self.mochila = []
         self.__metros_cavados = Metros_cavados 
         self.meta = METROS_META
         self.dias_transcurridos = Dias_transcurridos
         self.dias_totales = DIAS_TOTALES_TORNEO
+        self.nuevo = nuevo
+        #Los siguientes son atributos placeholder que se cambia dependiendo si es un torneo nuevo o no.
+        #si es un torneo nuevo, se generan nuevos valores para estos atributos. Si no, la funcion cargar torneo los sobreescribe
+        self.arena = None 
+        self.equipo = None
+
+        if self.nuevo == True: #si es un torneo nuevo (nueva partida), se genera arena nueva
+            arenas_filtradas = filtrar(arenas, ARENA_INICIAL)
+            arena_a_instanciar = choice(arenas_filtradas)
+            self.arena = instanciar_arena(arena_a_instanciar) #composicion
+            self.equipo = self.generar_equipo() #composicion
+
 
     @property
     def metros_cavados(self):
@@ -34,6 +44,18 @@ class Torneo:
         else:
             self.__metros_cavados = round(metros_nuevos, 2)
 
+    def generar_equipo(self):
+        lista_excavadores = []
+        instancia_excavadores = set()
+        while len(lista_excavadores) < EXCAVADORES_INICIALES:
+            excavador = choice(excavadores)
+            if excavador not in lista_excavadores:
+                lista_excavadores.append(excavador)
+        for excavador in lista_excavadores:
+            instancia_excavador = instanciar_excavador(excavador, self.arena)
+            instancia_excavadores.add(instancia_excavador)
+        return instancia_excavadores
+    
     def simular_dia(self):
         print("\n")
         print(f" Dia {self.dias_transcurridos} de {self.dias_totales} ")
@@ -82,16 +104,20 @@ class Torneo:
         print("-"*85)
         print(f"   NOMBRE     |    TIPO      |   ENERGIA    |   FUERZA     |   SUERTE     |  FELICIDAD ")
         for excavador in self.equipo:
-            print(f"{excavador.nombre: ^13s} | {excavador.tipo: ^12s} | {excavador.energia: ^12d} | {excavador.fuerza: ^12d} | {excavador.suerte: ^12d} | {excavador.felicidad} ")
+            print(f"{excavador.nombre: ^13s} | {excavador.tipo: ^12s} |\
+                   {excavador.energia: ^12d} | {excavador.fuerza: ^12d} \
+                  | {excavador.suerte: ^12d} | {excavador.felicidad} ")
         
     def ver_mochila(self):
         print(self.mochila)
         print(("*** Menu Items ***").center(100))
         print("-"*100)
-        print(f"          NOMBRE                  |      TIPO      |                            DESCRIPCION                            ")
+        print(f"          NOMBRE                  |      TIPO      | \
+                                         DESCRIPCION                            ")
         print("-"*100)
         for indice_item in range(0,len(self.mochila)):
-            print(f"[{indice_item + 1}] {self.mochila[indice_item].nombre: ^29s} | {self.mochila[indice_item].tipo: ^14s} | {self.mochila[indice_item].descripcion: ^64s}")
+            print(f"[{indice_item + 1}] {self.mochila[indice_item].nombre: ^29s} |\
+                   {self.mochila[indice_item].tipo: ^14s} | {self.mochila[indice_item].descripcion: ^64s}")
 
     def usar_consumible(self, consumible):
         for excavador in self.equipo:
@@ -121,6 +147,7 @@ class Torneo:
                     print("No hay mas hibridos disponibles :(")
                 else:
                     self.equipo.add(instanciar_excavador(excavador_random, self.arena))
+        else:
             if tesoro.cambio.lower()== "normal":
                 arena_random = choice(arenas_normales)
                 self.arena = instanciar_arena(arena_random)

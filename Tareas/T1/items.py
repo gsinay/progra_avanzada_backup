@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 
 class Item(ABC):
     def __init__(self, Nombre, Tipo, Descripcion, *args, **kwargs) -> None:
