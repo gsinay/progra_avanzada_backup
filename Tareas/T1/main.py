@@ -1,6 +1,7 @@
 
 from torneo import Torneo
 from guardar_cargar import guardar_torneo, cargar_torneo
+import os
 
 
 
@@ -27,8 +28,7 @@ def menu_inicio():
         Partida = generar_torneo()
         menu_acciones(Partida)
     elif int(input_usuario) == 2:
-        torneo = cargar_torneo()
-        menu_acciones(torneo)
+        menu_cargar()
     elif int(input_usuario) == 3:
         print("Abandonar juego, para cargar nuevamente el menú de inicio, ejecute el archivo main.py")
 
@@ -83,7 +83,7 @@ def menu_mochila(torneo):
     print(f"Dia de torneo DCCCavaCava: {torneo.dias_transcurridos}")
     print(f"Tipo de arena: {torneo.arena.tipo}")
     torneo.ver_mochila()
-    print("ingrese el numero del objeto que desea utilizar o la opción x para voler al menú de acciones:")
+    print("\ningrese el numero del objeto que desea utilizar o la opción x para voler al menú de acciones:")
     while True:
         try:
             input_usuario = input("Ingrese una opción para accionar: ")
@@ -113,6 +113,30 @@ def generar_torneo():
                         Dias_transcurridos = 0, nuevo=True)
     return torneo
 
+def menu_cargar():
+    print("\n")
+    print("Eliga una partida a cargar:".center(62))
+    archivos = os.listdir("Partidas")
+    for numero_archivo in range(len(archivos)):
+        print("[" + str(numero_archivo + 1) + "] "  + archivos[numero_archivo][:-4])
+    while True:
+        try:
+            input_usuario = input("Ingrese una partida para cargar: ")
+            lista_numeros = [*range(1, len(archivos) + 1, 1)]
+            for elemento in range(len(lista_numeros)):
+                lista_numeros[elemento] = str(lista_numeros[elemento])
+            lista_numeros.append("x")
+            if input_usuario not in lista_numeros:
+                raise ValueError("Opción no válida")
+            break
+        except ValueError:
+            print("Opción no válida, intentelo nuevamente")
+    if input_usuario == "x":
+        menu_inicio()
+    else:
+        torneo = cargar_torneo(archivos[int(input_usuario) - 1])
+        menu_acciones(torneo)
+    
 
 menu_inicio()
 

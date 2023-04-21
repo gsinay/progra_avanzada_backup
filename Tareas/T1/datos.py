@@ -26,22 +26,7 @@ with open("arenas.csv", "r") as archivo: #haciendo lista de listas de las arenas
         linea_limpia = linea.strip("\n")
         arenas.append(linea_limpia.split(","))
 
-#vamos a hacer sub-listas con los tipos de arena
 
-arenas_normales = []
-arenas_mojadas = []
-arenas_rocosas = []
-arenas_magneticas = []
-
-for arena in arenas:
-    if arena[1] == "normal":
-        arenas_normales.append(arena)
-    elif arena[1] == "mojada":
-        arenas_mojadas.append(arena)
-    elif arena[1] == "rocosa":
-        arenas_rocosas.append(arena)
-    elif arena[1] == "magnetica":
-        arenas_magneticas.append(arena)
 
 #vamos a instanciar los Items y apendicarlos a una lista:
 lista_consumibles = []

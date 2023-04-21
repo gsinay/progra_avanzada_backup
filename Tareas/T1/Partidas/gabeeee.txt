@@ -1,0 +1,8 @@
+arena,Arena magnética,magnetica,8,5,6,10
+excavador,Mtaguero,tareo,27,62,5,1,6
+excavador,MatiasMasjuan,docencio,32,21,10,5,10
+excavador,Lily614,docencio,60,0,8,0,10
+excavador,Benjeh,tareo,22,35,7,3,6
+metros_cavados,5.05
+meta,100
+dias_transcurridos,3

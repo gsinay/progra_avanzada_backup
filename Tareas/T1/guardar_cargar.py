@@ -4,7 +4,8 @@ from torneo import Torneo
 from datos import lista_items
 
 def guardar_torneo(torneo):
-    with open(os.path.join("DCCavaCava.txt"), "w") as datos:
+    nombre_archivo = input("Ingrese el nombre de la partida a guardar:")
+    with open(os.path.join("Partidas", nombre_archivo + ".txt"), "w") as datos:
         datos.write(f"arena,{torneo.arena.nombre},{torneo.arena.tipo},{torneo.arena.rareza},"
                     f"{torneo.arena.humedad},{torneo.arena.dureza},{torneo.arena.estatica}\n")
         for excavador in torneo.equipo:
@@ -17,8 +18,8 @@ def guardar_torneo(torneo):
         datos.write(f"meta,{torneo.meta}\n")
         datos.write(f"dias_transcurridos,{torneo.dias_transcurridos}")
                                                                                                     #aca para pep 8 
-def cargar_torneo():
-    with open(os.path.join("DCCavaCava.txt"), "r") as datos:
+def cargar_torneo(nombre_archivo):
+    with open(os.path.join("Partidas", nombre_archivo), "r") as datos:
         datos_lista = datos.readlines()
         lista_corregida = []
         for linea in datos_lista:

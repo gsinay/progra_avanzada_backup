@@ -1,6 +1,5 @@
 
-from datos import arenas_mojadas, arenas_rocosas, arenas_magneticas,\
-arenas_normales, arenas, excavadores
+from datos import arenas, excavadores
 from parametros import PROB_LLUVIA, PROB_TERREMOTO, PROB_DERRUMBE, METROS_PERDIDOS_DERRUMBE, \
 PROB_INICIAR_EVENTO, DIAS_TOTALES_TORNEO, METROS_META, ARENA_INICIAL, EXCAVADORES_INICIALES
 from random import choices, randint, choice
@@ -10,9 +9,9 @@ instanciar_arena
 
 
 class Torneo:
-    def __init__(self, Eventos: set, \
-                Metros_cavados: float,\
-                 Dias_transcurridos: int, nuevo: bool, \
+    def __init__(self, Eventos: set,
+                Metros_cavados: float,
+                 Dias_transcurridos: int, nuevo: bool,
                  *args, **kwargs) -> None: 
         
         self.eventos = Eventos
@@ -85,7 +84,8 @@ class Torneo:
         print(f"- {suma_tesoros} tesoros")
 
 
-        evento = choices([True, False], weights=[PROB_INICIAR_EVENTO, 1-PROB_INICIAR_EVENTO], k=1)[0]
+        evento = choices([True, False], 
+                         weights=[PROB_INICIAR_EVENTO, 1-PROB_INICIAR_EVENTO], k=1)[0]
         if evento == True:
             self.iniciar_evento()
         
@@ -102,22 +102,22 @@ class Torneo:
         print("-"*85)
         print(("*** Excavadores ***").center(85))
         print("-"*85)
-        print(f"   NOMBRE     |    TIPO      |   ENERGIA    |   FUERZA     |   SUERTE     |  FELICIDAD ")
+        print(f"   NOMBRE     |    TIPO      |   ENERGIA"
+              f"    |   FUERZA     |   SUERTE     |  FELICIDAD ")
         for excavador in self.equipo:
-            print(f"{excavador.nombre: ^13s} | {excavador.tipo: ^12s} |\
-                   {excavador.energia: ^12d} | {excavador.fuerza: ^12d} \
-                  | {excavador.suerte: ^12d} | {excavador.felicidad} ")
+            print(f"{excavador.nombre: ^13s} | {excavador.tipo: ^12s} |"
+                  f"{excavador.energia: ^12d}  | {excavador.fuerza: ^12d} |" 
+                  f"{excavador.suerte: ^12d} | {excavador.felicidad}")
         
     def ver_mochila(self):
-        print(self.mochila)
         print(("*** Menu Items ***").center(100))
         print("-"*100)
-        print(f"          NOMBRE                  |      TIPO      | \
-                                         DESCRIPCION                            ")
+        print(f"          NOMBRE                  |      TIPO      |"
+              f"                           DESCRIPCION                            ")
         print("-"*100)
         for indice_item in range(0,len(self.mochila)):
-            print(f"[{indice_item + 1}] {self.mochila[indice_item].nombre: ^29s} |\
-                   {self.mochila[indice_item].tipo: ^14s} | {self.mochila[indice_item].descripcion: ^64s}")
+            print(f"[{indice_item + 1}] {self.mochila[indice_item].nombre: ^29s} |"
+                  f"{self.mochila[indice_item].tipo: ^14s}  | {self.mochila[indice_item].descripcion: ^64s}")
 
     def usar_consumible(self, consumible):
         for excavador in self.equipo:
@@ -149,16 +149,16 @@ class Torneo:
                     self.equipo.add(instanciar_excavador(excavador_random, self.arena))
         else:
             if tesoro.cambio.lower()== "normal":
-                arena_random = choice(arenas_normales)
+                arena_random = choice(filtrar(arenas, "normal"))
                 self.arena = instanciar_arena(arena_random)
             elif tesoro.cambio.lower() == "mojada":
-                arena_random = choice(arenas_mojadas)
+                arena_random = choice(filtrar(arenas, "mojada"))
                 self.arena = instanciar_arena(arena_random)
             elif tesoro.cambio.lower() == "rocosa":
-                arena_random = choice(arenas_rocosas)
+                arena_random =  choice(filtrar(arenas, "rocosa"))
                 self.arena = instanciar_arena(arena_random)
             elif tesoro.cambio.lower() == "magnetica":
-                arena_random = choice(arenas_magneticas)
+                arena_random = choice(filtrar(arenas, "magnetica"))
                 self.arena = instanciar_arena(arena_random)
         self.mochila.remove(tesoro)
 
@@ -167,28 +167,28 @@ class Torneo:
         evento = choices(["Lluvia", "Terremoto", "Derrumbe"], weights=[PROB_LLUVIA, \
                     PROB_TERREMOTO, PROB_DERRUMBE], k=1)[0]
         if evento == "Lluvia" and self.arena.tipo == "normal":
-            numero_random = randint(1, len(arenas_mojadas)- 1) #elegimos arena mojada random
-            self.arena = instanciar_arena(arenas_mojadas[numero_random])
+            numero_random = randint(1, len(filtrar(arenas, "mojada"))- 1) #elegimos arena mojada random
+            self.arena = instanciar_arena(filtrar(arenas, "mojada")[numero_random])
             print(f"Se ha producido una lluvia, la arena normal se ha mojado y la nueva arena es {self.arena.nombre}")
         elif evento.lower() == "lluvia" and self.arena.tipo.lower()== "rocosa":
-            numero_random = randint(1, len(arenas_magneticas)- 1) #elegimos arena magnetica random
-            self.arena = self.arena = instanciar_arena(arenas_magneticas[numero_random])
+            numero_random = randint(1, len(filtrar(arenas, "magnetica"))- 1) #elegimos arena magnetica random
+            self.arena = self.arena = instanciar_arena(filtrar(arenas, "magnetica")[numero_random])
             print(f"Se ha producido una lluvia, la arena rocosa se ha electrificado y la nueva arena es {self.arena.nombre}")
         
         elif evento.lower() == "terremoto" and self.arena.tipo.lower() == "normal":
-            numero_random = randint(1, len(arenas_rocosas)- 1) #elegimos arena rocosa random
-            self.arena = self.arena = instanciar_arena(arenas_rocosas[numero_random])
+            numero_random = randint(1, len(filtrar(arenas, "rocosa"))- 1) #elegimos arena rocosa random
+            self.arena = self.arena = instanciar_arena(filtrar(arenas, "rocosa")[numero_random])
             print(f"Se ha producido un terremoto, la arena normal se ha vuelto rocosa y la nueva arena es {self.arena.nombre}")
         elif evento.lower() == "terremoto" and self.arena.tipo.lower() == "mojada":
-            numero_random = randint(1, len(arenas_magneticas)- 1) #elegimos arena magnetica random
-            self.arena = instanciar_arena(arenas_magneticas[numero_random])
+            numero_random = randint(1, len(filtrar(arenas, "magnetica"))- 1) #elegimos arena magnetica random
+            self.arena = instanciar_arena(filtrar(arenas, "magnetica")[numero_random])
             print(f"Se ha producido un terremoto, la arena mojada se ha vuelto magnetica y la nueva arena es {self.arena.nombre}")
         
         elif evento.lower() == "derrumbe":
             self.metros_cavados -= METROS_PERDIDOS_DERRUMBE
             print(f"Se ha producido un derrumbe, se han perdido {METROS_PERDIDOS_DERRUMBE} metros")
-            numero_random = randint(1, len(arenas_normales)- 1) #elegimos arena normal random
-            self.arena = instanciar_arena(arenas_normales[numero_random])
+            numero_random = randint(1, len(filtrar(arenas, "normal"))- 1) #elegimos arena normal random
+            self.arena = instanciar_arena(filtrar(arenas, "normal")[numero_random])
             print(f"La arena se ha vuelto normal y la nueva arena es {self.arena.nombre}")
 
     def __str__(self):
