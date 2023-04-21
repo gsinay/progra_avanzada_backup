@@ -1,0 +1,24 @@
+
+
+# --------------------------------------------
+# Python
+#
+__pycache__/
+#ignorando los csv
+/arenas.csv
+/consumibles.csv
+/excavadores.csv
+/tesoros.csv
+
+*.py[cod]
+
+
+*$py.class
+
+
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+
+
+*.DS_STORE
