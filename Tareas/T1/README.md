@@ -72,23 +72,28 @@ __IMPORTANTE__: Para correr el programa, es necesario que el terminal se ubique 
 ### Librerías externas utilizadas
 La lista de librerías externas que utilicé fue la siguiente:
 
-1. ```librería_1```: ```función() / módulo```
-2. ```librería_2```: ```función() / módulo``` (debe instalarse)
-3. ...
+1. ```os```: ```path```
+2. 
 
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:
 
-1. ```librería_1```: Contiene a ```ClaseA```, ```ClaseB```, (ser general, tampoco es necesario especificar cada una)...
-2. ```librería_2```: Hecha para <insertar descripción **breve** de lo que hace o qué contiene>
-3. ...
+1. ```excavadores```: Contiene a ```Escavador(ABC)``` y sus clases hijas
+2. ```arenas```: Contiene a ```Arena(ABC)``` y sus clases hijas
+3. ```items```: Contiene a ````Items(ABC)``` y sus clases hijas
+4. ```torneo```: Contiene a ```Torneo```. 
+5. ```funciones_auxiliares```: Contiene funciones para modularizar y ser mas breve en el codigo. Principalmente, para filtrar la base de datos de arenas y excavadores por tipo, para instanciar dichos objetos y tambien para obtener los excavadores que no han sido utilizados todavía.
+6. ```guardar_cargar```: Modulo con funciones que se encargan de escribir los archivos al guardar partias y de leerlos y instanciar torneos al momento de cararlas. 
 
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
 
-1. <Descripción/consideración 1 y justificación del por qué es válido/a> 
-2. <Descripción/consideración 2 y justificación del por qué es válido/a>
-3. ...
+1. Los items pueden ser repetidos, es decir, que al encontrar uno este puede volver a aparecer.
+2. Los trabajadores trabajan mientras tengan energía. Es decir, si excavar restra n energía y en un día hay m<n unidades de energía, se excavará igual dejando la energía en 0 y de ahí partir descansando. 
+3. No se pueden repetir excavadores. Es decir, no hay clones :)
+4. Se parte en el día 0. 
+5. Se excava mientras hayan días. Es decir, el juegot termina al llegar a dias_totales, y solamente ahí revisa si se ha excavado los metros_meta necesarios. 
+
 
 PD: <una última consideración (de ser necesaria) o comentario hecho anteriormente que se quiera **recalcar**>
 
