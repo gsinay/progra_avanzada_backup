@@ -77,7 +77,7 @@ class Excavador(ABC):
             self.dias_descanso = 0
             self.descansando = False
             self.__energia = 100
-            print(f"{self.nombre} ha terminado su descanso")
+            print(f"{self.nombre} volverá a trabajar en la siguiente ronda")
 
     def encontrar_item(self):
         prob_item = PROB_ENCONTRAR_ITEM * (self.__suerte / 10)

@@ -1,5 +1,5 @@
 
-from arenas import Arena_magnetica, Arena_mojada, Arena_normal, Arena_rocosa
+from arenas import ArenaMagnetica, ArenaMojada, ArenaNormal, ArenaRocosa
 from excavadores import ExcavadorDocencio, ExcavadorTareo, ExcavadorHibrido
 from random import choice
 
@@ -38,7 +38,7 @@ def instanciar_excavador(excavador, arena):
     return instancia_excavador
 
 def instanciar_arena(arena):
-    diccionario_arenas = {"normal": Arena_normal, "rocosa": Arena_rocosa, "mojada": Arena_mojada, "magnetica": Arena_magnetica}
+    diccionario_arenas = {"normal": ArenaNormal, "rocosa": ArenaNormal, "mojada": ArenaMojada, "magnetica": ArenaMagnetica}
     instancia_arena = diccionario_arenas[arena[1]](Nombre = arena[0],
                                                     Tipo = arena[1],
                                                     Rareza = int(arena[2]),

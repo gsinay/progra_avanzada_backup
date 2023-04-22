@@ -5,6 +5,7 @@
 #
 __pycache__/
 #ignorando los csv
+
 arenas.csv
 consumibles.csv
 excavadores.csv

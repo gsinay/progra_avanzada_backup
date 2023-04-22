@@ -46,24 +46,24 @@ class Arena(ABC):
     def dificultad_arena(self):
         return round((self.__rareza + self.__humedad + self.__dureza + self.__estatica) / 40, 2)
 
-class Arena_normal(Arena):
+class ArenaNormal(Arena):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
     def dificultad_arena(self):
         return round(POND_ARENA_NORMAL*super().dificultad_arena(), 2)
     
-class Arena_mojada(Arena):
+class ArenaMojada(Arena):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
-class Arena_rocosa(Arena):
+class ArenaRocosa(Arena):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
     def dificultad_arena(self):
         return round((self.rareza + self.humedad + 2*self.dureza + self.estatica) / 50, 2)
     
-class Arena_magnetica(Arena):
+class ArenaMagnetica(Arena):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
     def randomizer(self):
