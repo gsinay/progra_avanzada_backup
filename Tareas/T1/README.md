@@ -1,19 +1,11 @@
 # Tarea 1: DCCavaCava 🏖⛏
 
 
-Un buen ```README.md``` puede marcar una gran diferencia en la facilidad con la que corregimos una tarea, y consecuentemente cómo funciona su programa, por lo en general, entre más ordenado y limpio sea éste, mejor será 
-
-Para nuestra suerte, GitHub soporta el formato [MarkDown](https://es.wikipedia.org/wiki/Markdown), el cual permite utilizar una amplia variedad de estilos de texto, tanto para resaltar cosas importantes como para separar ideas o poner código de manera ordenada ([pueden ver casi todas las funcionalidades que incluye aquí](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet))
-
-Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **concisos** (a menos que lo consideren necesario) pero **tampoco pueden** faltar cosas. Lo importante es que sea claro y limpio 
-
-**Dejar claro lo que NO pudieron implementar y lo que no funciona a la perfección. Esto puede sonar innecesario pero permite que el ayudante se enfoque en lo que sí podría subir su puntaje.**
 
 ## Consideraciones generales :octocat:
 
-<Descripción de lo que hace y que **_no_** hace la tarea que entregaron junto
-con detalles de último minuto y consideraciones como por ejemplo cambiar algo
-en cierta línea del código o comentar una función>
+La tarea hace todo lo logrado. En generar, el funcionamiento es el siguiente: Se creaeron clases abstractar para excavadores y arenas, junto con sus clases hijas dependiendo de los tipos explicitados en el enunciado. Estas clases se encuentras en los archivos ```excavadores.py``` y ```arenas.py```,respectivamente. Luego, se hizo una clase pare el torneo en ```torneo.py``` la cual incluye un atributo de arena y un set de excavadores los cuales se acceden en sus metodos (principalmente simular_dia) con tal de calcular los metros cavados por dia. Los datos se leen en el archivos ```datos.py```, donde algunos objetos se instancian instantaneamente (como los items, mas sobre esto en la seccion de supuestos) mientras que otros, como las arenas y los excavadores, son ordenados en listas pero de forma desintanciada y se van instanciando a medida que sea necesario. Finalmente, el flujo del programa es mediante el archivo ```main.py``` y el archivo ```guardar_cargar.py```se carga de almacenar los datos de las partidas en una base de datos para guardar las partidas y de leer dichos archivos y instanciar el torneo nuevamente al cargar la partida. 
+
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
@@ -28,10 +20,11 @@ SINO QUE SE DEBERÁ EXPLICAR QUÉ SE REALIZO DETALLADAMENTE EN CADA ITEM.
 
 #### Programación Orientada a Objetos: 42 pts (35%)
 ##### ❌✅🟠  Diagrama
-##### ❌✅🟠 Definición de clases, atributos, métodos y properties
-##### ❌✅🟠 Relaciones entre clases
+__✅ Definición de clases, atributos, métodos y properties__: Se definen las clases en los archivos ya mencionados. Las clases padres son abstractas y las hijas heredan de estas. Algunos métodos son abstractos dependiendo del caso. Las clases tienen properties para los atributos que deben estar dentro de un rango específico como es mencionado en el enunciado.
+
+__✅ Relaciones entre clases:__ Hay herencia (en las clases abstractas como Excavadores con los tipos de excavadores, y lo mismo para Arenas y Items). Torneo compone a arenas y excavadores, y arena agrega a excavadores. Para mas informacion ver diagrama.
 #### Preparación programa: 11 pts (9%)
-##### ❌✅🟠 Creación de partidas
+__✅ Creación de partidas__: En el menu inicio se permite crear una nueva partida. Se distingue entre una partida nueva o una cargada mediante el atributo booleano _nuevo_ de la clase torneo, el cual si es true genera la arena y los excavadores iniciales en el init del Torneo.
 #### Entidades: 22 pts (18%)
 ##### ❌✅🟠 Excavador
 ##### ❌✅🟠 Arena
