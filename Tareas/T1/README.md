@@ -36,23 +36,36 @@ __✅ Torneo__: Se encuentra en ```torneo.py```. Instancia las arenas y los exca
  __✅Menú de Inicio__: Una funcion sin parametros. En ella se llama un input para ver que accion quiere el usuario. Es a prueba de fuego por el while loop y el try,except,raise que hay dentro de ella. Se cumple el bonus y para cargar partida se lleva a un menu separado definido por la funcion menu_cargar.
  
 ___✅ Menú Principal___: Tiene todas las opciones que se piden, y es robusto por el try,except,raise dentro de el while loop. La función que lo ejecuta es menu_acciones. 
-##### ❌✅🟠 Simulación día Torneo
-##### ❌✅🟠 Mostrar estado torneo
-##### ❌✅🟠 Menú Ítems
-##### ❌✅🟠 Guardar partida
-##### ❌✅🟠 Robustez
+
+__✅ Simulación día Torneo__: Se llama al método simular_dia de la clase Torneo y se imprime en consola los eventos del día.
+
+__✅ Mostrar estado torneo__: Se llama al método mostrar_estado de la clase Torneo y se imprime en consola el estado del torneo. La tabla funciona de forma bonita si la consola es grande, por lo cual se recomienda expandirla al momento de correr el main. 
+
+__✅ Menú Ítems:__ Se llama el método ver_mochila de Torneo para imprimir en consola los items en la mochila, y se pide imput de usuario para ocupar un item. Al ingresar el numero del item este se consume y es borrado de la mochila. Notar que si se ingresa la tecla "x" se vuelve al menu principal.  
+
+__✅ Guardar partida:__ Se pide un input para el nombre de la partida, la partida es guardada en un archivo .txt dentro del directorio ```partidas```. Estas luegos son leídas por las funciones en ``guardar_cargar.py``` cuando se carga la partida en el menu inicial. 
+
+___✅ Robustez:__ Los inputs toleran cualquier tipo de entrada y solamente ejecutan las acciones cuando la entrada corresponde a una opción valida. Si no, sigue pidiendo. Notar que __SI__ son case-sensitive. 
 #### Manejo de archivos: 14 pts (12%)
-##### ❌✅🟠 Archivos CSV 
-##### ❌✅🟠 Archivos TXT
-##### ❌✅🟠 parametros.py
+__✅ Archivos CSV:__ Son leidos y procesados en el archivo ```datos.py```, en los comentarios de dicho archivo se encuentra mas info de como se procesan los datos. 
+
+__✅ Archivos TXT:__ Son escritos con nombres personalizados dentro del directorio Parametros. Cada linea corresponde a uno de los atributos del Torneo o un elemento de los conjuntos/listas de dichos atributos. La primera palabra de cada linea explicita el tipo de elemento que se está leyendo (por eso en la funcion cargar_torneo se encuentra repetidamente indices como [1:]. 
+
+__✅ parametros.py:__ Todos los parametros estan ahi para evitar Hard-Codeo. 
 #### Bonus: 3 décimas máximo
-##### ❌✅🟠 Guardar Partida
+
+__✅ Guardar Partida:__ Implementado correctamente
 
 ## Ejecución :computer:
-El módulo principal de la tarea a ejecutar es  ```archivo.py```. Además se debe crear los siguientes archivos y directorios adicionales:
-1. ```archivo.ext``` en ```ubicación```
-2. ```directorio``` en ```ubicación```
-3. ...
+El módulo principal de la tarea a ejecutar es  ```main.py```. Además se debe crear los siguientes archivos y directorios adicionales:
+1. ```arenas.csv``` en ```T1```
+2. ```consumibles.csv``` en ```T1```
+3. ```ecavadores.csv```en ```T1```
+4. ```tesoros.csv``` en ```T1```
+
+__TODOS__ estos archivos deben estar en el mismo formato que el  "practica" correspondiente que fueron subidos o el programa no correrá. 
+
+__IMPORTANTE__: Para correr el programa, es necesario que el terminal se ubique en la carpeta T1 (el mismo directorio del ```main.py```), o saltará un error. Correr el programa con python3 ya que en algunos sistemas, como mac, python lo correrá con python 2.7 arrojando errores. 
 
 
 ## Librerías :books:
