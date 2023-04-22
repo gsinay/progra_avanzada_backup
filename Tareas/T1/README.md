@@ -26,12 +26,16 @@ __✅ Relaciones entre clases:__ Hay herencia (en las clases abstractas como Exc
 #### Preparación programa: 11 pts (9%)
 __✅ Creación de partidas__: En el menu inicio se permite crear una nueva partida. Se distingue entre una partida nueva o una cargada mediante el atributo booleano _nuevo_ de la clase torneo, el cual si es true genera la arena y los excavadores iniciales en el init del Torneo.
 #### Entidades: 22 pts (18%)
-##### ❌✅🟠 Excavador
-##### ❌✅🟠 Arena
-##### ❌✅🟠 Torneo
+ __✅ Excavador:__ Se encuentra dentro de ```excavadores.py``` Clase abstracta con tres clases hijas: ExcavadorTareo, ExcavadorDocencio y ExcavadorHibrido. Properties para edad, energia, fuerza, suerte y felicidad para mantenerlas siempre sobre 0 y bajo los valores explicitados en el enunciado. Notar que tiene un atributo de "durmiendo" que se activa si el trabajador llega a 0 energia y debe descansar lo estipulado en los parámetros. Notamos que en el metodo encontrar_item, si la arena es mojada luego los excavadores siempre encontraran items, como explicitado en el enunciado.
+ 
+__✅ Arena:__ Se encuentra dentro de ```arenas.py```. Clase abstracta con clases hijas: ArenaNormal, ArenaRocosa, ArenaMojada, ArenaMagnetica. La clase padre define los properties rareza, dureza, humedad y estatica y el metodo dificultad_arena. De los metodos a destacar en las clases hijas, en ArenaNormal y ArenaRocosa se sobreescribe dificultad_arena, y en ArenaMagnetica se define el metodo randomizer que pone la humedad y la dureza en un valor aleatorio. Este último método se llama en la simulacion de dias cuando la arena es magnetica como estipulado en el enunciado. 
+
+__✅ Torneo__: Se encuentra en ```torneo.py```. Instancia las arenas y los excavadores iniciales cuando es un torneo nuevo (no cargado) y define los métodos que serán utilizados en el flujo del programa. De estos, los princiaples son simular_dia, usar_consumible, abrir_tesoro y iniciar_evento (el cual se llama en simular dia si se le "gana" a la probabilidad). 
+
 #### Flujo del programa: 31 pts (26%)
-##### ❌✅🟠 Menú de Inicio
-##### ❌✅🟠 Menú Principal
+ __✅Menú de Inicio__: Una funcion sin parametros. En ella se llama un input para ver que accion quiere el usuario. Es a prueba de fuego por el while loop y el try,except,raise que hay dentro de ella. Se cumple el bonus y para cargar partida se lleva a un menu separado definido por la funcion menu_cargar.
+ 
+___✅ Menú Principal___: Tiene todas las opciones que se piden, y es robusto por el try,except,raise dentro de el while loop. La función que lo ejecuta es menu_acciones. 
 ##### ❌✅🟠 Simulación día Torneo
 ##### ❌✅🟠 Mostrar estado torneo
 ##### ❌✅🟠 Menú Ítems
