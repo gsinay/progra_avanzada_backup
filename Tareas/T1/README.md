@@ -19,7 +19,7 @@ SINO QUE SE DEBERÁ EXPLICAR QUÉ SE REALIZO DETALLADAMENTE EN CADA ITEM.
 ⚠️⚠️
 
 #### Programación Orientada a Objetos: 42 pts (35%)
-##### ❌✅🟠  Diagrama
+__✅  Diagrama__
 __✅ Definición de clases, atributos, métodos y properties__: Se definen las clases en los archivos ya mencionados. Las clases padres son abstractas y las hijas heredan de estas. Algunos métodos son abstractos dependiendo del caso. Las clases tienen properties para los atributos que deben estar dentro de un rango específico como es mencionado en el enunciado.
 
 __✅ Relaciones entre clases:__ Hay herencia (en las clases abstractas como Excavadores con los tipos de excavadores, y lo mismo para Arenas y Items). Torneo compone a arenas y excavadores, y arena agrega a excavadores. Para mas informacion ver diagrama.
@@ -92,40 +92,12 @@ Los supuestos que realicé durante la tarea son los siguientes:
 2. Los trabajadores trabajan mientras tengan energía. Es decir, si excavar restra n energía y en un día hay m<n unidades de energía, se excavará igual dejando la energía en 0 y de ahí partir descansando. 
 3. No se pueden repetir excavadores. Es decir, no hay clones :)
 4. Se parte en el día 0. 
-5. Se excava mientras hayan días. Es decir, el juegot termina al llegar a dias_totales, y solamente ahí revisa si se ha excavado los metros_meta necesarios. 
+5. Se excava mientras hayan días. Es decir, el juego termina al llegar a dias_totales, y solamente ahí revisa si se ha excavado los metros_meta necesarios. 
+6. Al consumir un consumible, primero se aplican los efectos del comsumible y después los extras dependiendo del excavador que lo consume.
 
 
 PD: <una última consideración (de ser necesaria) o comentario hecho anteriormente que se quiera **recalcar**>
 
-
--------
-
-
-
-**EXTRA:** si van a explicar qué hace específicamente un método, no lo coloquen en el README mismo. Pueden hacerlo directamente comentando el método en su archivo. Por ejemplo:
-
-```python
-class Corrector:
-
-    def __init__(self):
-          pass
-
-    # Este método coloca un 6 en las tareas que recibe
-    def corregir(self, tarea):
-        tarea.nota  = 6
-        return tarea
-```
-
-Si quieren ser más formales, pueden usar alguna convención de documentación. Google tiene la suya, Python tiene otra y hay muchas más. La de Python es la [PEP287, conocida como reST](https://www.python.org/dev/peps/pep-0287/). Lo más básico es documentar así:
-
-```python
-def funcion(argumento):
-    """
-    Mi función hace X con el argumento
-    """
-    return argumento_modificado
-```
-Lo importante es que expliquen qué hace la función y que si saben que alguna parte puede quedar complicada de entender o tienen alguna función mágica usen los comentarios/documentación para que el ayudante entienda sus intenciones.
 
 ## Referencias de código externo :book:
 
