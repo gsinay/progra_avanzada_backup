@@ -181,6 +181,9 @@ class ExcavadorHibrido(ExcavadorDocencio, ExcavadorTareo):
         return metros_cavados
     def consumir(self, consumible: Consumible):
         ExcavadorTareo.consumir(self, consumible)
+        if self.energia < 20: #esto pues hay consumibles que restan energia 
+            self.energia = 20
+        
 
 
 
