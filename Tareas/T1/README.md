@@ -130,7 +130,7 @@ Lo importante es que expliquen qué hace la función y que si saben que alguna p
 ## Referencias de código externo :book:
 
 Para realizar mi tarea saqué código de:
-1. \<link de código>: este hace \<lo que hace> y está implementado en el archivo <nombre.py> en las líneas <número de líneas> y hace <explicación breve de que hace>
+1. \<https://stackoverflow.com/questions/61618505/what-does-do-with-range-in-python>: Ocupe una versión de lo explicitado acá para generar una lista de largo N con cada indice correspondiente a un numero de ese largo (EJ: [0,1,2,3]). Esto lo ocupé en los menús de cargar partida y ver mochila con tal de poder enumerar las partidas/items dependiendo del largo de las listas del de la mochila / lista de archivos en el directorio Partidas. 
 
 ## Descuentos
 La guía de descuentos se encuentra [link](https://github.com/IIC2233/syllabus/blob/main/Tareas/Descuentos.md).
