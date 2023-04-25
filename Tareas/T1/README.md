@@ -4,7 +4,7 @@
 
 ## Consideraciones generales :octocat:
 
-La tarea hace todo lo logrado. En generar, el funcionamiento es el siguiente: Se creaeron clases abstractar para excavadores y arenas, junto con sus clases hijas dependiendo de los tipos explicitados en el enunciado. Estas clases se encuentras en los archivos ```excavadores.py``` y ```arenas.py```,respectivamente. Luego, se hizo una clase pare el torneo en ```torneo.py``` la cual incluye un atributo de arena y un set de excavadores los cuales se acceden en sus metodos (principalmente simular_dia) con tal de calcular los metros cavados por dia. Los datos se leen en el archivos ```datos.py```, donde algunos objetos se instancian instantaneamente (como los items, mas sobre esto en la seccion de supuestos) mientras que otros, como las arenas y los excavadores, son ordenados en listas pero de forma desintanciada y se van instanciando a medida que sea necesario. Finalmente, el flujo del programa es mediante el archivo ```main.py``` y el archivo ```guardar_cargar.py```se carga de almacenar los datos de las partidas en una base de datos para guardar las partidas y de leer dichos archivos y instanciar el torneo nuevamente al cargar la partida. 
+La tarea hace todo lo logrado. En generar, el funcionamiento es el siguiente: Se creaeron clases abstractas para excavadores y arenas, junto con sus clases hijas dependiendo de los tipos explicitados en el enunciado. Estas clases se encuentras en los archivos ```excavadores.py``` y ```arenas.py```,respectivamente. Luego, se hizo una clase para el torneo en ```torneo.py``` la cual incluye un atributo de arena y un set de excavadores los cuales se acceden en sus metodos (principalmente simular_dia) con tal de calcular los metros cavados por dia. Los datos se leen en el archivos ```datos.py```, donde algunos objetos se instancian instantaneamente (como los items, mas sobre esto en la seccion de supuestos) mientras que otros, como las arenas y los excavadores, son ordenados en listas pero de forma desintanciada y se van instanciando a medida que sea necesario. Finalmente, el flujo del programa es mediante el archivo ```main.py```. El archivo ```guardar_cargar.py```se ecarga de almacenar los datos de las partidas en una base de datos para guardar las partidas y de leer dichos archivos y instanciar el torneo nuevamente al cargar la partida. 
 
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
@@ -20,6 +20,7 @@ SINO QUE SE DEBERÁ EXPLICAR QUÉ SE REALIZO DETALLADAMENTE EN CADA ITEM.
 
 #### Programación Orientada a Objetos: 42 pts (35%)
 __✅  Diagrama__
+
 __✅ Definición de clases, atributos, métodos y properties__: Se definen las clases en los archivos ya mencionados. Las clases padres son abstractas y las hijas heredan de estas. Algunos métodos son abstractos dependiendo del caso. Las clases tienen properties para los atributos que deben estar dentro de un rango específico como es mencionado en el enunciado.
 
 __✅ Relaciones entre clases:__ Hay herencia (en las clases abstractas como Excavadores con los tipos de excavadores, y lo mismo para Arenas y Items). Torneo compone a arenas y excavadores, y arena agrega a excavadores. Para mas informacion ver diagrama.
@@ -41,9 +42,9 @@ __✅ Simulación día Torneo__: Se llama al método simular_dia de la clase Tor
 
 __✅ Mostrar estado torneo__: Se llama al método mostrar_estado de la clase Torneo y se imprime en consola el estado del torneo. La tabla funciona de forma bonita si la consola es grande, por lo cual se recomienda expandirla al momento de correr el main. 
 
-__✅ Menú Ítems:__ Se llama el método ver_mochila de Torneo para imprimir en consola los items en la mochila, y se pide imput de usuario para ocupar un item. Al ingresar el numero del item este se consume y es borrado de la mochila. Notar que si se ingresa la tecla "x" se vuelve al menu principal.  
+__✅ Menú Ítems:__ Se llama el método ver_mochila de Torneo para imprimir en consola los items en la mochila, y se pide input de usuario para ocupar un item. Al ingresar el numero del item este se consume y es borrado de la mochila. Notar que si se ingresa la tecla "x" se vuelve al menu principal.  
 
-__✅ Guardar partida:__ Se pide un input para el nombre de la partida, la partida es guardada en un archivo .txt dentro del directorio ```partidas```. Estas luegos son leídas por las funciones en ``guardar_cargar.py``` cuando se carga la partida en el menu inicial. 
+__✅ Guardar partida:__ Se pide un input para el nombre de la partida, la partida es guardada en un archivo .txt dentro del directorio ```partidas```. Estas luegos son leídas por las funciones en ```guardar_cargar.py``` cuando se carga la partida en el menu inicial. 
 
 ___✅ Robustez:__ Los inputs toleran cualquier tipo de entrada y solamente ejecutan las acciones cuando la entrada corresponde a una opción valida. Si no, sigue pidiendo. Notar que __SI__ son case-sensitive. 
 #### Manejo de archivos: 14 pts (12%)
@@ -80,10 +81,10 @@ Por otro lado, los módulos que fueron creados fueron los siguientes:
 
 1. ```excavadores```: Contiene a ```Escavador(ABC)``` y sus clases hijas
 2. ```arenas```: Contiene a ```Arena(ABC)``` y sus clases hijas
-3. ```items```: Contiene a ````Items(ABC)``` y sus clases hijas
+3. ```items```: Contiene a ```Items(ABC)``` y sus clases hijas
 4. ```torneo```: Contiene a ```Torneo```. 
 5. ```funciones_auxiliares```: Contiene funciones para modularizar y ser mas breve en el codigo. Principalmente, para filtrar la base de datos de arenas y excavadores por tipo, para instanciar dichos objetos y tambien para obtener los excavadores que no han sido utilizados todavía.
-6. ```guardar_cargar```: Modulo con funciones que se encargan de escribir los archivos al guardar partias y de leerlos y instanciar torneos al momento de cararlas. 
+6. ```guardar_cargar```: Modulo con funciones que se encargan de escribir los archivos al guardar partidas y de leerlos y instanciar torneos al momento de cararlas. 
 
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
