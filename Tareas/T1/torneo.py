@@ -5,8 +5,9 @@ PROB_INICIAR_EVENTO, DIAS_TOTALES_TORNEO, METROS_META, ARENA_INICIAL, EXCAVADORE
 from random import choices, randint, choice
 from funciones_auxiliares import filtrar, obtener_excavador_inutilizado, instanciar_excavador, \
 instanciar_arena
+from items import Consumible, Tesoro
 
-
+                                                                                                                                
 
 class Torneo:
     def __init__(self, Eventos: set,
@@ -37,7 +38,7 @@ class Torneo:
     def metros_cavados(self):
         return self.__metros_cavados
     @metros_cavados.setter
-    def metros_cavados(self, metros_nuevos):
+    def metros_cavados(self, metros_nuevos: int):
         if metros_nuevos < 0:
             self.metros_cavados = 0
         else:
@@ -117,14 +118,15 @@ class Torneo:
         print("-"*100)
         for indice_item in range(0,len(self.mochila)):
             print(f"[{indice_item + 1}] {self.mochila[indice_item].nombre: ^29s} |"
-                  f"{self.mochila[indice_item].tipo: ^14s}  | {self.mochila[indice_item].descripcion: ^64s}")
-
-    def usar_consumible(self, consumible):
+                  f"{self.mochila[indice_item].tipo: ^14s}"
+                  f"  | {self.mochila[indice_item].descripcion: ^64s}")
+                                                                                                    
+    def usar_consumible(self, consumible: Consumible):
         for excavador in self.equipo:
             excavador.consumir(consumible)
         self.mochila.remove(consumible)
 
-    def abrir_tesoro(self, tesoro):
+    def abrir_tesoro(self, tesoro: Tesoro):
         if tesoro.calidad == 1: #vamos a agregar un trabajador
             if tesoro.cambio.lower() == "docencio":
                 excavadores_filtrados = filtrar(excavadores, "docencio")
@@ -162,32 +164,43 @@ class Torneo:
                 self.arena = instanciar_arena(arena_random)
         self.mochila.remove(tesoro)
 
-
+                                                                                                                                                                                                            
     def iniciar_evento(self):
         evento = choices(["Lluvia", "Terremoto", "Derrumbe"], weights=[PROB_LLUVIA, \
                     PROB_TERREMOTO, PROB_DERRUMBE], k=1)[0]
         if evento == "Lluvia" and self.arena.tipo == "normal":
-            numero_random = randint(1, len(filtrar(arenas, "mojada"))- 1) #elegimos arena mojada random
+            #elegimos arena mojada random
+            numero_random = randint(1, len(filtrar(arenas, "mojada"))- 1) 
             self.arena = instanciar_arena(filtrar(arenas, "mojada")[numero_random])
-            print(f"Se ha producido una lluvia, la arena normal se ha mojado y la nueva arena es {self.arena.nombre}")
+            print(f"Se ha producido una lluvia, la arena normal se ha mojado "
+                  f"y la nueva arena es {self.arena.nombre}")
         elif evento.lower() == "lluvia" and self.arena.tipo.lower()== "rocosa":
-            numero_random = randint(1, len(filtrar(arenas, "magnetica"))- 1) #elegimos arena magnetica random
-            self.arena = self.arena = instanciar_arena(filtrar(arenas, "magnetica")[numero_random])
-            print(f"Se ha producido una lluvia, la arena rocosa se ha electrificado y la nueva arena es {self.arena.nombre}")
+            #elegimos arena magnetica random
+            numero_random = randint(1, len(filtrar(arenas, "magnetica"))- 1) 
+            self.arena = self.arena = instanciar_arena(
+                filtrar(arenas, "magnetica")[numero_random])
+            print(f"Se ha producido una lluvia, la arena rocosa se ha electrificado "
+                  f"y la nueva arena es {self.arena.nombre}")
         
         elif evento.lower() == "terremoto" and self.arena.tipo.lower() == "normal":
-            numero_random = randint(1, len(filtrar(arenas, "rocosa"))- 1) #elegimos arena rocosa random
+            #elegimos arena rocosa random
+            numero_random = randint(1, len(filtrar(arenas, "rocosa"))- 1) 
             self.arena = self.arena = instanciar_arena(filtrar(arenas, "rocosa")[numero_random])
-            print(f"Se ha producido un terremoto, la arena normal se ha vuelto rocosa y la nueva arena es {self.arena.nombre}")
+            print(f"Se ha producido un terremoto, la arena normal se ha vuelto rocosa "
+                  f"y la nueva arena es {self.arena.nombre}")
         elif evento.lower() == "terremoto" and self.arena.tipo.lower() == "mojada":
-            numero_random = randint(1, len(filtrar(arenas, "magnetica"))- 1) #elegimos arena magnetica random
+            #elegimos arena magnetica random
+            numero_random = randint(1, len(filtrar(arenas, "magnetica"))- 1) 
             self.arena = instanciar_arena(filtrar(arenas, "magnetica")[numero_random])
-            print(f"Se ha producido un terremoto, la arena mojada se ha vuelto magnetica y la nueva arena es {self.arena.nombre}")
+            print(f"Se ha producido un terremoto, la arena mojada se ha vuelto magnetica "
+                  f"y la nueva arena es {self.arena.nombre}")
         
         elif evento.lower() == "derrumbe":
             self.metros_cavados -= METROS_PERDIDOS_DERRUMBE
-            print(f"Se ha producido un derrumbe, se han perdido {METROS_PERDIDOS_DERRUMBE} metros")
-            numero_random = randint(1, len(filtrar(arenas, "normal"))- 1) #elegimos arena normal random
+            print(f"Se ha producido un derrumbe, "
+                  f"se han perdido {METROS_PERDIDOS_DERRUMBE} metros")
+            #elegimos arena normal random
+            numero_random = randint(1, len(filtrar(arenas, "normal"))- 1) 
             self.arena = instanciar_arena(filtrar(arenas, "normal")[numero_random])
             print(f"La arena se ha vuelto normal y la nueva arena es {self.arena.nombre}")
 

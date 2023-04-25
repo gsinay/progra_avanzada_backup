@@ -1,14 +1,14 @@
 from abc import ABC
 
 class Item(ABC):
-    def __init__(self, Nombre, Tipo, Descripcion, *args, **kwargs) -> None:
+    def __init__(self, Nombre: str, Tipo: str, Descripcion:str, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.nombre = Nombre
         self.tipo = Tipo
         self.descripcion = Descripcion
 
 class Consumible(Item):
-    def __init__(self, Energia, Fuerza, Suerte, Felicidad, *args, **kwargs) -> None:
+    def __init__(self, Energia: int, Fuerza: int, Suerte: int, Felicidad: int, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.energia = Energia
         self.fuerza = Fuerza
@@ -21,7 +21,7 @@ class Consumible(Item):
                 \nSuerte: {self.suerte}\nFelicidad: {self.felicidad}")
     
 class Tesoro(Item):
-    def __init__(self, Calidad, Cambio, *args, **kwargs) -> None:
+    def __init__(self, Calidad: int, Cambio:str, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.calidad = Calidad
         self.cambio = Cambio

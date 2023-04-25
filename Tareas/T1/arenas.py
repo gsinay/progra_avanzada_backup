@@ -44,7 +44,8 @@ class Arena(ABC):
         self.__estatica = min(10, max(1, estatica_nueva))
 
     def dificultad_arena(self):
-        return round((self.__rareza + self.__humedad + self.__dureza + self.__estatica) / 40, 2)
+        return round((self.__rareza + self.__humedad +
+                       self.__dureza + self.__estatica) / 40, 2)
 
 class ArenaNormal(Arena):
     def __init__(self, *args, **kwargs) -> None:

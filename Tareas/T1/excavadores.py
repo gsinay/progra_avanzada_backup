@@ -5,13 +5,15 @@ ENERGIA_ADICIONAL_TAREO, SUERTE_ADICIONAL_TAREO, EDAD_ADICIONAL_TAREO, FELICIDAD
 from items import Consumible
 from random import choices, randint
 from datos import  lista_items
+from arenas import Arena
                                                                                                     
 class Excavador(ABC):
-    def __init__(self, Nombre, Edad, Energia, Fuerza, Suerte, \
-                  Felicidad, Arena_actual, *args, **kwargs) -> None:
+    def __init__(self, Nombre: str, Edad: int, Energia: int,
+                  Fuerza: int, Suerte: int, 
+                  Felicidad: int, Arena_actual: Arena, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.nombre = Nombre
-        self.__edad = Edad #los parametros privados los getearemos y setearemos para que no se pasen de los limites
+        self.__edad = Edad 
         self.__energia = Energia
         self.__fuerza = Fuerza
         self.__suerte = Suerte
@@ -19,7 +21,7 @@ class Excavador(ABC):
         self.arena_actual = Arena_actual
         self.descansando = False
         self.dias_descanso = 0
-    
+
     @property
     def edad(self): #getter de edad
         return self.__edad
@@ -70,7 +72,7 @@ class Excavador(ABC):
             self.descansando = True
             print(f"{self.nombre} partirá su descanso en la siguiente ronda")
         if self.descansando == True and self.dias_descanso < dias_a_descansar: 
-            #si se esta descansando y no se han cumplido los dias a descansar, se aumenta el contador de dias de descanso
+            #si se esta descansando y no se han cumplido los dias a descansar, descanamos uno mas
             self.dias_descanso += 1
         elif self.descansando == True and self.dias_descanso == dias_a_descansar:
             #si se esta descansando y se han cumplido los dias a descansar, se termina el descanso
@@ -83,7 +85,8 @@ class Excavador(ABC):
         prob_item = PROB_ENCONTRAR_ITEM * (self.__suerte / 10)
         #se calcula la probabilidad de encontrar un item
         encontrar_item = choices([True, False], weights=[prob_item, 1-prob_item], k=1)[0]
-        if encontrar_item or self.arena_actual.tipo == "mojada": #esto pues an arena mojada siempre encontramos items
+        #el or de abajo pues an arena mojada siempre encontramos items
+        if encontrar_item or self.arena_actual.tipo == "mojada": 
             encontrar_consumible = choices([True, False], \
                             weights=[PROB_ENCONTRAR_CONSUMIBLE, 1-PROB_ENCONTRAR_CONSUMIBLE], k=1)[0] 
             if encontrar_consumible:
@@ -102,7 +105,7 @@ class Excavador(ABC):
         energia_gastada = int((10 / self.__fuerza) + (self.__edad / 6))
         return energia_gastada
 
-    
+
 
 class ExcavadorDocencio(Excavador):
     def __init__(self, *args, **kwargs) -> None:
@@ -111,8 +114,8 @@ class ExcavadorDocencio(Excavador):
 
     def cavar(self):
         if self.descansando == False:
-            metros_cavados = round(((30/self.edad) + ((self.felicidad + 2*self.fuerza)/10)) * \
-                                    (1/(10 * self.arena_actual.dificultad_arena())), 2) 
+            metros_cavados = round(((30/self.edad) + ((self.felicidad + 2*self.fuerza)/10)) \
+                                    * (1/(10 * self.arena_actual.dificultad_arena())), 2) 
             self.energia -= self.gastar_energia()
             self.felicidad += FELICIDAD_ADICIONAL_DOCENCIO
             self.fuerza += FUERZA_ADICIONAL_DOCENCIO
@@ -139,7 +142,7 @@ class ExcavadorTareo(Excavador):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.tipo = "tareo"
-
+                                                                                                                   
     def cavar(self):
         if self.descansando == False:
             metros_cavados = round(((30/self.edad) + ((self.felicidad + 2*self.fuerza)/10)) * \

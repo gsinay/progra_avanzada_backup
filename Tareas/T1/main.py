@@ -2,7 +2,7 @@
 from torneo import Torneo
 from guardar_cargar import guardar_torneo, cargar_torneo
 import os
-
+               
 
 
 # def menu_inicio():
@@ -83,7 +83,8 @@ def menu_mochila(torneo):
     print(f"Dia de torneo DCCCavaCava: {torneo.dias_transcurridos}")
     print(f"Tipo de arena: {torneo.arena.tipo}")
     torneo.ver_mochila()
-    print("\ningrese el numero del objeto que desea utilizar o la opción x para voler al menú de acciones:")
+    print(f"\ningrese el numero del objeto que desea utilizar",
+           "o la opción x para voler al menú de acciones:")
     while True:
         try:
             input_usuario = input("Ingrese una opción para accionar: ")
@@ -121,7 +122,7 @@ def menu_cargar():
         print("[" + str(numero_archivo + 1) + "] "  + archivos[numero_archivo][:-4])
     while True:
         try:
-            input_usuario = input("Ingrese una partida para cargar: ")
+            input_usuario = input("Ingrese una partida para cargar o aprete \"x\" para volver: ")
             lista_numeros = [*range(1, len(archivos) + 1, 1)]
             for elemento in range(len(lista_numeros)):
                 lista_numeros[elemento] = str(lista_numeros[elemento])

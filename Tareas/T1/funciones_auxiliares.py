@@ -1,16 +1,16 @@
 
-from arenas import ArenaMagnetica, ArenaMojada, ArenaNormal, ArenaRocosa
-from excavadores import ExcavadorDocencio, ExcavadorTareo, ExcavadorHibrido
+from arenas import ArenaMagnetica, ArenaMojada, ArenaNormal, ArenaRocosa, Arena
+from excavadores import ExcavadorDocencio, ExcavadorTareo, ExcavadorHibrido, Excavador
 from random import choice
-
-def filtrar(lista, filtro):
+                                                                                                    
+def filtrar(lista: list, filtro: str):
     lista_a_retornar = []
     for elemento in lista:
         if elemento[1] == filtro:
             lista_a_retornar.append(elemento)
     return lista_a_retornar
 
-def instanciar_excavador(excavador, arena):
+def instanciar_excavador(excavador: list, arena: Arena):
     if excavador[1] == "docencio":
         instancia_excavador = ExcavadorDocencio(Nombre = excavador[0], 
                                                     Edad = int(excavador[2]), 
@@ -37,7 +37,7 @@ def instanciar_excavador(excavador, arena):
                                                     Arena_actual = arena)
     return instancia_excavador
 
-def instanciar_arena(arena):
+def instanciar_arena(arena: list):
     diccionario_arenas = {"normal": ArenaNormal, "rocosa": ArenaNormal, "mojada": ArenaMojada, "magnetica": ArenaMagnetica}
     instancia_arena = diccionario_arenas[arena[1]](Nombre = arena[0],
                                                     Tipo = arena[1],
@@ -48,7 +48,7 @@ def instanciar_arena(arena):
     return instancia_arena
 
         
-def obtener_excavador_inutilizado(lista_excavadores_posibles, set_excavadores_en_uso):
+def obtener_excavador_inutilizado(lista_excavadores_posibles: list, set_excavadores_en_uso: set):
     nuevo_objeto = None
     #primero vemos si tenemos alguno que no este en uso, es decir, que hayan disponibles:
     nombres_en_uso = {obj.nombre for obj in set_excavadores_en_uso}

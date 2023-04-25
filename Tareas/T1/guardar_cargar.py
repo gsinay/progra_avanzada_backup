@@ -3,7 +3,7 @@ from funciones_auxiliares import instanciar_arena, instanciar_excavador
 from torneo import Torneo
 from datos import lista_items
 
-def guardar_torneo(torneo):
+def guardar_torneo(torneo: Torneo):
     nombre_archivo = input("Ingrese el nombre de la partida a guardar:")
     with open(os.path.join("Partidas", nombre_archivo + ".txt"), "w") as datos:
         datos.write(f"arena,{torneo.arena.nombre},{torneo.arena.tipo},{torneo.arena.rareza},"
@@ -17,16 +17,18 @@ def guardar_torneo(torneo):
         datos.write(f"metros_cavados,{torneo.metros_cavados}\n")
         datos.write(f"meta,{torneo.meta}\n")
         datos.write(f"dias_transcurridos,{torneo.dias_transcurridos}")
-                                                                                                    #aca para pep 8 
-def cargar_torneo(nombre_archivo):
+                                                                                                    
+def cargar_torneo(nombre_archivo: str):
     with open(os.path.join("Partidas", nombre_archivo), "r") as datos:
         datos_lista = datos.readlines()
         lista_corregida = []
         for linea in datos_lista:
             linea = linea.strip().split(",")
             lista_corregida.append(linea)
-        arena = instanciar_arena(lista_corregida[0][1:]) #lista_corregida[0][1:] es una lista con los datos de la arena, del uno en adelante
-        excavadores = set() #set vacio                    porque el primer elemento es "arena" ocupado para la carga pero no la instanciacion
+        arena = instanciar_arena(lista_corregida[0][1:]) 
+        #lista_corregida[0][1:] es una lista con los datos de la arena, del uno en adelante
+        #porque el primer elemento es "arena" ocupado para la carga pero no la instanciacion
+        excavadores = set() #set vacio                   
         mochila = []
         for elemento in lista_corregida:
             if elemento[0] == "excavador":
@@ -43,8 +45,11 @@ def cargar_torneo(nombre_archivo):
             if elemento[0] == "dias_transcurridos":
                 dias_transcurridos = int(elemento[1])
 
-        torneo = Torneo(Eventos = {"Lluvia", "Terremoto", "Derrumbe"}, Metros_cavados = metros_cavados,
-                        Dias_transcurridos = dias_transcurridos, Meta = meta, nuevo=False)
+        torneo = Torneo(Eventos = {"Lluvia", "Terremoto", "Derrumbe"}, 
+                        Metros_cavados = metros_cavados,
+                        Dias_transcurridos = dias_transcurridos, 
+                        Meta = meta, 
+                        nuevo=False)
         torneo.arena = arena
         torneo.equipo = excavadores
         torneo.mochila = mochila
