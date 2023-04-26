@@ -52,18 +52,22 @@ def menu_acciones(torneo):
         except ValueError:
             print("Opción no válida, intentelo nuevamente")
     if input_usuario == "1":
+        terminado = False
         torneo.simular_dia()
         if torneo.dias_transcurridos == torneo.dias_totales:
             print("El torneo ha terminado!")
             if torneo.metros_cavados >= torneo.meta:
                 print("Felicidades, has ganado el torneo!")
                 print(f" Has cavado {torneo.metros_cavados} metros, y la meta era {torneo.meta} metros")
+                terminado = True
             else:
                 print(f"Has perdido el torneo, la meta era {torneo.meta} metros y has cavado {torneo.metros_cavados} metros")
                 print("Vuelve a intentarlo!")
             #agregar carcar una vez que tenga funcion definida
+                terminado = True
             menu_inicio()
-        menu_acciones(torneo)
+        if not terminado:
+            menu_acciones(torneo)
     elif input_usuario == "2":
         torneo.mostrar_estado()
         menu_acciones(torneo)

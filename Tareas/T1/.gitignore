@@ -10,6 +10,7 @@ arenas.csv
 consumibles.csv
 excavadores.csv
 tesoros.csv
+enunciado.pdf
 
 *.py[cod]
 

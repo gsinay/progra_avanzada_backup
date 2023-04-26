@@ -85,20 +85,22 @@ class Excavador(ABC):
         prob_item = PROB_ENCONTRAR_ITEM * (self.__suerte / 10)
         #se calcula la probabilidad de encontrar un item
         encontrar_item = choices([True, False], weights=[prob_item, 1-prob_item], k=1)[0]
-        #el or de abajo pues an arena mojada siempre encontramos items
-        if encontrar_item or self.arena_actual.tipo == "mojada": 
-            encontrar_consumible = choices([True, False], \
-                            weights=[PROB_ENCONTRAR_CONSUMIBLE, 1-PROB_ENCONTRAR_CONSUMIBLE], k=1)[0] 
-            if encontrar_consumible:
-                numero_random = randint(0, len(lista_items[0])-1)
-                #leyendo los datos del consumible random:
-                #retorna un objeto consumible
-                return lista_items[0][numero_random]
+        if self.descansando == False: #si esta durmiendo no encuentra items
+             #el or de abajo pues an arena mojada siempre encontramos items
+            if encontrar_item or self.arena_actual.tipo == "mojada": 
+                encontrar_consumible = choices([True, False], \
+                                weights=[PROB_ENCONTRAR_CONSUMIBLE, 1-PROB_ENCONTRAR_CONSUMIBLE], k=1)[0] 
+                if encontrar_consumible:
+                    numero_random = randint(0, len(lista_items[0])-1)
+                    #leyendo los datos del consumible random:
+                    #retorna un objeto consumible
+                    return lista_items[0][numero_random]
+                else:
+                    numero_random = randint(0, len(lista_items[1])-1)
+                    return lista_items[1][numero_random]
             else:
-                numero_random = randint(0, len(lista_items[1])-1)
-                return lista_items[1][numero_random]
-        else:
-            return None
+                return None
+        return None
 
             
     def gastar_energia(self):

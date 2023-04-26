@@ -66,9 +66,6 @@ class Torneo:
         suma_consumibles = 0
         suma_tesoros = 0
         for excavador in self.equipo: #se recorre el equipo 
-            metros_cavados = excavador.cavar()
-            print(f"{excavador.nombre} ha cavado {metros_cavados} metros")
-            suma_metros += metros_cavados
             item = excavador.encontrar_item()
             if item != None:
                 print(f"{excavador.nombre} ha encontrado un {item.nombre}")
@@ -78,6 +75,9 @@ class Torneo:
                 elif item.tipo == "Consumible":
                     suma_consumibles += 1
                 self.mochila.append(item)
+            metros_cavados = excavador.cavar()
+            print(f"{excavador.nombre} ha cavado {metros_cavados} metros")
+            suma_metros += metros_cavados
         self.metros_cavados += suma_metros
         print(f"Se han cavado {round(suma_metros, 2)} metros en total")
         print(f"Se han encontrado {suma_tesoros + suma_consumibles} items en total")
