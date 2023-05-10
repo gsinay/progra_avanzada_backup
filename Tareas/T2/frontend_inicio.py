@@ -10,6 +10,7 @@ from parametros import (MIN_CARACTERES, MAX_CARACTERES)
 class VentanaInicio(QWidget):
 
     senal_empezar = pyqtSignal(str, str)
+    senal_verificar = pyqtSignal(str)
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -60,18 +61,17 @@ class VentanaInicio(QWidget):
 
         self.show()
 
-    def verificar_info(self): #esto deberia cambiarse a un archivo backend
+    
+
+    def verificar_info(self): 
         username = self.text_username.text()
-        lugar = self.dropdown_lugares.currentText()
-        if not username:
-             QMessageBox.warning(self, 'Warning', "debe ingresar un usuario")
-        elif not username.isalnum():
-            QMessageBox.warning(self, 'Warning', "el usuario debe ser alfanumerico")
-        elif len(username) < MIN_CARACTERES:
-            QMessageBox.warning(self, 'Warning', f"el usuario debe tener al menos {MIN_CARACTERES} caracteres")
-        elif len(username) > MAX_CARACTERES:
-            QMessageBox.warning(self, 'Warning', f"el usuario debe tener menos de {MAX_CARACTERES} caracteres")
-        else:
+        self.senal_verificar.emit(username)
+    
+    def error_username(self, mensaje):
+        QMessageBox.warning(self, 'Error', mensaje)
+        
+    def empezar_juego(self, username):
+            lugar = self.dropdown_lugares.currentText()
             self.senal_empezar.emit(username, lugar)
             self.close()
 
