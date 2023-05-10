@@ -1,6 +1,6 @@
 import sys
 import os
-from PyQt5.QtWidgets import (QApplication, QWidget, QLabel, QLineEdit,
+from PyQt5.QtWidgets import  (QApplication, QWidget, QLabel, QLineEdit,
                              QComboBox, QPushButton, QMessageBox)
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QPixmap
@@ -8,11 +8,12 @@ from PyQt5.QtCore import QRect
 from parametros import (MIN_CARACTERES, MAX_CARACTERES)
 
 class VentanaInicio(QWidget):
+
+    senal_empezar = pyqtSignal(str, str)
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.init_gui()
-        self.senal_empezar = pyqtSignal(str, str)
 
     def init_gui(self):
         self.setGeometry(200, 200, 600, 700)
@@ -59,7 +60,7 @@ class VentanaInicio(QWidget):
 
         self.show()
 
-    def verificar_info(self):
+    def verificar_info(self): #esto deberia cambiarse a un archivo backend
         username = self.text_username.text()
         lugar = self.dropdown_lugares.currentText()
         if not username:
@@ -74,3 +75,8 @@ class VentanaInicio(QWidget):
             self.senal_empezar.emit(username, lugar)
             self.close()
 
+if __name__ == '__main__':
+    app = QApplication([])
+    ventana_inicio = VentanaInicio()
+    ventana_inicio.show()
+    sys.exit(app.exec())
