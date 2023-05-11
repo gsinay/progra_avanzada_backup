@@ -16,6 +16,10 @@ if __name__ == '__main__':
     procesador_inicio.senal_username_verificado.connect(ventana_inicio.empezar_juego)
     procesador_inicio.senal_username_malo.connect(ventana_inicio.error_username)
     ventana_inicio.senal_empezar.connect(ventana_juego.empezar_juego)
+
+    #señales juego
+
+    
     
 
 
