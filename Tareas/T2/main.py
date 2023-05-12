@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QApplication
 from frontend_inicio import VentanaInicio
 from frontend_juego import VentanaJuego
 from backend_inicio import Procesador
-from models import Juego_constructor
+from models_juegos import Juego_constructor, Juego
 import sys
 
 
@@ -12,6 +12,7 @@ if __name__ == '__main__':
     procesador_inicio = Procesador(ventana_inicio)
     ventana_juego = VentanaJuego()
     logica_juego_constructor = Juego_constructor()
+    logica_juego = Juego()
     
 
     # Conectamos las señales del frontend inicio con el procesador
@@ -26,6 +27,8 @@ if __name__ == '__main__':
     logica_juego_constructor.senal_error_agregar_elemento.connect(ventana_juego.error_agregar_elemento)
     logica_juego_constructor.senal_elemento_agregado.connect(ventana_juego.elemento_agregado)
     ventana_juego.senal_limpiar_grilla.connect(logica_juego_constructor.limpiar_grilla)
+    ventana_juego.senal_empezar_juego.connect(logica_juego_constructor.empezar_juego)
+    logica_juego_constructor.senal_check_partir.connect(ventana_juego.check_partir)
 
 
     sys.exit(app.exec())

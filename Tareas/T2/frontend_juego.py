@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (QWidget, QLabel, QGridLayout,
                              QFrame)
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import pyqtSignal, QSize
-from models import Luigi, Juego_constructor
+from models_juegos import Juego_constructor
 import os
 from parametros import (ANCHO_GRILLA, LARGO_GRILLA, FANTASMAS_HORIZONTALES,
                         FANTASMAS_VERTICALES, FUEGOS, ROCAS, MURALLAS)
@@ -11,14 +11,16 @@ from parametros import (ANCHO_GRILLA, LARGO_GRILLA, FANTASMAS_HORIZONTALES,
 class VentanaJuego(QWidget):
     senal_agregar_elemento = pyqtSignal(tuple, str)
     senal_limpiar_grilla =  pyqtSignal()
+    senal_empezar_juego = pyqtSignal()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.init_gui()
-        self.juego_constructor = Juego_constructor() #instanciaremos esto para mantener cuenta de cuantos elementos quedan en el front
+        self.juego_constructor = Juego_constructor()
+        #instanciaremos esto para mantener cuenta de cuantos elementos quedan en el back
 
     def init_gui(self):
-        self.setFixedSize(600, 700)
+        self.setFixedSize(800, 800)
         self.setWindowTitle('Ventana Juego')
     
     def empezar_juego(self, username, lugar):
@@ -29,8 +31,9 @@ class VentanaJuego(QWidget):
             self.modo_juego(lugar)
 
     def modo_constructor(self):
-        self.armar_grilla()
+        self.armar_grilla("Modo Constructor")
         self.setWindowTitle('Modo Constructor')
+        self.condiciones_ok = False #booleano que checkea si podemos empezar
 
         #agregar elementos al lado izquierdo
         self.boton_luigi = QPushButton(f"{self.juego_constructor.luigi}")
@@ -89,7 +92,7 @@ class VentanaJuego(QWidget):
         self.nombre_sprite_clickeado = nombre_sprite
         print(self.nombre_sprite_clickeado)
 
-    def armar_grilla(self):
+    def armar_grilla(self, modo_juego):
         self.rows = LARGO_GRILLA
         self.columns = ANCHO_GRILLA
         self.grilla = QGridLayout()
@@ -98,13 +101,18 @@ class VentanaJuego(QWidget):
             for column in range(self.columns):
                 if row == 0 or row == LARGO_GRILLA - 1 or column == 0 or column == ANCHO_GRILLA - 1:
                     elemento = QLabel()
-                    elemento.setPixmap(QPixmap(os.path.join('sprites', 'Elementos', 'bordermap.png')))
-                else:
+                    elemento.setPixmap(QPixmap(os.path.join('sprites', 'Elementos', 'bordermap.png')).scaled(50,50))
+                elif modo_juego != "Modo Juego":
                     elemento = QPushButton()
                     elemento.id = (row, column)
                     elemento.setStyleSheet('background-color: black; border: 1px solid white')
-                    elemento.setFixedSize(32, 32)
+                    elemento.setFixedSize(50, 50)
                     elemento.clicked.connect(self.boton_grilla_clickeado)
+                elif modo_juego == "Modo Juego":
+                    elemento = QLabel()
+                    elemento.id = (row, column)
+                    elemento.setStyleSheet('background-color: black; border: 1px solid white')
+                    elemento.setFixedSize(50, 50)
                 elemento.setContentsMargins(0, 0, 0, 0) #quitar los margenes
                 self.grilla.addWidget(elemento, row, column)
 
@@ -166,17 +174,32 @@ class VentanaJuego(QWidget):
         self.senal_limpiar_grilla.emit()
     
     def partir(self):
-        self.setWindowTitle("Juego")
-        for boton in self.botones_elementos_constructor:
-            boton.setEnabled(False)
-        self.boton_partir.setEnabled(False)
+        self.senal_empezar_juego.emit()
+        if self.condiciones_ok == True:
+            for boton in self.botones_elementos_constructor:
+                boton.deleteLater()
+            for row in range(self.rows):
+                for column in range(self.columns):
+                    if row != 0 and row != LARGO_GRILLA - 1 and column != 0 and column != ANCHO_GRILLA - 1:
+                        bloque = self.grilla.itemAtPosition(row, column).widget()
+                        bloque.setEnabled(False)
         self.boton_limpiar.setEnabled(False)
-        for row in range(self.rows):
-            for column in range(self.columns):
-                if row != 0 and row != LARGO_GRILLA - 1 and column != 0 and column != ANCHO_GRILLA - 1:
-                    bloque = self.grilla.itemAtPosition(row, column).widget()
-                    bloque.setEnabled(False)
+        self.boton_partir.setEnabled(False)
+    
+    def check_partir(self, ok_para_partir, mensaje):
+        if ok_para_partir == False:
+            QMessageBox.warning(self, "Error", mensaje)
+        else:
+            self.condiciones_ok = True
 
 
-    def modo_juego(self, nombre_juego):
-        self.armar_grilla()
+    def modo_juego(self, lugar):
+        self.armar_grilla("Modo Juego")
+        vbox1 = QVBoxLayout()
+        vbox1.addLayout(self.grilla)
+        hbox1 = QHBoxLayout()
+        hbox1.addStretch(100)
+        hbox1.addLayout(vbox1)
+        self.setLayout(hbox1)
+        self.setWindowTitle(lugar)
+       
