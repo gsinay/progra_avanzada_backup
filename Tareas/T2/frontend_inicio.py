@@ -9,7 +9,8 @@ from parametros import (MIN_CARACTERES, MAX_CARACTERES)
 
 class VentanaInicio(QWidget):
 
-    senal_empezar = pyqtSignal(str, str)
+    senal_empezar_constructor = pyqtSignal(str, str)
+    senal_empezar_juego = pyqtSignal(str, str)
     senal_verificar = pyqtSignal(str)
     
     def __init__(self, *args, **kwargs):
@@ -72,7 +73,10 @@ class VentanaInicio(QWidget):
         
     def empezar_juego(self, username):
             lugar = self.dropdown_lugares.currentText()
-            self.senal_empezar.emit(username, lugar)
+            if lugar == "Modo Constructor":
+                self.senal_empezar_constructor.emit(username, lugar)
+            else:
+                self.senal_empezar_juego.emit(username, lugar)
             self.close()
 
 if __name__ == '__main__':

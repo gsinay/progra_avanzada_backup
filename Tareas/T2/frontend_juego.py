@@ -1,3 +1,4 @@
+from PyQt5 import QtGui
 from PyQt5.QtWidgets import (QWidget, QLabel, QGridLayout,
                              QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox,
                              QFrame)
@@ -9,90 +10,26 @@ from parametros import (ANCHO_GRILLA, LARGO_GRILLA, FANTASMAS_HORIZONTALES,
                         FANTASMAS_VERTICALES, FUEGOS, ROCAS, MURALLAS)
 
 class VentanaJuego(QWidget):
-    senal_agregar_elemento = pyqtSignal(tuple, str)
-    senal_limpiar_grilla =  pyqtSignal()
-    senal_empezar_juego = pyqtSignal()
 
+    senal_poblar_grilla = pyqtSignal(str)
+   
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.init_gui()
-        self.juego_constructor = Juego_constructor()
-        #instanciaremos esto para mantener cuenta de cuantos elementos quedan en el back
-
-    def init_gui(self):
         self.setFixedSize(800, 800)
-        self.setWindowTitle('Ventana Juego')
-    
-    def empezar_juego(self, username, lugar):
+
+    def set_info(self, username, nombre_lugar):
         self.show()
-        if lugar == "Modo Constructor":
-            self.modo_constructor()
-        else:
-            self.modo_juego(lugar)
+        self.setWindowTitle(f"Juego en {nombre_lugar} - {username}")
+        self.armar_grilla()
+        self.poblar_grilla(nombre_lugar)
+        self.nombre_lugar = nombre_lugar
+    def set_info_desde_constructor(self, grilla, username):
+        self.show()
+        self.setWindowTitle(f"Juego de {username}")
+        self.armar_grilla()
+        self.poblar_grilla_front(grilla)
 
-    def modo_constructor(self):
-        self.armar_grilla("Modo Constructor")
-        self.setWindowTitle('Modo Constructor')
-        self.condiciones_ok = False #booleano que checkea si podemos empezar
-
-        #agregar elementos al lado izquierdo
-        self.boton_luigi = QPushButton(f"{self.juego_constructor.luigi}")
-        self.boton_luigi.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'luigi_rigth_1.png')))
-        self.boton_pared = QPushButton(f"{self.juego_constructor.pared}")
-        self.boton_pared.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'wall.png')))
-        self.boton_roca = QPushButton(f"{self.juego_constructor.roca}")
-        self.boton_roca.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'rock.png')))
-        self.boton_estrella = QPushButton(f"{self.juego_constructor.estrella}")
-        self.boton_estrella.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'osstar.png')))
-        self.boton_fantasma_horizontal = QPushButton(f"{self.juego_constructor.fantasma_horizontal}")
-        self.boton_fantasma_horizontal.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'white_ghost_left_1.png')))
-        self.boton_fantasma_vertical = QPushButton(f"{self.juego_constructor.fantasma_vertical}")
-        self.boton_fantasma_vertical.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'red_ghost_vertical_1.png')))
-        self.boton_fuego = QPushButton(f"{self.juego_constructor.fuego}")
-        self.boton_fuego.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'fire.png')))
-        self.botones_elementos_constructor = (self.boton_luigi, self.boton_pared, self.boton_roca, self.boton_estrella, 
-                                         self.boton_fantasma_horizontal, self.boton_fantasma_vertical, self.boton_fuego)
-        
-        for boton in self.botones_elementos_constructor:
-            boton.setIconSize(QSize(32, 32))
-        #conectar los botones a slot con lambda para registrar los nombres
-        self.boton_luigi.clicked.connect(lambda: self.boton_sprite_clickeado("luigi"))
-        self.boton_pared.clicked.connect(lambda: self.boton_sprite_clickeado("pared"))
-        self.boton_roca.clicked.connect(lambda: self.boton_sprite_clickeado("roca"))
-        self.boton_estrella.clicked.connect(lambda: self.boton_sprite_clickeado("estrella"))
-        self.boton_fantasma_horizontal.clicked.connect(lambda: self.boton_sprite_clickeado("fantasma_horizontal"))
-        self.boton_fantasma_vertical.clicked.connect(lambda: self.boton_sprite_clickeado("fantasma_vertical"))
-        self.boton_fuego.clicked.connect(lambda: self.boton_sprite_clickeado("fuego"))
-        
-        #botones partir y limpiar y conectarlos
-        self.boton_partir = QPushButton("Partir")
-        self.boton_partir.clicked.connect(self.partir)
-        self.boton_limpiar = QPushButton("limpiar")
-        self.boton_limpiar.clicked.connect(self.limpiar)
-
-        vbox1 = QVBoxLayout()
-        vbox1.addStretch(1)
-        for boton in self.botones_elementos_constructor:
-            vbox1.addWidget(boton)
-        vbox1.addStretch(10)
-        vbox1.addWidget(self.boton_partir)
-        vbox1.addWidget(self.boton_limpiar)
-
-        #agregando grilla al lado derecho
-        vbox2 = QVBoxLayout()
-        vbox2.addStretch(1)
-        vbox2.addLayout(self.grilla)
-        vbox2.addStretch(1)
-        hbox1 = QHBoxLayout()
-        hbox1.addLayout(vbox1)
-        hbox1.addLayout(vbox2)
-        self.setLayout(hbox1)
-
-    def boton_sprite_clickeado(self, nombre_sprite):
-        self.nombre_sprite_clickeado = nombre_sprite
-        print(self.nombre_sprite_clickeado)
-
-    def armar_grilla(self, modo_juego):
+    def armar_grilla(self):
         self.rows = LARGO_GRILLA
         self.columns = ANCHO_GRILLA
         self.grilla = QGridLayout()
@@ -102,104 +39,47 @@ class VentanaJuego(QWidget):
                 if row == 0 or row == LARGO_GRILLA - 1 or column == 0 or column == ANCHO_GRILLA - 1:
                     elemento = QLabel()
                     elemento.setPixmap(QPixmap(os.path.join('sprites', 'Elementos', 'bordermap.png')).scaled(50,50))
-                elif modo_juego != "Modo Juego":
-                    elemento = QPushButton()
-                    elemento.id = (row, column)
-                    elemento.setStyleSheet('background-color: black; border: 1px solid white')
-                    elemento.setFixedSize(50, 50)
-                    elemento.clicked.connect(self.boton_grilla_clickeado)
-                elif modo_juego == "Modo Juego":
+                else:
                     elemento = QLabel()
                     elemento.id = (row, column)
                     elemento.setStyleSheet('background-color: black; border: 1px solid white')
                     elemento.setFixedSize(50, 50)
                 elemento.setContentsMargins(0, 0, 0, 0) #quitar los margenes
                 self.grilla.addWidget(elemento, row, column)
-
-    def boton_grilla_clickeado(self):  ##conectar esto con backend!!!!
-        elemento = self.sender()
-        self.senal_agregar_elemento.emit(elemento.id, self.nombre_sprite_clickeado)
-
-    def error_agregar_elemento(self, mensaje):
-        QMessageBox.warning(self, "Error", mensaje)
-    def elemento_agregado(self, nombre_elemento, button_id):
-
-        bloque = self.grilla.itemAtPosition(button_id[0], button_id[1]).widget()
-        if nombre_elemento == "luigi":
-            bloque.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'luigi_rigth_1.png')))
-            self.juego_constructor.luigi -= 1
-            self.boton_luigi.setText(f"{self.juego_constructor.luigi}")
-        elif nombre_elemento == "pared":
-            bloque.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'wall.png')))
-            self.juego_constructor.pared -= 1
-            self.boton_pared.setText(f"{self.juego_constructor.pared}")
-        elif nombre_elemento == "roca":
-            bloque.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'rock.png')))
-            self.juego_constructor.roca -= 1
-            self.boton_roca.setText(f"{self.juego_constructor.roca}")
-        elif nombre_elemento == "estrella":
-            bloque.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'osstar.png')))
-            self.juego_constructor.estrella -= 1
-            self.boton_estrella.setText(f"{self.juego_constructor.estrella}")
-        elif nombre_elemento == "fantasma_horizontal":
-            bloque.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'white_ghost_left_1.png')))
-            self.juego_constructor.fantasma_horizontal -= 1
-            self.boton_fantasma_horizontal.setText(f"{self.juego_constructor.fantasma_horizontal}")
-        elif nombre_elemento == "fantasma_vertical":
-            bloque.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'red_ghost_vertical_1.png')))
-            self.juego_constructor.fantasma_vertical -= 1
-            self.boton_fantasma_vertical.setText(f"{self.juego_constructor.fantasma_vertical}")
-        elif nombre_elemento == "fuego":
-            bloque.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'fire.png')))
-            self.juego_constructor.fuego -= 1
-            self.boton_fuego.setText(f"{self.juego_constructor.fuego}")
-        else:
-            print("error")
-
-    def limpiar(self):
-        for row in range(self.rows):
-            for column in range(self.columns):
-                if row != 0 and row != LARGO_GRILLA - 1 and column != 0 and column != ANCHO_GRILLA - 1:
-                    bloque = self.grilla.itemAtPosition(row, column).widget()
-                    bloque.setIcon(QIcon())
-                    bloque.setStyleSheet('background-color: black; border: 1px solid white')
-        self.juego_constructor = Juego_constructor()
-        self.boton_luigi.setText(f"{self.juego_constructor.luigi}")
-        self.boton_pared.setText(f"{self.juego_constructor.pared}")
-        self.boton_roca.setText(f"{self.juego_constructor.roca}")
-        self.boton_estrella.setText(f"{self.juego_constructor.estrella}")
-        self.boton_fantasma_horizontal.setText(f"{self.juego_constructor.fantasma_horizontal}")
-        self.boton_fantasma_vertical.setText(f"{self.juego_constructor.fantasma_vertical}")
-        self.boton_fuego.setText(f"{self.juego_constructor.fuego}")
-        self.senal_limpiar_grilla.emit()
+        hbox = QHBoxLayout()
+        hbox.addStretch(1)
+        hbox.addLayout(self.grilla)
+        hbox.addStretch(1)
+        vbox = QVBoxLayout()
+        vbox.addStretch(1)
+        vbox.addLayout(hbox)
+        vbox.addStretch(1)
+        self.setLayout(vbox)
     
-    def partir(self):
-        self.senal_empezar_juego.emit()
-        if self.condiciones_ok == True:
-            for boton in self.botones_elementos_constructor:
-                boton.deleteLater()
-            for row in range(self.rows):
-                for column in range(self.columns):
-                    if row != 0 and row != LARGO_GRILLA - 1 and column != 0 and column != ANCHO_GRILLA - 1:
-                        bloque = self.grilla.itemAtPosition(row, column).widget()
-                        bloque.setEnabled(False)
-        self.boton_limpiar.setEnabled(False)
-        self.boton_partir.setEnabled(False)
-    
-    def check_partir(self, ok_para_partir, mensaje):
-        if ok_para_partir == False:
-            QMessageBox.warning(self, "Error", mensaje)
-        else:
-            self.condiciones_ok = True
+    def poblar_grilla(self, nombre_lugar):
+        self.senal_poblar_grilla.emit(nombre_lugar)
 
-
-    def modo_juego(self, lugar):
-        self.armar_grilla("Modo Juego")
-        vbox1 = QVBoxLayout()
-        vbox1.addLayout(self.grilla)
-        hbox1 = QHBoxLayout()
-        hbox1.addStretch(100)
-        hbox1.addLayout(vbox1)
-        self.setLayout(hbox1)
-        self.setWindowTitle(lugar)
-       
+    def poblar_grilla_front(self, grilla):
+        for fila in range(len(grilla)):
+            for columna in range(len(grilla[0])):
+                if len(grilla[fila][columna]) == 1:
+                    if grilla[fila][columna][0] == "luigi":
+                        pixmap = QPixmap(os.path.join('sprites', 'Personajes', 'luigi_front.png')).scaled(50,50)
+                    elif grilla[fila][columna][0] == "fantasma_vertical":
+                        pixmap = QPixmap(os.path.join('sprites', 'Personajes', 'red_ghost_vertical_1.png')).scaled(50,50)
+                    elif grilla[fila][columna][0] == "fantasma_horizontal":
+                        pixmap = QPixmap(os.path.join('sprites', 'Personajes', 'white_ghost_rigth_1.png')).scaled(50,50)
+                    elif grilla[fila][columna][0] == "fuego":
+                        pixmap = QPixmap(os.path.join('sprites', 'Elementos', 'fire.png')).scaled(50,50)
+                    elif grilla[fila][columna][0] == "roca":
+                        pixmap = QPixmap(os.path.join('sprites', 'Elementos', 'rock.png')).scaled(50,50)
+                    elif grilla[fila][columna][0] == "pared":
+                        pixmap = QPixmap(os.path.join('sprites', 'Elementos', 'wall.png')).scaled(50,50)
+                    elif grilla[fila][columna][0] == "estrella":
+                        pixmap = QPixmap(os.path.join('sprites', 'Elementos', 'osstar.png')).scaled(50,50)
+                    bloque = self.grilla.itemAtPosition(fila + 1, columna + 1).widget()
+                    bloque.setPixmap(pixmap)
+                elif len(grilla[fila][columna]) == 0:
+                    bloque = self.grilla.itemAtPosition(fila + 1, columna + 1).widget()
+                    bloque.clear()
+            
