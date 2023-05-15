@@ -36,11 +36,15 @@ if __name__ == '__main__':
     #de ahora en adelante se conecta el back con la ventana juego y no juego_Constructor
     logica_juego_constructor.senal_partir_ventana_juego.connect(ventana_juego.set_info_desde_constructor)
     logica_juego_constructor.senal_partir.connect(logica_juego.partir)
-    ventana_juego_constructor.senal_tecla_presionada.connect(logica_juego.tecla_presionada)
-    logica_juego.senal_mover_luigi.connect(ventana_juego_constructor.luigi_movido)
+   
+    ventana_juego.senal_tecla_presionada.connect(logica_juego.tecla_presionada)
 
     ventana_juego.senal_poblar_grilla.connect(logica_juego.poblar_grilla_backend)
     logica_juego.senal_armar_front_inicial.connect(ventana_juego.poblar_grilla_front)
-
+    logica_juego.senal_game_over.connect(ventana_juego.game_over)
+    logica_juego.senal_actualizar_tiempo.connect(ventana_juego.actualizar_tiempo)
+    logica_juego.senal_actualizar_vidas.connect(ventana_juego.actualizar_vidas)
+    ventana_juego.senal_pausar.connect(logica_juego.pausar)
+    logica_juego.senal_actualizar_boton_pausa.connect(ventana_juego.actualizar_boton_pausa)
 
     sys.exit(app.exec())

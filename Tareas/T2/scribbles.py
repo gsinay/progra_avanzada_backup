@@ -10,10 +10,6 @@ class Luigi(QWidget):
         self.setGeometry(100,100, 300, 300)
         self.show()
 
-        
-    def keyPressEvent(self, event):
-        print(f"Se presionó la tecla {event.text()}")
-
 if __name__ == '__main__':
     app = QApplication([])
     ex = Luigi()

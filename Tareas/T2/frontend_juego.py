@@ -1,17 +1,21 @@
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import (QWidget, QLabel, QGridLayout,
                              QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox,
-                             QFrame)
+                             QApplication)
+from PyQt5.QtMultimedia import QSound
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import pyqtSignal, QSize
 from models_juegos import Juego_constructor
 import os
 from parametros import (ANCHO_GRILLA, LARGO_GRILLA, FANTASMAS_HORIZONTALES,
-                        FANTASMAS_VERTICALES, FUEGOS, ROCAS, MURALLAS)
+                        FANTASMAS_VERTICALES, FUEGOS, ROCAS, MURALLAS,
+                        TIEMPO_CUENTA_REGRESIVA, CANTIDAD_VIDAS)
 
 class VentanaJuego(QWidget):
 
-    senal_poblar_grilla = pyqtSignal(str)
+    senal_poblar_grilla = pyqtSignal(str, str)
+    senal_tecla_presionada = pyqtSignal(str)
+    senal_pausar = pyqtSignal()
    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -19,15 +23,47 @@ class VentanaJuego(QWidget):
 
     def set_info(self, username, nombre_lugar):
         self.show()
+        self.nombre_lugar = nombre_lugar
+        self.username = username
         self.setWindowTitle(f"Juego en {nombre_lugar} - {username}")
+        self.armar_botones_y_timer(TIEMPO_CUENTA_REGRESIVA, CANTIDAD_VIDAS)
         self.armar_grilla()
         self.poblar_grilla(nombre_lugar)
-        self.nombre_lugar = nombre_lugar
     def set_info_desde_constructor(self, grilla, username):
         self.show()
+        self.username = username
         self.setWindowTitle(f"Juego de {username}")
+        self.armar_botones_y_timer(TIEMPO_CUENTA_REGRESIVA, CANTIDAD_VIDAS)
         self.armar_grilla()
         self.poblar_grilla_front(grilla)
+        
+    def armar_botones_y_timer(self, tiempo, vidas):
+        self.label_timer = QLabel(self)
+        self.label_timer.setText(f"Tiempo restante: {tiempo}")
+        self.label_vidas = QLabel(self)
+        self.label_vidas.setText(f"Vidas restantes: {vidas}")
+        self.boton_pausa = QPushButton(self)
+        self.boton_pausa.setText("Pausar")
+        self.boton_pausa.clicked.connect(self.pausar)
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.label_timer)
+        vbox.addWidget(self.label_vidas)
+        vbox.addWidget(self.boton_pausa)
+        self.hbox = QHBoxLayout()
+        self.hbox.addLayout(vbox)
+
+    def actualizar_tiempo(self, tiempo):
+        self.label_timer.setText(f"Tiempo restante: {tiempo}")
+    def actualizar_vidas(self, vidas):
+        self.label_vidas.setText(f"Vidas restantes: {vidas}")
+    def pausar(self):
+        self.senal_pausar.emit()
+    def actualizar_boton_pausa(self, juego_pausado):
+        if juego_pausado:
+            self.boton_pausa.setText("renaudar")
+        else:
+            self.boton_pausa.setText("pausar")
+    
 
     def armar_grilla(self):
         self.rows = LARGO_GRILLA
@@ -46,18 +82,12 @@ class VentanaJuego(QWidget):
                     elemento.setFixedSize(50, 50)
                 elemento.setContentsMargins(0, 0, 0, 0) #quitar los margenes
                 self.grilla.addWidget(elemento, row, column)
-        hbox = QHBoxLayout()
-        hbox.addStretch(1)
-        hbox.addLayout(self.grilla)
-        hbox.addStretch(1)
-        vbox = QVBoxLayout()
-        vbox.addStretch(1)
-        vbox.addLayout(hbox)
-        vbox.addStretch(1)
-        self.setLayout(vbox)
+        
+        self.hbox.addLayout(self.grilla)
+        self.setLayout(self.hbox)
     
     def poblar_grilla(self, nombre_lugar):
-        self.senal_poblar_grilla.emit(nombre_lugar)
+        self.senal_poblar_grilla.emit(nombre_lugar, self.username)
 
     def poblar_grilla_front(self, grilla):
         for fila in range(len(grilla)):
@@ -82,4 +112,23 @@ class VentanaJuego(QWidget):
                 elif len(grilla[fila][columna]) == 0:
                     bloque = self.grilla.itemAtPosition(fila + 1, columna + 1).widget()
                     bloque.clear()
+
+    def keyPressEvent(self, event):
+       self.senal_tecla_presionada.emit(event.text())
+
+    def game_over(self, username, text, puntaje):
+        if puntaje == 0:
+            archivo_sonido = os.path.join('sounds', 'gameOver.wav')
+            sonido = QSound(archivo_sonido)
+            sonido.play()
+            QMessageBox.information(self, "Game Over", f"{username}: {text}")
+        else:
+            archivo_sonido = os.path.join('sounds', 'stageClear.wav')
+            sonido = QSound(archivo_sonido)
+            sonido.play()
+            QMessageBox.information(self, "Game Over", f"{username}: {text} con {puntaje} puntos")
+        QApplication.quit()
+
+            
+    
             

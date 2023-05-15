@@ -8,6 +8,7 @@ from time import sleep
 from parametros import (MIN_VELOCIDAD, MAX_VELOCIDAD)
 
 class Fantasma(QThread):
+    lock = QMutex()
     def __init__(self, senal_movimiento, posicion, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.label = QLabel()
@@ -16,7 +17,8 @@ class Fantasma(QThread):
         self.senal_movimiento = senal_movimiento
         self.vivo = True
         self.senal_movimiento = senal_movimiento
-        self.lock = QMutex() #lock the pyqt5
+        self.daemon = True
+        
         
 
 
@@ -30,7 +32,7 @@ class FantasmaHorizontal(Fantasma):
 
 
     def run(self):
-       while self.vivo == True:
+       while self.vivo:
             sleep(self.tiempo_fantasma)
             self.lock.lock()
             self.senal_movimiento.emit(self.posicion, self.direccion, self)
@@ -45,9 +47,11 @@ class FantasmaVertical(Fantasma):
         self.direccion = "arriba" #se parten moviendo hacia arriba
 
     def run(self):
-        while self.vivo == True:
+        while self.vivo:
             sleep(self.tiempo_fantasma)
+            self.lock.lock()
             self.senal_movimiento.emit(self.posicion, self.direccion, self)
+            self.lock.unlock()
             
 class Luigi(QWidget):
     senal_mover = pyqtSignal(str)
@@ -57,3 +61,4 @@ class Luigi(QWidget):
         self.label.setPixmap(QPixmap(os.path.join('sprites', 'Personajes', 'luigi_rigth_1.png')))
         self.posicion = posicion
         self.label.setScaledContents(True)
+        self.vidas = 3

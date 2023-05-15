@@ -1,11 +1,12 @@
-from PyQt5.QtCore import QThread, pyqtSignal, QObject
+from PyQt5.QtCore import QThread, pyqtSignal, QObject, QTimer
 from PyQt5.QtWidgets import QLabel, QApplication, QGridLayout, QPushButton, QWidget
 from PyQt5.QtGui import QPixmap
 from parametros import (ANCHO_GRILLA, LARGO_GRILLA)
 import os
 import random
 from parametros import (CANTIDAD_VIDAS, FANTASMAS_HORIZONTALES, FANTASMAS_VERTICALES, 
-                        FUEGOS, ROCAS, MURALLAS, MIN_VELOCIDAD, MAX_VELOCIDAD)
+                        FUEGOS, ROCAS, MURALLAS, MIN_VELOCIDAD, MAX_VELOCIDAD, TIEMPO_CUENTA_REGRESIVA,
+                        MULTIPLICADOR_PUNTAJE)
 from models_elementos import Luigi, FantasmaHorizontal, FantasmaVertical
 import sys
 import time
@@ -16,9 +17,8 @@ class Juego_constructor(QObject):
     senal_error_agregar_elemento = pyqtSignal(str)
     senal_check_partir = pyqtSignal(bool, str)
     senal_elemento_agregado = pyqtSignal(str, tuple)
-    senal_partir = pyqtSignal(list)
+    senal_partir = pyqtSignal(list, str)
     senal_partir_ventana_juego = pyqtSignal(list, str)
-
     def __init__(self):
         super().__init__()
         self.luigi = 1
@@ -37,17 +37,14 @@ class Juego_constructor(QObject):
                 sub_lista.append([])
 
     def agregar_elemento(self, posicion, nombre_elemento):
-        print(posicion, nombre_elemento)
         if len(self.list[posicion[0]-1][posicion[1]-1]) != 0:
             self.senal_error_agregar_elemento.emit("Ya hay un elemento en esa posición")
         elif getattr(self, nombre_elemento) == 0:
             self.senal_error_agregar_elemento.emit("No quedan elementos de ese tipo")
         else:
             self.list[posicion[0]-1][posicion[1]-1].append(nombre_elemento)
-            print(f"quedan {getattr(self, nombre_elemento)} {nombre_elemento}")
             self.senal_elemento_agregado.emit(nombre_elemento, posicion)
             setattr(self, nombre_elemento, getattr(self, nombre_elemento)-1)
-            print(f"Se agregó {nombre_elemento} en la posición {posicion}. quedan {getattr(self, nombre_elemento)} {nombre_elemento}")
             
     def limpiar_grilla(self):
         self.armar_grilla_backend()
@@ -64,7 +61,7 @@ class Juego_constructor(QObject):
             self.senal_check_partir.emit(False, "No se puede empezar el juego sin Luigi o la estrella")
         else:
             self.senal_check_partir.emit(True, "Sucess")
-            self.senal_partir.emit(self.list)#esta se conecta al back
+            self.senal_partir.emit(self.list, username)#esta se conecta al back
             self.senal_partir_ventana_juego.emit(self.list, username) #esta se conecta al front
             
 
@@ -73,12 +70,26 @@ class Juego(QWidget):
     senal_mover_luigi = pyqtSignal(tuple, str)
     senal_armar_front_inicial = pyqtSignal(list)
     senal_mover_fantasma = pyqtSignal(tuple, str, QThread)
+    senal_game_over = pyqtSignal(str, str, float)
+    senal_actualizar_tiempo = pyqtSignal(int)
+    senal_actualizar_vidas = pyqtSignal(int)
+    senal_actualizar_boton_pausa = pyqtSignal(bool)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.threads = {}
         self.senal_mover_fantasma.connect(self.mover_fantasma)
-    def partir(self, grilla): #este metodo parte el juego desde el moodo constructor. COMPLETAR!
+        self.game_over = False
+        self.game_started = False
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.actualizar_tiempo)
+        self.timer.start(1000)
+        self.tiempo_restante = TIEMPO_CUENTA_REGRESIVA
+        self.pausado = False
+
+    def partir(self, grilla, username): #este metodo parte el juego desde el moodo constructor. COMPLETAR!
         self.grilla = grilla
+        self.username = username
         self.crear_caracteres()
         
 
@@ -88,8 +99,9 @@ class Juego(QWidget):
             for elemento in range(ANCHO_GRILLA-2):
                 sub_lista.append([])
     
-    def poblar_grilla_backend(self, nombre_archivo): #CAMBIAR POR CLASES CUANDO ESTEN LISTAS
+    def poblar_grilla_backend(self, nombre_archivo, username): #CAMBIAR POR CLASES CUANDO ESTEN LISTAS
         self.armar_grilla_backend()
+        self.username = username
         with open(os.path.join("mapas", nombre_archivo + ".txt"), "r") as archivo:
             lineas = archivo.readlines()
             for linea in range(len(lineas)):
@@ -119,47 +131,32 @@ class Juego(QWidget):
             for columna in range(len(self.grilla[fila])):
                 if self.grilla[fila][columna] == ["luigi"]:
                     self.Luigi_juego = Luigi((fila, columna))
-                    print(f"Se creó Luigi en la posición {fila, columna}")
-                #elif self.grilla[fila][columna] == ["roca"]:
-                    #self.Roca_juego = Roca((fila, columna))
-               # elif self.grilla[fila][columna] == ["pared"]:
-                   # self.Pared_juego = Pared((fila, columna))
-                #elif self.grilla[fila][columna] == ["estrella"]:
-                    #self.Estrella_juego = Estrella((fila, columna))
                 elif self.grilla[fila][columna] == ["fantasma_horizontal"]:
                     elemento =  FantasmaHorizontal(self.senal_mover_fantasma, (fila, columna))
                     self.threads_fantasmas.add(elemento)
                 elif self.grilla[fila][columna] == ["fantasma_vertical"]:
                     elemento = FantasmaVertical(self.senal_mover_fantasma, (fila, columna))
                     self.threads_fantasmas.add(elemento)
-               # elif self.grilla[fila][columna] == ["fuego"]:
-                    #self.Fuego_juego = Fuego((fila, columna))
         #conectar senñales de los fantasmas
         for thread in self.threads_fantasmas:
-            print(thread)
             thread.start()
+        self.game_started = True
         
     def mover_fantasma(self, posicion, direccion, thread):
-        print(ANCHO_GRILLA - 3)
-        print(posicion[1])
-        if direccion == "derecha":
+        if direccion == "derecha" and thread.vivo and self.pausado == False:
             if posicion[1] == ANCHO_GRILLA - 3:
                 thread.direccion = "izquierda"
-                print("cambio de direccion")
-
             elif self.grilla[posicion[0]][posicion[1] + 1] == ["pared"] or self.grilla[posicion[0]][posicion[1] + 1] == ["roca"]:
                 thread.direccion = "izquierda"
             elif self.grilla[posicion[0]][posicion[1] + 1] == ["fuego"]:
                 thread.vivo = False
                 self.grilla[posicion[0]][posicion[1]].remove("fantasma_horizontal")
             else:
-                print(self.grilla)
                 self.grilla[posicion[0]][posicion[1]].remove("fantasma_horizontal")
                 self.grilla[posicion[0]][posicion[1] + 1].append("fantasma_horizontal")
-                print(self.grilla)
                 thread.posicion = (posicion[0], posicion[1] + 1)
 
-        elif direccion == "izquierda":
+        elif direccion == "izquierda" and thread.vivo and self.pausado == False:
             if posicion[1] == 0:
                 thread.direccion = "derecha"
             elif self.grilla[posicion[0]][posicion[1] - 1 ] == ["pared"] or self.grilla[posicion[0]][posicion[1] -1 ] == ["roca"]:
@@ -174,85 +171,149 @@ class Juego(QWidget):
                 thread.posicion = (posicion[0], posicion[1] - 1)
         self.senal_armar_front_inicial.emit(self.grilla)
 
-        if direccion == "abajo":
+        if direccion == "abajo" and thread.vivo and self.pausado == False:
             if posicion[0] == LARGO_GRILLA - 3:
                 thread.direccion = "arriba"
-                print("cambio de direccion")
-
             elif self.grilla[posicion[0] + 1 ][posicion[1]] == ["pared"] or self.grilla[posicion[0]+ 1][posicion[1]] == ["roca"]:
                 thread.direccion = "arriba"
             elif self.grilla[posicion[0] + 1][posicion[1]] == ["fuego"]:
                 thread.vivo = False
                 self.grilla[posicion[0]][posicion[1]].remove("fantasma_vertical")
             else:
-                print(self.grilla)
                 self.grilla[posicion[0]][posicion[1]].remove("fantasma_vertical")
                 self.grilla[posicion[0] +1][posicion[1]].append("fantasma_vertical")
-                print(self.grilla)
                 thread.posicion = (posicion[0] +  1, posicion[1])
 
-        elif direccion == "arriba":
+        elif direccion == "arriba" and thread.vivo and self.pausado == False:
             if posicion[0] == 0:
                 thread.direccion = "abajo"
-                print("cambio de direccion")
-
             elif self.grilla[posicion[0] -1 ][posicion[1]] == ["pared"] or self.grilla[posicion[0] - 1][posicion[1]] == ["roca"]:
-                thread.direccion = "arriba"
+                thread.direccion = "abajo"
             elif self.grilla[posicion[0] - 1][posicion[1]] == ["fuego"]:
                 thread.vivo = False
                 self.grilla[posicion[0]][posicion[1]].remove("fantasma_vertical")
             else:
-                print(self.grilla)
                 self.grilla[posicion[0]][posicion[1]].remove("fantasma_vertical")
                 self.grilla[posicion[0] - 1][posicion[1]].append("fantasma_vertical")
-                print(self.grilla)
                 thread.posicion = (posicion[0] - 1, posicion[1])
         self.senal_armar_front_inicial.emit(self.grilla)
-        
+        self.checkear_colisiones()
     
 
-    def tecla_presionada(self, tecla):
-        if tecla.lower() == "w":
-            if self.Luigi_juego.posicion[0] != 1:
-                self.actualizar_grilla(tecla.lower()) #actualizar se encarga de actualizar grilla backend
-        elif tecla.lower() == "d":
-            if self.Luigi_juego.posicion[1] != ANCHO_GRILLA - 2:
-                self.actualizar_grilla(tecla.lower())
-        elif tecla.lower() == "a":
-             if self.Luigi_juego.posicion[1] != 1:
-                self.actualizar_grilla(tecla.lower())
-        elif tecla.lower() == "s":
-            if self.Luigi_juego.posicion[0] != LARGO_GRILLA - 2:
-                self.actualizar_grilla(tecla.lower())
+    def tecla_presionada(self, tecla): #esto va a tener muuuchos ifs
+        posicion = self.Luigi_juego.posicion
+        if tecla.lower() == "w" and self.pausado == False: #luigi se mueve para arriba
+            if posicion[0] != 0:
+                if posicion[0] != 1 and self.grilla[posicion[0] - 1][posicion[1]] == ["roca"] and self.grilla[posicion[0] - 2][posicion[1]] == []:
+                    self.grilla[posicion[0]][posicion[1]].remove("luigi")
+                    self.grilla[posicion[0] - 1][posicion[1]].remove("roca")
+                    self.grilla[posicion[0] - 1][posicion[1]].append("luigi") 
+                    self.grilla[posicion[0] - 2][posicion[1]].append("roca") 
+                    self.Luigi_juego.posicion = (posicion[0]-1, posicion[1]) 
+                elif self.grilla[posicion[0] - 1][posicion[1]] == ["pared"]:
+                    pass
+                else:
+                    self.grilla[posicion[0]][posicion[1]].remove("luigi")
+                    self.grilla[posicion[0] - 1][posicion[1]].append("luigi") 
+                    self.Luigi_juego.posicion = (posicion[0]-1, posicion[1])
+        elif tecla.lower() == "d" and self.pausado == False:
+            if posicion[1] != ANCHO_GRILLA - 3:
+                if posicion[0] != ANCHO_GRILLA - 4 and self.grilla[posicion[0]][posicion[1] + 1] == ["roca"] and self.grilla[posicion[0]][posicion[1] + 2] == []:
+                    self.grilla[posicion[0]][posicion[1]].remove("luigi")
+                    self.grilla[posicion[0]][posicion[1] + 1].remove("roca")
+                    self.grilla[posicion[0]][posicion[1] + 1].append("luigi") 
+                    self.grilla[posicion[0]][posicion[1] + 2].append("roca") 
+                    self.Luigi_juego.posicion = (posicion[0], posicion[1] + 1) 
+                elif self.grilla[posicion[0]][posicion[1] + 1] == ["pared"]:
+                    pass
+                else:
+                    self.grilla[posicion[0]][posicion[1]].remove("luigi")
+                    self.grilla[posicion[0]][posicion[1] + 1].append("luigi") 
+                    self.Luigi_juego.posicion = (posicion[0], posicion[1] + 1)
+        elif tecla.lower() == "a" and self.pausado == False:
+             if posicion[1] != 0:
+                if posicion[0] != 1  and self.grilla[posicion[0]][posicion[1] - 1] == ["roca"] and self.grilla[posicion[0]][posicion[1] - 2] == []:
+                    self.grilla[posicion[0]][posicion[1]].remove("luigi")
+                    self.grilla[posicion[0]][posicion[1] - 1].remove("roca")
+                    self.grilla[posicion[0]][posicion[1] - 1].append("luigi") 
+                    self.grilla[posicion[0]][posicion[1] - 2].append("roca") 
+                    self.Luigi_juego.posicion = (posicion[0], posicion[1] - 1) 
+                elif self.grilla[posicion[0]][posicion[1] - 1] == ["pared"]:
+                    pass
+                else:
+                    self.grilla[posicion[0]][posicion[1]].remove("luigi")
+                    self.grilla[posicion[0]][posicion[1] - 1].append("luigi") 
+                    self.Luigi_juego.posicion = (posicion[0], posicion[1] - 1)
+        elif tecla.lower() == "s" and self.pausado == False:
+            if posicion[0] != LARGO_GRILLA - 3:
+                if posicion[0] != LARGO_GRILLA - 4 and self.grilla[posicion[0] + 1][posicion[1]] == ["roca"] and self.grilla[posicion[0] + 2][posicion[1]] == []:
+                    self.grilla[posicion[0]][posicion[1]].remove("luigi")
+                    self.grilla[posicion[0] + 1][posicion[1]].remove("roca")
+                    self.grilla[posicion[0] + 1][posicion[1]].append("luigi") 
+                    self.grilla[posicion[0] + 2][posicion[1]].append("roca") 
+                    self.Luigi_juego.posicion = (posicion[0] + 1, posicion[1]) 
+                elif self.grilla[posicion[0] + 1][posicion[1]] == ["pared"]:
+                    pass
+                else:
+                    self.grilla[posicion[0]][posicion[1]].remove("luigi")
+                    self.grilla[posicion[0] + 1][posicion[1]].append("luigi") 
+                    self.Luigi_juego.posicion = (posicion[0] + 1, posicion[1])
         else:
             pass
+        self.checkear_colisiones()
+        self.senal_armar_front_inicial.emit(self.grilla)
+        self.checkear_exito()
 
-    def actualizar_grilla(self, direccion):
-        if direccion == "w":
-            self.grilla[self.Luigi_juego.posicion[0]-1][self.Luigi_juego.posicion[1]-1].remove("luigi")
-            self.grilla[self.Luigi_juego.posicion[0]-2][self.Luigi_juego.posicion[1]-1].append("luigi")
-            self.Luigi_juego.posicion = (self.Luigi_juego.posicion[0]-1, self.Luigi_juego.posicion[1])
-            self.senal_mover_luigi.emit(self.Luigi_juego.posicion, "arriba")
-        elif direccion == "d":
-            self.grilla[self.Luigi_juego.posicion[0]-1][self.Luigi_juego.posicion[1]-1].remove("luigi")
-            self.grilla[self.Luigi_juego.posicion[0]-1][self.Luigi_juego.posicion[1]].append("luigi")
-            self.Luigi_juego.posicion = (self.Luigi_juego.posicion[0], self.Luigi_juego.posicion[1]+1)
-            self.senal_mover_luigi.emit(self.Luigi_juego.posicion, "derecha")
-        elif direccion == "a":
-            self.grilla[self.Luigi_juego.posicion[0]-1][self.Luigi_juego.posicion[1]-1].remove("luigi")
-            self.grilla[self.Luigi_juego.posicion[0]-1][self.Luigi_juego.posicion[1]-2].append("luigi")
-            self.Luigi_juego.posicion = (self.Luigi_juego.posicion[0], self.Luigi_juego.posicion[1]-1)
-            self.senal_mover_luigi.emit(self.Luigi_juego.posicion, "izquierda")
-        elif direccion == "s":
-            self.grilla[self.Luigi_juego.posicion[0]-1][self.Luigi_juego.posicion[1]-1].remove("luigi")
-            self.grilla[self.Luigi_juego.posicion[0]][self.Luigi_juego.posicion[1]-1].append("luigi")
-            self.Luigi_juego.posicion = (self.Luigi_juego.posicion[0]+1, self.Luigi_juego.posicion[1])
-            self.senal_mover_luigi.emit(self.Luigi_juego.posicion, "abajo")
-
-            
-
+    def checkear_colisiones(self):
+        for fila in self.grilla:
+            for columna in fila:
+                if "luigi" in columna:
+                    if "fantasma_vertical" in columna or "fantasma_horizontal" in columna or "fuego" in columna:
+                        columna.remove("luigi")
+                        self.Luigi_juego.vidas -= 1
+                        self.Luigi_juego.posicion = (0,0)
+                        self.grilla[0][0].append("luigi")
+                        self.senal_armar_front_inicial.emit(self.grilla)
+                        self.senal_actualizar_vidas.emit(self.Luigi_juego.vidas)
+        if self.Luigi_juego.vidas == 0 and self.game_over == False:
+            self.game_over = True
+            for thread in self.threads_fantasmas:
+                thread.vivo = False
+            self.senal_game_over.emit(self.username, "perdiste por falta de vidas", 0 )
         
-                    
 
+
+    def checkear_exito(self):
+        for fila in self.grilla:
+            for columna in fila:
+                if "luigi" in columna and "estrella" in columna:
+                    for thread in self.threads_fantasmas:
+                        thread.vivo = False
+                    self.senal_game_over.emit(self.username, 
+                                              "ganaste!!!", 
+                                              ((self.tiempo_restante * MULTIPLICADOR_PUNTAJE) /
+                                                (4 - self.Luigi_juego.vidas)))
+    
+    def actualizar_tiempo(self):
+        if self.game_started == True:
+            self.tiempo_restante -= 1
+            if self.tiempo_restante == 0:
+                self.timer.stop()
+                self.game_over = True
+                for thread in self.threads_fantasmas:
+                    thread.vivo = False
+                self.senal_game_over.emit(self.username, "perdiste por falta de tiempo", 0)
+            self.senal_actualizar_tiempo.emit(self.tiempo_restante)
+    
+    def pausar(self):
+        if self.pausado == False:
+            self.pausado = True
+            self.timer.stop()
+        elif self.pausado == True:
+            self.pausado = False
+            self.timer.start()
+        self.senal_actualizar_boton_pausa.emit(self.pausado)
         
-        
+                
+
+    

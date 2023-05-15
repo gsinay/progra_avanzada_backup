@@ -90,7 +90,7 @@ class VentanaJuegoConstructor(QWidget):
 
     def boton_sprite_clickeado(self, nombre_sprite):
         self.nombre_sprite_clickeado = nombre_sprite
-        print(self.nombre_sprite_clickeado)
+    
 
     def armar_grilla(self, modo_juego):
         self.rows = LARGO_GRILLA
@@ -192,35 +192,7 @@ class VentanaJuegoConstructor(QWidget):
         else:
             self.condiciones_ok = True
 
-    def keyPressEvent(self, event):
-        if self.condiciones_ok == True:
-            self.senal_tecla_presionada.emit(event.text())
     
-    def luigi_movido(self, posicion, direccion):
-        if direccion == "arriba":
-            bloque = self.grilla.itemAtPosition(posicion[0] + 1, posicion[1]).widget()
-            bloque.setIcon(QIcon())
-            bloque.setStyleSheet('background-color: black; border: 1px solid white')
-            bloque = self.grilla.itemAtPosition(posicion[0], posicion[1]).widget()
-            bloque.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'luigi_up_1.png')))
-        elif direccion == "derecha":
-            bloque = self.grilla.itemAtPosition(posicion[0], posicion[1]-1).widget()
-            bloque.setIcon(QIcon())
-            bloque.setStyleSheet('background-color: black; border: 1px solid white')
-            bloque = self.grilla.itemAtPosition(posicion[0], posicion[1]).widget()
-            bloque.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'luigi_rigth_1.png')))
-        elif direccion == "izquierda":
-            bloque = self.grilla.itemAtPosition(posicion[0], posicion[1]+1).widget()
-            bloque.setIcon(QIcon())
-            bloque.setStyleSheet('background-color: black; border: 1px solid white')
-            bloque = self.grilla.itemAtPosition(posicion[0], posicion[1]).widget()
-            bloque.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'luigi_left_1.png')))
-        elif direccion == "abajo":
-            bloque = self.grilla.itemAtPosition(posicion[0]-1, posicion[1]).widget()
-            bloque.setIcon(QIcon())
-            bloque.setStyleSheet('background-color: black; border: 1px solid white')
-            bloque = self.grilla.itemAtPosition(posicion[0], posicion[1]).widget()
-            bloque.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'luigi_down_1.png')))
 
 
 
