@@ -258,6 +258,8 @@ class Juego(QWidget):
                     self.grilla[posicion[0]][posicion[1]].remove("luigi")
                     self.grilla[posicion[0] + 1][posicion[1]].append("luigi") 
                     self.Luigi_juego.posicion = (posicion[0] + 1, posicion[1])
+        elif tecla.lower() == "p":
+            self.pausar()
         else:
             pass
         self.checkear_colisiones()
