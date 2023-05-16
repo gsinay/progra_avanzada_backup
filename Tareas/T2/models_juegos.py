@@ -86,6 +86,7 @@ class Juego(QWidget):
         self.timer.start(1000)
         self.tiempo_restante = TIEMPO_CUENTA_REGRESIVA
         self.pausado = False
+        self.tiene_estrella = False
 
     def partir(self, grilla, username): #este metodo parte el juego desde el moodo constructor. COMPLETAR!
         self.grilla = grilla
@@ -260,6 +261,14 @@ class Juego(QWidget):
                     self.Luigi_juego.posicion = (posicion[0] + 1, posicion[1])
         elif tecla.lower() == "p":
             self.pausar()
+        elif tecla.lower() == "g" and self.tiene_estrella:
+            for thread in self.threads_fantasmas:
+                    thread.vivo = False
+                    self.senal_game_over.emit(self.username, 
+                                              "ganaste!!!", 
+                                              ((self.tiempo_restante * MULTIPLICADOR_PUNTAJE) /
+                                                (4 - self.Luigi_juego.vidas)))
+    
         else:
             pass
         self.checkear_colisiones()
@@ -289,13 +298,10 @@ class Juego(QWidget):
         for fila in self.grilla:
             for columna in fila:
                 if "luigi" in columna and "estrella" in columna:
-                    for thread in self.threads_fantasmas:
-                        thread.vivo = False
-                    self.senal_game_over.emit(self.username, 
-                                              "ganaste!!!", 
-                                              ((self.tiempo_restante * MULTIPLICADOR_PUNTAJE) /
-                                                (4 - self.Luigi_juego.vidas)))
-    
+                    self.tiene_estrella = True
+                    columna.remove("estrella")
+                    self.senal_armar_front_inicial.emit(self.grilla)
+
     def actualizar_tiempo(self):
         if self.game_started == True:
             self.tiempo_restante -= 1

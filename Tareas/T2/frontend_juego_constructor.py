@@ -1,7 +1,7 @@
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import (QWidget, QLabel, QGridLayout,
                              QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox,
-                             QFrame)
+                             QComboBox)
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import pyqtSignal, QSize
 from models_juegos import Juego_constructor
@@ -38,18 +38,25 @@ class VentanaJuegoConstructor(QWidget):
         #agregar elementos al lado izquierdo
         self.boton_luigi = QPushButton(f"{self.juego_constructor.luigi}")
         self.boton_luigi.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'luigi_rigth_1.png')))
+        self.boton_luigi.tipo = "entidad"
         self.boton_pared = QPushButton(f"{self.juego_constructor.pared}")
         self.boton_pared.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'wall.png')))
+        self.boton_pared.tipo = "bloque"
         self.boton_roca = QPushButton(f"{self.juego_constructor.roca}")
         self.boton_roca.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'rock.png')))
+        self.boton_roca.tipo = "bloque"
         self.boton_estrella = QPushButton(f"{self.juego_constructor.estrella}")
         self.boton_estrella.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'osstar.png')))
+        self.boton_estrella.tipo = "bloque"
         self.boton_fantasma_horizontal = QPushButton(f"{self.juego_constructor.fantasma_horizontal}")
         self.boton_fantasma_horizontal.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'white_ghost_left_1.png')))
+        self.boton_fantasma_horizontal.tipo = "entidad"
         self.boton_fantasma_vertical = QPushButton(f"{self.juego_constructor.fantasma_vertical}")
         self.boton_fantasma_vertical.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'red_ghost_vertical_1.png')))
+        self.boton_fantasma_vertical.tipo = "entidad"
         self.boton_fuego = QPushButton(f"{self.juego_constructor.fuego}")
         self.boton_fuego.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'fire.png')))
+        self.boton_fuego.tipo = "bloque"
         self.botones_elementos_constructor = (self.boton_luigi, self.boton_pared, self.boton_roca, self.boton_estrella, 
                                          self.boton_fantasma_horizontal, self.boton_fantasma_vertical, self.boton_fuego)
         
@@ -70,8 +77,16 @@ class VentanaJuegoConstructor(QWidget):
         self.boton_limpiar = QPushButton("limpiar")
         self.boton_limpiar.clicked.connect(self.limpiar)
 
+        #dropdown menu
+        self.dropdown = QComboBox(self)
+        self.dropdown.addItem("todos")
+        self.dropdown.addItem("entidad")
+        self.dropdown.addItem("bloque")
+        self.dropdown.currentTextChanged.connect(self.filtrar_botones)
+
         vbox1 = QVBoxLayout()
         vbox1.addStretch(1)
+        vbox1.addWidget(self.dropdown)
         for boton in self.botones_elementos_constructor:
             vbox1.addWidget(boton)
         vbox1.addStretch(10)
@@ -91,6 +106,19 @@ class VentanaJuegoConstructor(QWidget):
     def boton_sprite_clickeado(self, nombre_sprite):
         self.nombre_sprite_clickeado = nombre_sprite
     
+    def filtrar_botones(self, text):
+        opcion = self.dropdown.currentText()
+        vbox = QVBoxLayout()
+        for boton in self.botones_elementos_constructor:
+            if opcion == "todos":
+                boton.show()
+            else:
+                if boton.tipo != opcion:
+                    boton.hide()
+                else:
+                    boton.show()
+
+            
 
     def armar_grilla(self, modo_juego):
         self.rows = LARGO_GRILLA
