@@ -99,7 +99,38 @@ class Equipo:
 
         
     def distancia(self, id_jugador_1: int, id_jugador_2: int) -> int:
-        pass
+        cola = deque()
+        visitados = [[]]
+        numero_camino = 0
+        cola.append(id_jugador_1)
+        distancia = 0
+        if len(self.dict_adyacencia[id_jugador_1]) > 0:
+            while len(cola) > 0:
+                jugador = cola.pop()
+                if jugador != id_jugador_1:
+                    visitados[numero_camino].append(jugador)
+                for jugador_vecino in self.dict_adyacencia[jugador]:
+                    if jugador_vecino not in visitados[numero_camino]:
+                        cola.append(jugador_vecino)
+                if jugador == id_jugador_2:
+                    numero_camino += 1
+                    visitados.append([])
+        else:
+            return - 1
+        
+        for camino in visitados:
+            if id_jugador_2 not in camino:
+                visitados.remove(camino)
+
+        if len(visitados) == 0:
+            return -1
+        
+        minimo = 100000 #numero grande
+        for camino in visitados:
+            if len(camino) < minimo:
+                minimo = len(camino)
+
+        return minimo
 
         
 
