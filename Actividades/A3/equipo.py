@@ -62,13 +62,13 @@ class Equipo:
         if len(self.dict_adyacencia[id_jugador]) == 0:
             return None
         
-        for id_vecino in self.dict_adyacencia[id_jugador]:
-            velocidad_vecino = self.jugadores[id_vecino].velocidad
+        for id_compañero in self.jugadores:
+            velocidad_compañero = self.jugadores[id_compañero].velocidad
             velocidad_jugador =  self.jugadores[id_jugador].velocidad
-            resta = abs(velocidad_vecino - velocidad_jugador)
+            resta = abs(velocidad_compañero - velocidad_jugador)
             if resta > numero:
                 numero = resta
-                id_jugador_peor_compañero = id_vecino
+                id_jugador_peor_compañero = id_compañero
         return self.jugadores[id_jugador_peor_compañero]
     
     def peor_conocido(self, id_jugador: int) -> Jugador:
