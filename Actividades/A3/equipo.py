@@ -98,20 +98,14 @@ class Equipo:
         return jugador_retorno
 
         
-
-
-
-
-                    
-
-        '''Retorna al amigo con la mayor diferencia de velocidad.'''
-        # Completar
-        return "COMPLETAR"
-    
     def distancia(self, id_jugador_1: int, id_jugador_2: int) -> int:
-        '''Retorna el tamaño del camino más corto entre los jugadores.'''
-        # Completar
-        return "COMPLETAR"
+        pass
+
+        
+
+
+
+        
     
 
 if __name__ == '__main__':
@@ -138,6 +132,7 @@ if __name__ == '__main__':
     print(f'El mejor amigo de Alba es {equipo.mejor_amigo(1)}') 
     print(f'El peor compañero de Alex es {equipo.peor_compañero(3)}')
     print(f'El peor conocido de Alonso es {equipo.peor_conocido(0)}')
-    #print(f'La distancia entre Alicia y Alonso es {equipo.distancia(2, 0)}')
-    #print(f'La distancia entre Alba y Alex es {equipo.distancia(1, 3)}')
+    
+    print(f'La distancia entre Alicia y Alonso es {equipo.distancia(2, 0)}')
+    print(f'La distancia entre Alba y Alex es {equipo.distancia(1, 3)}')
     
