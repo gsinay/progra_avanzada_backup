@@ -18,9 +18,9 @@ class VentanaInicio(QWidget):
         self.init_gui()
 
     def init_gui(self):
-        self.setGeometry(200, 200, 600, 700)
+        self.setGeometry(200, 200, 600, 750)
         self.setWindowTitle('Ventana Inicial')
-        self.setFixedSize(600, 700)
+        self.setFixedSize(600, 750)
         
         #foto de background
         self.label_background = QLabel(self)
@@ -57,8 +57,15 @@ class VentanaInicio(QWidget):
         self.boton_iniciar.setText('Empezar Juego')
         self.boton_iniciar.move(50, 650)
 
+        self.boton_salir = QPushButton(self)
+        self.boton_salir.setText('Salir del programa')
+        self.boton_salir.move(50, 700)
+
+
+
         #conectar el boton a un slot que verifica la informacion
         self.boton_iniciar.clicked.connect(self.verificar_info)
+        self.boton_salir.clicked.connect(self.salir)
 
         self.show()
 
@@ -67,6 +74,9 @@ class VentanaInicio(QWidget):
     def verificar_info(self): 
         username = self.text_username.text()
         self.senal_verificar.emit(username)
+
+    def salir(self):
+        self.close()
     
     def error_username(self, mensaje):
         QMessageBox.warning(self, 'Error', mensaje)

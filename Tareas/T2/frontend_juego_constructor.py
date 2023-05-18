@@ -108,7 +108,6 @@ class VentanaJuegoConstructor(QWidget):
     
     def filtrar_botones(self, text):
         opcion = self.dropdown.currentText()
-        vbox = QVBoxLayout()
         for boton in self.botones_elementos_constructor:
             if opcion == "todos":
                 boton.show()
@@ -202,8 +201,8 @@ class VentanaJuegoConstructor(QWidget):
     
     def partir(self):
         self.senal_empezar_juego.emit(self.username)
-        self.hide()
-        if self.condiciones_ok == True:
+        if self.condiciones_ok == True: 
+            self.hide()
             for boton in self.botones_elementos_constructor:
                 boton.deleteLater()
             for row in range(self.rows):
