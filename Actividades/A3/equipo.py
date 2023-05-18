@@ -169,3 +169,5 @@ if __name__ == '__main__':
     print(f'La distancia entre Alicia y Alonso es {equipo.distancia(2, 0)}')
     print(f'La distancia entre Alba y Alex es {equipo.distancia(1, 3)}')
     
+
+   
