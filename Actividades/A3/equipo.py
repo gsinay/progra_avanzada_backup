@@ -65,11 +65,11 @@ class Equipo:
         for id_vecino in self.dict_adyacencia[id_jugador]:
             velocidad_vecino = self.jugadores[id_vecino].velocidad
             velocidad_jugador =  self.jugadores[id_jugador].velocidad
-            resta = abs(velocidad_jugador - velocidad_vecino)
+            resta = abs(velocidad_vecino - velocidad_jugador)
             if resta > numero:
                 numero = resta
-                id_jugador_mejor_amigo = id_vecino
-        return self.jugadores[id_jugador_mejor_amigo]
+                id_jugador_peor_compañero = id_vecino
+        return self.jugadores[id_jugador_peor_compañero]
     
     def peor_conocido(self, id_jugador: int) -> Jugador:
         cola = deque()
@@ -99,11 +99,13 @@ class Equipo:
 
         
     def distancia(self, id_jugador_1: int, id_jugador_2: int) -> int:
+        if id_jugador_1 == id_jugador_2:
+            return 0
+        
         cola = deque()
         visitados = [[]]
         numero_camino = 0
         cola.append(id_jugador_1)
-        distancia = 0
         if len(self.dict_adyacencia[id_jugador_1]) > 0:
             while len(cola) > 0:
                 jugador = cola.pop()
