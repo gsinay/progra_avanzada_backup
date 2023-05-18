@@ -170,4 +170,33 @@ if __name__ == '__main__':
     print(f'La distancia entre Alba y Alex es {equipo.distancia(1, 3)}')
     
 
-   
+    equipo = Equipo()
+    equipo.jugadores = {
+            0: Jugador('Alan', 2),
+            1: Jugador('Alberto', 3),
+            2: Jugador('Alejandra', 5),
+            3: Jugador('Alex', 8),
+            4: Jugador('Alonso', 13),
+            5: Jugador('Alba', 21),
+            6: Jugador('Alicia', 34),
+            7: Jugador('Alfredo', 55),
+            8: Jugador('Alma', 16),
+            9: Jugador('Aldo', 89)
+        }
+    adyacencia = {
+            0: {1},
+            1: {0, 2, 3},
+            2: {1, 3},
+            3: {1},
+            4: {5},
+            5: {4, 6},
+            6: {4, 5},
+            7: {8},
+            8: {9},
+            9: set()
+        }
+    
+    equipo.dict_adyacencia = defaultdict(set)
+    for key, value in adyacencia.items():
+        equipo.dict_adyacencia[key] = value
+    print(equipo.distancia(0 ,))
