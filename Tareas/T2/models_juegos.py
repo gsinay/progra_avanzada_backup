@@ -271,7 +271,6 @@ class Juego(QWidget):
                                         (4 - self.Luigi_juego.vidas)))
         else:
             pass
-        print(self.grilla)
         self.checkear_colisiones()
         self.senal_armar_front_inicial.emit(self.grilla)
         self.checkear_exito()
