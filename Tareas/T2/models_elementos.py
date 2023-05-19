@@ -5,7 +5,7 @@ from PyQt5.QtGui import QPixmap
 import random
 import os
 from time import sleep
-from parametros import (MIN_VELOCIDAD, MAX_VELOCIDAD)
+from parametros import (MIN_VELOCIDAD, MAX_VELOCIDAD, CANTIDAD_VIDAS)
 
 class Fantasma(QThread):
     lock = QMutex()
@@ -61,4 +61,4 @@ class Luigi(QWidget):
         self.label.setPixmap(QPixmap(os.path.join('sprites', 'Personajes', 'luigi_rigth_1.png')))
         self.posicion = posicion
         self.label.setScaledContents(True)
-        self.vidas = 3
+        self.vidas = CANTIDAD_VIDAS

@@ -8,9 +8,7 @@ from parametros import (CANTIDAD_VIDAS, FANTASMAS_HORIZONTALES, FANTASMAS_VERTIC
                         FUEGOS, ROCAS, MURALLAS, MIN_VELOCIDAD, MAX_VELOCIDAD, TIEMPO_CUENTA_REGRESIVA,
                         MULTIPLICADOR_PUNTAJE)
 from models_elementos import Luigi, FantasmaHorizontal, FantasmaVertical
-import sys
-import time
-
+import math
 
 class Juego_constructor(QObject):
 
@@ -87,6 +85,7 @@ class Juego(QWidget):
         self.tiempo_restante = TIEMPO_CUENTA_REGRESIVA
         self.pausado = False
         self.tiene_estrella = False
+        self.booleans = {"k": False, "i": False, "l" : False, "n" : False, "f": False} #cheatchodes
 
 
     def partir(self, grilla, username): #este metodo parte el juego desde el moodo constructor. COMPLETAR!
@@ -204,7 +203,7 @@ class Juego(QWidget):
 
     def tecla_presionada(self, tecla): #esto va a tener muuuchos ifs
         posicion = self.Luigi_juego.posicion
-        if tecla.lower() == "w" and self.pausado == False: #luigi se mueve para arriba
+        if tecla.lower() == "w" and self.pausado == False: #luigi se mueve para arriba 
             if posicion[0] != 0:
                 if posicion[0] != 1 and self.grilla[posicion[0] - 1][posicion[1]] == ["roca"] and self.grilla[posicion[0] - 2][posicion[1]] == []:
                     self.grilla[posicion[0]][posicion[1]].remove("luigi")
@@ -233,6 +232,7 @@ class Juego(QWidget):
                     self.grilla[posicion[0]][posicion[1] + 1].append("luigi") 
                     self.Luigi_juego.posicion = (posicion[0], posicion[1] + 1)
         elif tecla.lower() == "a" and self.pausado == False:
+
              if posicion[1] != 0:
                 if posicion[0] != 1  and self.grilla[posicion[0]][posicion[1] - 1] == ["roca"] and self.grilla[posicion[0]][posicion[1] - 2] == []:
                     self.grilla[posicion[0]][posicion[1]].remove("luigi")
@@ -262,19 +262,41 @@ class Juego(QWidget):
                     self.Luigi_juego.posicion = (posicion[0] + 1, posicion[1])
         elif tecla.lower() == "p":
             self.pausar()
+        elif tecla.lower() == "i":
+            self.booleans["i"] = True
+        elif tecla.lower() == "n" and self.booleans["i"]:
+            self.booleans["n"] = True
+        elif tecla.lower() == "f" and self.booleans["i"] and self.booleans["n"]:
+            self.booleans["f"] = True
+            self.timer.stop()
+            self.Luigi_juego.vidas = math.inf
+
+
         elif tecla.lower() == "g" and self.tiene_estrella:
             for thread in self.threads_fantasmas:
                 thread.vivo = False
+            if self.booleans["i"] and self.booleans["n"] and self.booleans["f"]:
+                self.senal_game_over.emit(self.username, 
+                                        "ganaste!!!", 
+                                        ((TIEMPO_CUENTA_REGRESIVA * MULTIPLICADOR_PUNTAJE) /
+                                        (1)))
+            print(self.tiempo_restante)
+            print(self.Luigi_juego.vidas)
             self.senal_game_over.emit(self.username, 
                                         "ganaste!!!", 
                                         ((self.tiempo_restante * MULTIPLICADOR_PUNTAJE) /
-                                        (4 - self.Luigi_juego.vidas)))
+                                        (1 + CANTIDAD_VIDAS - self.Luigi_juego.vidas)))
         else:
-            pass
+            self.resetear_booleanos()
+
         self.checkear_colisiones()
         self.senal_armar_front_inicial.emit(self.grilla)
         self.checkear_exito()
 
+    def resetear_booleanos(self):
+         for booleano in self.booleans:
+                self.booleans[booleano] = False
+    
     def checkear_colisiones(self):
         for fila in self.grilla:
             for columna in fila:
