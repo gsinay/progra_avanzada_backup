@@ -47,12 +47,12 @@ class Juego_constructor(QObject):
     def limpiar_grilla(self):
         self.armar_grilla_backend()
         self.luigi = 1
-        self.roca = ROCAS
-        self.pared = MURALLAS
+        self.roca = MAXIMO_ROCA
+        self.pared = MAXIMO_PARED
         self.estrella = 1
-        self.fantasma_horizontal = FANTASMAS_HORIZONTALES
-        self.fantasma_vertical = FANTASMAS_VERTICALES
-        self.fuego = FUEGOS
+        self.fantasma_horizontal = MAXIMO_FANTASMAS_HORIZONTAL
+        self.fantasma_vertical = MAXIMO_FANTASMAS_VERTICAL
+        self.fuego = MAXIMO_FUEGO
 
     def empezar_juego(self, username):
         if self.luigi == 1 or self.estrella == 1:
