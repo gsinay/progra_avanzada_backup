@@ -4,8 +4,8 @@ from PyQt5.QtGui import QPixmap
 from parametros import (ANCHO_GRILLA, LARGO_GRILLA)
 import os
 import random
-from parametros import (CANTIDAD_VIDAS, FANTASMAS_HORIZONTALES, FANTASMAS_VERTICALES, 
-                        FUEGOS, ROCAS, MURALLAS, MIN_VELOCIDAD, MAX_VELOCIDAD, TIEMPO_CUENTA_REGRESIVA,
+from parametros import (CANTIDAD_VIDAS, MAXIMO_FANTASMAS_HORIZONTAL, MAXIMO_FANTASMAS_VERTICAL, 
+                        MAXIMO_FUEGO, MAXIMO_ROCA, MAXIMO_PARED, TIEMPO_CUENTA_REGRESIVA,
                         MULTIPLICADOR_PUNTAJE)
 from models_elementos import Luigi, FantasmaHorizontal, FantasmaVertical
 import math
@@ -20,12 +20,12 @@ class Juego_constructor(QObject):
     def __init__(self):
         super().__init__()
         self.luigi = 1
-        self.roca = ROCAS
-        self.pared = MURALLAS
+        self.roca = MAXIMO_ROCA
+        self.pared = MAXIMO_PARED
         self.estrella = 1
-        self.fantasma_horizontal = FANTASMAS_HORIZONTALES
-        self.fantasma_vertical = FANTASMAS_VERTICALES
-        self.fuego = FUEGOS
+        self.fantasma_horizontal = MAXIMO_FANTASMAS_HORIZONTAL
+        self.fantasma_vertical = MAXIMO_FANTASMAS_VERTICAL
+        self.fuego = MAXIMO_FUEGO
         self.armar_grilla_backend()
 
     def armar_grilla_backend(self):

@@ -7,8 +7,7 @@ from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import pyqtSignal, QSize
 from models_juegos import Juego_constructor
 import os
-from parametros import (ANCHO_GRILLA, LARGO_GRILLA, FANTASMAS_HORIZONTALES,
-                        FANTASMAS_VERTICALES, FUEGOS, ROCAS, MURALLAS,
+from parametros import (ANCHO_GRILLA, LARGO_GRILLA,
                         TIEMPO_CUENTA_REGRESIVA, CANTIDAD_VIDAS)
 
 class VentanaJuego(QWidget):
