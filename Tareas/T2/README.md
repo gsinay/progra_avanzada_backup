@@ -18,15 +18,15 @@ Las clases para la lógica se encuentran en el archivo ```models_juegos.py```y l
 #### Mecánicas de juego: 47 pts (47%):
 __✅ Luigi:__ Se intancia un luigi al partir el juego, el cual tiene una cantidad de vidas dependiendo de los parametros y tambien un atributo de posición para mantener memoria de donde se encuentra en la grilla. El método KeyPressEvent está conectado con el slot tecla_presionada del back Juego, el cual checkea si la tecla es awsd. Si es una de esas, intentará mover el luigi. Intentará pues también checkea para cada dirección si hay una muralla o un fuego/fantasma (en tal caso pierde una vida y vuelve al inicio). Luigi puede mover las rocas, siempre mientras estas no estén frente a una muralla o o limite de grilla en la dirección de movimiento. 
 __✅Fantasmas__: Son Qthreads que tienen un temporizador aleatorio dado por los parametros y un atributo que establece su dirección de movimiento. El temporizador llama a un método de tal manera que en ese itnervalo de tiempo se actualize la grilla del back Juego dependiendo de quien llama al método y su dirección. Esto se hace a través de la senal_movimiento, la cual se conecta al slot mover_fantasma del back y envía la dirección del fantasma que se esta moviendo, la posición del fantasma, y el fantasma mismo. Si el fantasma no puede moverse en la dirección establecida por muralla o roca, se cambia su direccion de movimiento. Si choca con un fuego, el fantasma se saca de la grilla y se para el thread. 
-__✅ Modo Constructor:__ Funciona correctamente. Se puede poner una cierta cantidad de elementos en la grilla dependiendo de los parámetros, y se pueden filtrar por tipo. Esto se logra seteandole un atributo tipo a cada boton. El boton para jugar solo funciona si se cumple que hay un luigi y una estrella en la grilla, sino se da un popup de alerta de tipo ```QComboBox```. Tuve que definir un tamaño para la ventana pues por alguna razón, al ocupar .scaled() para los sprites, no se permitía mantener la naturaleza rectangular de la grilla al extender la pagina. 
-__✅ Fin de ronda__: Dependiendo de si se gana o se pierde, suenan los sonidos de la carpeta sounds. Se muestra el puntaje y el usuario a través de una QComboBox. Nuevamente esta informacion es pasada del back al front mediante una señal. 
+__✅ Modo Constructor:__ Funciona correctamente. Se puede poner una cierta cantidad de elementos en la grilla dependiendo de los parámetros, y se pueden filtrar por tipo. Esto se logra seteandole un atributo tipo a cada boton. El boton para jugar solo funciona si se cumple que hay un luigi y una estrella en la grilla, sino se da un popup de alerta de tipo ```QMessageBox```. Tuve que definir un tamaño para la ventana pues por alguna razón, al ocupar .scaled() para los sprites, no se permitía mantener la naturaleza rectangular de la grilla al extender la pagina. 
+__✅ Fin de ronda__: Dependiendo de si se gana o se pierde, suenan los sonidos de la carpeta sounds. Se muestra el puntaje y el usuario a través de una QMessageBox. Nuevamente esta informacion es pasada del back al front mediante una señal. 
 #### Interacción con el usuario: 14 pts (14%)
 __✅Clicks__: Los clicks de los botones son mediante click izquierdo. En el caso de los botones, se conectan con sus slots respectivos mediante .clicked.connect(), donde de ahí en adelante se emitea una señal si es necesario. En el caso del juego constructor, al clickear en un boton de sprite, este queda seleccionado hasta que se aprete otro botón. Por ejemplo, si clickeo en la muralla, luego puedo clickear en una posicion en la grilla para settear esa muralla. Luego puedo clickera nuevamente en la grilla en otra posicion (siempre mientras queden murallas y la nueva posicion esté vacía) para poner una nueva muralla. sin tener que haber apretado el boton de muralla (Es decir, los botones tienen memoria). En un inicio, cuando no se ha apretado ningun botón, se asume que el boton clickeado es luigi. 
 __❌__:   No implementado, los sprites se mueven discretamente en la grilla. Se eligió un único archivo para cada elemento del juego png de la carpeta sprites para representarlo. 
 #### Funcionalidades con el teclado: 8 pts (8%)
 __✅ Pausa__: Se puede pausar/renaudar el juego con el botón p del teclado y con el boton pausar/renaudar de la ventana. Esto pausa y renadua el timer de acorde. Se bloquean tambien los movimientos de los threads y de luigi con sus teclas correspondientes.
 ##### ❌✅🟠 K + I + L
-__✅ I + N + F__: Se pausa el timer infinitamente y se le entregan virtualmente infinitas vidas a luigi (mediante math.inf). Notar que este cambio de vidas en la ventana solamente se muestra en el front una vez que luigi choque con un fuego o fantasma, aunque en el back se tenga memoria de esto. Una vez terminado el juego, se calcula el puntaje como si fuera el máximo. 
+__✅ I + N + F__: Se pausa el timer infinitamente y se le entregan virtualmente infinitas vidas a luigi (mediante math.inf). Notar que este cambio de vidas en la ventana solamente se muestra en el front una vez que luigi choque con un fuego o fantasma, aunque en el back se tenga memoria de esto. Una vez terminado el juego, se calcula el puntaje como si fuera el máximo. Notar que para hacer uso del cheatcode se debe apretar la tecla I, luego la N y después la F, sin apretar ninguna tecla entremedio, si no se vuelve al inicio de la sequencia (tipo Gta jaja)
 #### Archivos: 4 pts (4%)
 __✅ Sprites__: Los archivos utilizados son importados correctamente (de forma relativa) desde la carpeta sprites. Son implementados en los Qlabels o QPushButtons con setIcon() o setPixmap().
 __✅ Parametros.py:__ Correctamente definidos en ```parametros.py``` y importados a los otros archivos .py  segun sea necesario. 
@@ -48,37 +48,28 @@ Es sumamente importante asegurarse que los archivos ```frontend_inicio.py```, ``
 ### Librerías externas utilizadas
 La lista de librerías externas que utilicé fue la siguiente:
 
-1. ```librería_1```: ```función() / módulo```
-2. ```librería_2```: ```función() / módulo``` (debe instalarse)
+1. ```os```: ```path```
+2. ```math```: ```inf()``` (A mi conocimiento, no debe instalarse). La ocupé en ```models_juegos.py```en la línea 272, para setear las vidas de luigi a un numero muuuuy alto (virtualmente infinito) al hacer uso del cheatcode IND
 3. ...
 
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:
 
-1. ```librería_1```: Contiene a ```ClaseA```, ```ClaseB```, (ser general, tampoco es necesario especificar cada una)...
-2. ```librería_2```: Hecha para <insertar descripción **breve** de lo que hace o qué contiene>
-3. ...
+1. ```models_elementos```: Contiene a ```Luigi```, un Qwidget, y a ```Fantasma```  un Qthread con sus clases hijas ```FantasmaHorizontal```y ```FantasmaVertical```
+2. ```models_juegos```: Contiene a ```JuegoConstructor```y ```Juego```, los modelos del back para el juego constructor y el juego como tal. 
 
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
+ - Al finalizar el juego, se muestra el popup, y al cerrar el popup, se cierra la aplicación, pues al no implementar la opción jugar de nuevo no hace sentido mantener la aplicación abierta. 
+ - 
 
-1. <Descripción/consideración 1 y justificación del por qué es válido/a> 
-2. <Descripción/consideración 2 y justificación del por qué es válido/a>
-3. ...
-
-PD: <una última consideración (de ser necesaria) o comentario hecho anteriormente que se quiera **recalcar**>
-
-
--------
-
-
-
-nte entienda sus intenciones.
 
 ## Referencias de código externo :book:
 
 Para realizar mi tarea saqué código de:
-1. \<link de código>: este hace \<lo que hace> y está implementado en el archivo <nombre.py> en las líneas <número de líneas> y hace <explicación breve de que hace>
+1. \<https://doc.qt.io/qtforpython-5/PySide2/QtCore/QMutex.html>: Esto es un lock dentro del mundo de PyQT5 para que los threads fantasmas no tengan problema de sincronización al moverse en la grilla. Esta implementado en ```models_elementos.py``` en la linea 11, y se accede al lock en los metodos run de cada thread. 
+
+En general, ocupé muuuchos métodos, atributos, clases, etc. de PyQt5 que no vimos directamente en clases. Por ejemplo: el método set_params, las clase QComboBox, QmessageBox y Qsound, etc. En general, toda la información de estas clases y como ocuparlas las encontré en la documentación oficial de PyQt5 que se encuenra en <https://doc.qt.io/qt.html#qtforpython>
 
 ## Descuentos
 La guía de descuentos se encuentra [link](https://github.com/IIC2233/syllabus/blob/main/Tareas/Descuentos.md).

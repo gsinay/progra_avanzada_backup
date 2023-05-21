@@ -1,5 +1,4 @@
 from PyQt5.QtCore import pyqtSignal, QObject
-from PyQt5.QtWidgets import QMessageBox
 from parametros import (MIN_CARACTERES, MAX_CARACTERES)
 
 class Procesador(QObject):

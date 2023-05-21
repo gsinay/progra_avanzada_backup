@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import (QWidget, QLabel, QGridLayout,
 from PyQt5.QtMultimedia import QSound
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import pyqtSignal, QSize
-from models_juegos import Juego_constructor
 import os
 from parametros import (ANCHO_GRILLA, LARGO_GRILLA,
                         TIEMPO_CUENTA_REGRESIVA, CANTIDAD_VIDAS)

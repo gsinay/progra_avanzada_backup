@@ -4,8 +4,6 @@ from PyQt5.QtWidgets import  (QApplication, QWidget, QLabel, QLineEdit,
                              QComboBox, QPushButton, QMessageBox)
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import QRect
-from parametros import (MIN_CARACTERES, MAX_CARACTERES)
 
 class VentanaInicio(QWidget):
 

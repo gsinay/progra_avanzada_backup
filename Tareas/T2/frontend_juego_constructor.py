@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import (QWidget, QLabel, QGridLayout,
                              QComboBox)
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import pyqtSignal, QSize
-from models_juegos import Juego_constructor
+from models_juegos import JuegoConstructor
 import os
 from parametros import (ANCHO_GRILLA, LARGO_GRILLA)
 
@@ -17,7 +17,7 @@ class VentanaJuegoConstructor(QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.init_gui()
-        self.juego_constructor = Juego_constructor()
+        self.juego_constructor = JuegoConstructor()
         self.nombre_sprite_clickeado = "luigi"
         #instanciaremos esto para mantener cuenta de cuantos elementos quedan en el back
 
@@ -189,7 +189,7 @@ class VentanaJuegoConstructor(QWidget):
                     bloque = self.grilla.itemAtPosition(row, column).widget()
                     bloque.setIcon(QIcon())
                     bloque.setStyleSheet('background-color: black; border: 1px solid white')
-        self.juego_constructor = Juego_constructor()
+        self.juego_constructor = JuegoConstructor()
         self.boton_luigi.setText(f"{self.juego_constructor.luigi}")
         self.boton_pared.setText(f"{self.juego_constructor.pared}")
         self.boton_roca.setText(f"{self.juego_constructor.roca}")

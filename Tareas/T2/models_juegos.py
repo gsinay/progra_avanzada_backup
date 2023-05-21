@@ -1,16 +1,14 @@
 from PyQt5.QtCore import QThread, pyqtSignal, QObject, QTimer
-from PyQt5.QtWidgets import QLabel, QApplication, QGridLayout, QPushButton, QWidget
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import  QWidget
 from parametros import (ANCHO_GRILLA, LARGO_GRILLA)
 import os
-import random
 from parametros import (CANTIDAD_VIDAS, MAXIMO_FANTASMAS_HORIZONTAL, MAXIMO_FANTASMAS_VERTICAL, 
                         MAXIMO_FUEGO, MAXIMO_ROCA, MAXIMO_PARED, TIEMPO_CUENTA_REGRESIVA,
                         MULTIPLICADOR_PUNTAJE)
 from models_elementos import Luigi, FantasmaHorizontal, FantasmaVertical
 import math
 
-class Juego_constructor(QObject):
+class JuegoConstructor(QObject):
 
     senal_error_agregar_elemento = pyqtSignal(str)
     senal_check_partir = pyqtSignal(bool, str)

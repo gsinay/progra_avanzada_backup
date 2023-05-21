@@ -1,6 +1,6 @@
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QLabel, QWidget
-from PyQt5.QtCore import QThread, pyqtSignal, QObject, QMutex
+from PyQt5.QtCore import QThread, pyqtSignal, QMutex
 from PyQt5.QtGui import QPixmap
 import random
 import os

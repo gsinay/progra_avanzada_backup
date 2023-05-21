@@ -3,7 +3,7 @@ from frontend_inicio import VentanaInicio
 from frontend_juego_constructor import VentanaJuegoConstructor
 from frontend_juego import VentanaJuego
 from backend_inicio import Procesador
-from models_juegos import Juego_constructor, Juego
+from models_juegos import JuegoConstructor, Juego
 import sys
 
 
@@ -12,7 +12,7 @@ if __name__ == '__main__':
     ventana_inicio = VentanaInicio()
     procesador_inicio = Procesador(ventana_inicio)
     ventana_juego_constructor = VentanaJuegoConstructor()
-    logica_juego_constructor = Juego_constructor()
+    logica_juego_constructor = JuegoConstructor()
     logica_juego = Juego()
     ventana_juego = VentanaJuego()
     logica_juego.setFocus()
