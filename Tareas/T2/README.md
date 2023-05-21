@@ -1,34 +1,18 @@
 # Tarea 2: DCCazafantasmas 👻🧱🔥
 
-
-Un buen ```README.md``` puede marcar una gran diferencia en la facilidad con la que corregimos una tarea, y consecuentemente cómo funciona su programa, por lo en general, entre más ordenado y limpio sea éste, mejor será 
-
-Para nuestra suerte, GitHub soporta el formato [MarkDown](https://es.wikipedia.org/wiki/Markdown), el cual permite utilizar una amplia variedad de estilos de texto, tanto para resaltar cosas importantes como para separar ideas o poner código de manera ordenada ([pueden ver casi todas las funcionalidades que incluye aquí](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet))
-
-Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **concisos** (a menos que lo consideren necesario) pero **tampoco pueden** faltar cosas. Lo importante es que sea claro y limpio 
-
-**Dejar claro lo que NO pudieron implementar y lo que no funciona a la perfección. Esto puede sonar innecesario pero permite que el ayudante se enfoque en lo que sí podría subir su puntaje.**
-
 ## Consideraciones generales :octocat:
 
-<Descripción de lo que hace y que **_no_** hace la tarea que entregaron junto
-con detalles de último minuto y consideraciones como por ejemplo cambiar algo
-en cierta línea del código o comentar una función>
+La tarea, a grande razgos, cumple con lo solicitado. Es decir, se puede acceder al modo constructor o directametne a un mapa, validando el nombre de usuario, donde se representa en una ventana la grilla, la cual se "dibuja" a base de la información alamcenada en el back(lista de lista de listas). Se puede mover a luigi con las teclas, actualizando así la grilla del back, y los fantasmas se mueven aleatoriamente también actualizando el back. Se cuenta con un temporizador y un contador de vidas de luigi a base de los parámetros y el juego recononoce cuando se ha ganado o perdido. 
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
-Explicación: mantén el emoji correspondiente, de manera honesta, para cada item. Si quieres, también puedes agregarlos a los títulos:
-- ❌ si **NO** completaste lo pedido
-- ✅ si completaste **correctamente** lo pedido
-- 🟠 si el item está **incompleto** o tiene algunos errores
+
 
 **⚠️⚠️NO BASTA CON SOLO PONER EL COLOR DE LO IMPLEMENTADO**,
-SINO QUE SE DEBERÁ EXPLICAR QUÉ SE REALIZO DETALLADAMENTE EN CADA ITEM.
-⚠️⚠️
 
 #### Ventanas: 27 pts (27%)
-##### ❌✅🟠 Ventana de Inicio
-##### ❌✅🟠 Ventana de Juego
+ __✅ Ventana de Inicio:__ Lograda correctamente. Se muestra la foto del background, se permite ingresar un nombre y verificar su largo y alfanumericidad. Se puede elegir los mapas cargados en la carpeta mapas y también el modo constructor. Hay un boton de partir que cierra la ventana y abre la ventana de juego o constructor, y un boton salir que cierra la aplicación si es apretado. 
+__✅ Ventana de Juego:__ Lograda correctamente. Se muestra una ventana diferente en el caso del modo constructor. Si se elige este, se connectea la información de la ventana de inicio con las instancias de las clases VentanaJuegoConstructor y JuegoConstructor. en la instancia de la ventana, encargada del front, se muestra la grilla con los sprites de murallas, boton de limpiar / jugar (este solo funciona si hay un luigi y estrella en la grilla)  y una capacidad de filtrar los elementos a base de su tipo. Al agregar elementos en la grilla del front, se le pasa a una lista de listas de listas en el back (Logica) mediante una señal de agregar elemento. Una vez se parte el juego (lo cual solo es permitido si se encuentra un luigi y estrella en la grilla) , se cierra esta ventana y se abre una nueva la cual es una instancia de VentanaJuego y se puebla la del grilla, en paralelo a enviar esta informacion a una nueva lista de listas de listas en el back, ahora en la instancia Juego. Esta nueva ventana tiene un temporizador, y se puede pausar y renaudar (por boton y letra p). Se muestran las vidas de luigi y este se puede mover con las teclas asdw. Los fantasmas se mueven correctamente y se gana o pierde dependiendo de las condiciones correctamente. Notar que __NO__ importa si las teclas son mayusculas o minusculas, las condicieones funcionan correctamente (el movimiento de luigi, la pausa, y apretar G para liberar la estrella al agarrarla). En caso que se entre directamente, 
 #### Mecánicas de juego: 47 pts (47%)
 ##### ❌✅🟠 Luigi
 ##### ❌✅🟠 Fantasmas
