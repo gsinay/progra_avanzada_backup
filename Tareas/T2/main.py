@@ -33,10 +33,10 @@ if __name__ == '__main__':
     ventana_juego_constructor.senal_limpiar_grilla.connect(logica_juego_constructor.limpiar_grilla)
     ventana_juego_constructor.senal_empezar_juego.connect(logica_juego_constructor.empezar_juego)
     logica_juego_constructor.senal_check_partir.connect(ventana_juego_constructor.check_partir)
-    #de ahora en adelante se conecta el back con la ventana juego y no juego_Constructor
     logica_juego_constructor.senal_partir_ventana_juego.connect(ventana_juego.set_info_desde_constructor)
     logica_juego_constructor.senal_partir.connect(logica_juego.partir)
    
+    #de ahora en adelante se conecta el back con la ventana juego y no juego_Constructor
     ventana_juego.senal_tecla_presionada.connect(logica_juego.tecla_presionada)
 
     ventana_juego.senal_poblar_grilla.connect(logica_juego.poblar_grilla_backend)

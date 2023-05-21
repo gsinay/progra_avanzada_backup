@@ -18,6 +18,7 @@ class VentanaJuegoConstructor(QWidget):
         super().__init__(*args, **kwargs)
         self.init_gui()
         self.juego_constructor = Juego_constructor()
+        self.nombre_sprite_clickeado = "luigi"
         #instanciaremos esto para mantener cuenta de cuantos elementos quedan en el back
 
     def init_gui(self):
