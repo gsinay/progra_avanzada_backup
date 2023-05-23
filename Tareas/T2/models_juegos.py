@@ -260,6 +260,13 @@ class Juego(QWidget):
                     self.Luigi_juego.posicion = (posicion[0] + 1, posicion[1])
         elif tecla.lower() == "p":
             self.pausar()
+        elif tecla.lower() == "k":
+            self.booleans["k"] = True
+        elif tecla.lower() == "i" and self.booleans["k"]:
+            self.booleans["i"] = True
+        elif tecla.lower() == "l" and self.booleans["i"] and self.booleans["k"]:
+            self.booleans["l"] = True
+            self.borrar_fantasmas()
         elif tecla.lower() == "i":
             self.booleans["i"] = True
         elif tecla.lower() == "n" and self.booleans["i"]:
@@ -292,7 +299,10 @@ class Juego(QWidget):
         self.checkear_exito()
 
     def resetear_booleanos(self):
-         for booleano in self.booleans:
+        if self.booleans["i"] and self.booleans["n"] and self.booleans["f"]:
+             pass
+        else:  
+            for booleano in self.booleans:
                 self.booleans[booleano] = False
     
     def checkear_colisiones(self):
@@ -342,6 +352,20 @@ class Juego(QWidget):
             self.timer.start()
         self.senal_actualizar_boton_pausa.emit(self.pausado)
         
-                
+    def borrar_fantasmas(self):
+        for thread in self.threads_fantasmas:
+            thread.vivo = False
+        #remove all fantasma_horizontal and fantasma_vertical from self.grilla
+        for fila in range(len(self.grilla)):
+            for columna in range(len(self.grilla[fila])):
+                if "fantasma_horizontal" in self.grilla[fila][columna]:
+                    self.grilla[fila][columna] = [valor for valor in self.grilla[fila][columna]
+                                                   if valor != "fantasma_horizontal"]
+                elif "fantasma_vertical" in self.grilla[fila][columna]:
+                    self.grilla[fila][columna] = [valor for valor in self.grilla[fila][columna]
+                                                   if valor != "fantasma_vertical"]
+        self.senal_armar_front_inicial.emit(self.grilla)
+
+
 
     

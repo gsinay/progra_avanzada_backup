@@ -2,7 +2,7 @@
 
 ## Consideraciones generales :octocat:
 
-La tarea, a grande razgos, cumple con lo solicitado. Es decir, se puede acceder al modo constructor o directamente a un mapa, validando el nombre de usuario, donde se representa en una ventana la grilla, la cual se "dibuja" a base de la información almacenada en el back(lista de lista de listas). Se puede mover a luigi con las teclas, actualizando así la grilla del back, y los fantasmas se mueven aleatoriamente también actualizando el back. Se cuenta con un temporizador y un contador de vidas de luigi a base de los parámetros y el juego recononoce cuando se ha ganado o perdido. Lo único no logrado fueron las siguientes dos cosas: las animaciones de los elementos en la grilla al moverse, los cuales se moderalon con movimiento discreto de una casilla a la otra, y el cheatcode KIL.
+La tarea, a grande razgos, cumple con lo solicitado. Es decir, se puede acceder al modo constructor o directamente a un mapa, validando el nombre de usuario, donde se representa en una ventana la grilla, la cual se "dibuja" a base de la información almacenada en el back(lista de lista de listas). Se puede mover a luigi con las teclas, actualizando así la grilla del back, y los fantasmas se mueven aleatoriamente también actualizando el back. Se cuenta con un temporizador y un contador de vidas de luigi a base de los parámetros y el juego recononoce cuando se ha ganado o perdido. Lo único no logrado las animaciones de los elementos en la grilla al moverse, los cuales se moderalon con movimiento discreto de una casilla a la otra. 
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
@@ -32,9 +32,9 @@ __❌Animaciones__:   No implementado, los sprites se mueven discretamente en la
 #### Funcionalidades con el teclado: 8 pts (8%)
 __✅ Pausa__: Se puede pausar/renaudar el juego con el botón p del teclado y con el boton pausar/renaudar de la ventana. Esto pausa y renauda el timer de acorde. Se bloquean tambien los movimientos de los threads y de luigi con sus teclas correspondientes.
 
-__❌ K + I + L:__ No implementado.
+__✅I + N + F__: Se pausa el timer infinitamente y se le entregan virtualmente infinitas vidas a luigi (mediante math.inf). Notar que este cambio de vidas en la ventana solamente se muestra en el front una vez que luigi choque con un fuego o fantasma, aunque en el back se tenga memoria de esto. Una vez terminado el juego, se calcula el puntaje como si fuera el máximo. Notar que para hacer uso del cheatcode se debe apretar la tecla I, luego la N y después la F, sin apretar ninguna tecla entremedio, si no se vuelve al inicio de la secuencia (tipo Gta jaja)
 
-__✅ I + N + F__: Se pausa el timer infinitamente y se le entregan virtualmente infinitas vidas a luigi (mediante math.inf). Notar que este cambio de vidas en la ventana solamente se muestra en el front una vez que luigi choque con un fuego o fantasma, aunque en el back se tenga memoria de esto. Una vez terminado el juego, se calcula el puntaje como si fuera el máximo. Notar que para hacer uso del cheatcode se debe apretar la tecla I, luego la N y después la F, sin apretar ninguna tecla entremedio, si no se vuelve al inicio de la sequencia (tipo Gta jaja)
+__✅ K + I + L:__ Se borran los fantasmas del mapa y de la grilla del back, dejando el mapa sin peligro de fantasmas. Al igual que el cheatcode anterior, deben apretarse las letras KIL en orden una por una, y si se apreta una tecla entremedio, se debe reiniciar la secuencia. 
 
 #### Archivos: 4 pts (4%)
 __✅ Sprites__: Los archivos utilizados son importados correctamente (de forma relativa) desde la carpeta sprites. Son implementados en los Qlabels o QPushButtons con setIcon() o setPixmap().
