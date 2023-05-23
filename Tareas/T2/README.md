@@ -85,6 +85,10 @@ Para realizar mi tarea saqué código de:
 
 En general, ocupé muuuchos métodos, atributos, clases, etc. de PyQt5 que no vimos directamente en clases. Por ejemplo: el método set_params, las clase QComboBox, QmessageBox y Qsound, etc. En general, toda la información de estas clases y como ocuparlas las encontré en la documentación oficial de PyQt5 que se encuenra en <https://doc.qt.io/qt.html#qtforpython>.
 
+2. \<https://stackoverflow.com/questions/1157106/remove-all-occurrences-of-a-value-from-a-list>: Compresión de listas para borrar todos los elementos con cierto valor de una lista. Implementado en la linea 350 aprox de ```models_juegos.py```en la funcion borrar_fantasmas la cual se utiliza una vez el cheatcode KIL es implementado. 
+
+3. \<https://www.pythonguis.com/tutorials/transmitting-extra-data-qt-signals/> en las lineas 69-75 de ```frontend_juego_constructor.py```, usé lambda functions para poder conectar el press de un boton a un mismo slot pero que el slot se comporté dependiendo de cierta forma dependiendo del sender del boton. 
+
 
 
 ## Descuentos

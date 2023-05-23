@@ -2,8 +2,9 @@ from PyQt5.QtCore import QThread, pyqtSignal, QObject, QTimer
 from PyQt5.QtWidgets import  QWidget
 from parametros import (ANCHO_GRILLA, LARGO_GRILLA)
 import os
-from parametros import (CANTIDAD_VIDAS, MAXIMO_FANTASMAS_HORIZONTAL, MAXIMO_FANTASMAS_VERTICAL, 
-                        MAXIMO_FUEGO, MAXIMO_ROCA, MAXIMO_PARED, TIEMPO_CUENTA_REGRESIVA,
+from parametros import (CANTIDAD_VIDAS, MAXIMO_FANTASMAS_HORIZONTAL,
+                        MAXIMO_FANTASMAS_VERTICAL, MAXIMO_FUEGO, 
+                        MAXIMO_ROCA, MAXIMO_PARED, TIEMPO_CUENTA_REGRESIVA,
                         MULTIPLICADOR_PUNTAJE)
 from models_elementos import Luigi, FantasmaHorizontal, FantasmaVertical
 import math
@@ -40,8 +41,8 @@ class JuegoConstructor(QObject):
         else:
             self.list[posicion[0]-1][posicion[1]-1].append(nombre_elemento)
             self.senal_elemento_agregado.emit(nombre_elemento, posicion)
-            setattr(self, nombre_elemento, getattr(self, nombre_elemento)-1)
-            
+            setattr(self, nombre_elemento, getattr(self, nombre_elemento)-1) 
+      
     def limpiar_grilla(self):
         self.armar_grilla_backend()
         self.luigi = 1
@@ -54,11 +55,12 @@ class JuegoConstructor(QObject):
 
     def empezar_juego(self, username):
         if self.luigi == 1 or self.estrella == 1:
-            self.senal_check_partir.emit(False, "No se puede empezar el juego sin Luigi o la estrella")
+            self.senal_check_partir.emit(
+                False, "No se puede empezar el juego sin Luigi o la estrella")
         else:
             self.senal_check_partir.emit(True, "Sucess")
-            self.senal_partir.emit(self.list, username)#esta se conecta al back
-            self.senal_partir_ventana_juego.emit(self.list, username) #esta se conecta al front
+            self.senal_partir.emit(self.list, username)
+            self.senal_partir_ventana_juego.emit(self.list, username)
             
 
 class Juego(QWidget):
@@ -86,19 +88,19 @@ class Juego(QWidget):
         self.booleans = {"k": False, "i": False, "l" : False, "n" : False, "f": False} #cheatchodes
 
 
-    def partir(self, grilla, username): #este metodo parte el juego desde el moodo constructor. COMPLETAR!
+    def partir(self, grilla, username): #este metodo parte el juego desde el modo constructor.
         self.grilla = grilla
         self.username = username
         self.crear_caracteres()
         
 
-    def armar_grilla_backend(self):
+    def armar_grilla_backend(self): #metodo crae grilla de nxn si entramos desde mapa predefinido
         self.grilla = [[] for i in range(LARGO_GRILLA-2)]
         for sub_lista in self.grilla:
             for elemento in range(ANCHO_GRILLA-2):
                 sub_lista.append([])
     
-    def poblar_grilla_backend(self, nombre_archivo, username): #CAMBIAR POR CLASES CUANDO ESTEN LISTAS
+    def poblar_grilla_backend(self, nombre_archivo, username):  #pobla self.grilla desde mapa predefinido
         self.armar_grilla_backend()
         self.username = username
         with open(os.path.join("mapas", nombre_archivo + ".txt"), "r") as archivo:
@@ -124,7 +126,7 @@ class Juego(QWidget):
         self.senal_armar_front_inicial.emit(self.grilla)
         self.crear_caracteres()
 
-    def crear_caracteres(self):
+    def crear_caracteres(self): #instancia luigis y fantasmas dado grilla
         self.threads_fantasmas = set()
         for fila in range(len(self.grilla)):
             for columna in range(len(self.grilla[fila])):
@@ -140,12 +142,13 @@ class Juego(QWidget):
         for thread in self.threads_fantasmas:
             thread.start()
         self.game_started = True
-        
-    def mover_fantasma(self, posicion, direccion, thread):
+
+    def mover_fantasma(self, posicion, direccion, thread): #llamado por threads al moverse
         if direccion == "derecha" and thread.vivo and self.pausado == False:
             if posicion[1] == ANCHO_GRILLA - 3:
                 thread.direccion = "izquierda"
-            elif self.grilla[posicion[0]][posicion[1] + 1] == ["pared"] or self.grilla[posicion[0]][posicion[1] + 1] == ["roca"]:
+            elif (self.grilla[posicion[0]][posicion[1] + 1] == ["pared"]
+                   or self.grilla[posicion[0]][posicion[1] + 1] == ["roca"]):
                 thread.direccion = "izquierda"
             elif self.grilla[posicion[0]][posicion[1] + 1] == ["fuego"]:
                 thread.vivo = False
@@ -158,7 +161,8 @@ class Juego(QWidget):
         elif direccion == "izquierda" and thread.vivo and self.pausado == False:
             if posicion[1] == 0:
                 thread.direccion = "derecha"
-            elif self.grilla[posicion[0]][posicion[1] - 1 ] == ["pared"] or self.grilla[posicion[0]][posicion[1] -1 ] == ["roca"]:
+            elif (self.grilla[posicion[0]][posicion[1] - 1 ] == ["pared"] 
+                  or self.grilla[posicion[0]][posicion[1] -1 ] == ["roca"]):
                 thread.direccion = "derecha"
             elif self.grilla[posicion[0]][posicion[1] - 1] == ["fuego"]:
                 thread.vivo = False
@@ -173,7 +177,8 @@ class Juego(QWidget):
         if direccion == "abajo" and thread.vivo and self.pausado == False:
             if posicion[0] == LARGO_GRILLA - 3:
                 thread.direccion = "arriba"
-            elif self.grilla[posicion[0] + 1 ][posicion[1]] == ["pared"] or self.grilla[posicion[0]+ 1][posicion[1]] == ["roca"]:
+            elif (self.grilla[posicion[0] + 1 ][posicion[1]] == ["pared"]
+                   or self.grilla[posicion[0]+ 1][posicion[1]] == ["roca"]):
                 thread.direccion = "arriba"
             elif self.grilla[posicion[0] + 1][posicion[1]] == ["fuego"]:
                 thread.vivo = False
@@ -186,7 +191,8 @@ class Juego(QWidget):
         elif direccion == "arriba" and thread.vivo and self.pausado == False:
             if posicion[0] == 0:
                 thread.direccion = "abajo"
-            elif self.grilla[posicion[0] -1 ][posicion[1]] == ["pared"] or self.grilla[posicion[0] - 1][posicion[1]] == ["roca"]:
+            elif (self.grilla[posicion[0] -1 ][posicion[1]] == ["pared"]
+                   or self.grilla[posicion[0] - 1][posicion[1]] == ["roca"]):
                 thread.direccion = "abajo"
             elif self.grilla[posicion[0] - 1][posicion[1]] == ["fuego"]:
                 thread.vivo = False
@@ -203,26 +209,31 @@ class Juego(QWidget):
         posicion = self.Luigi_juego.posicion
         if tecla.lower() == "w" and self.pausado == False: #luigi se mueve para arriba 
             if posicion[0] != 0:
-                if posicion[0] != 1 and self.grilla[posicion[0] - 1][posicion[1]] == ["roca"] and self.grilla[posicion[0] - 2][posicion[1]] == []:
+                if (posicion[0] != 1 and self.grilla[posicion[0] - 1][posicion[1]] == ["roca"]
+                     and self.grilla[posicion[0] - 2][posicion[1]] == []):
                     self.grilla[posicion[0]][posicion[1]].remove("luigi")
                     self.grilla[posicion[0] - 1][posicion[1]].remove("roca")
                     self.grilla[posicion[0] - 1][posicion[1]].append("luigi") 
                     self.grilla[posicion[0] - 2][posicion[1]].append("roca") 
                     self.Luigi_juego.posicion = (posicion[0]-1, posicion[1]) 
                 elif self.grilla[posicion[0] - 1][posicion[1]] == ["pared"]:
-                    pass
+                    pass  
                 else:
                     self.grilla[posicion[0]][posicion[1]].remove("luigi")
                     self.grilla[posicion[0] - 1][posicion[1]].append("luigi") 
                     self.Luigi_juego.posicion = (posicion[0]-1, posicion[1])
         elif tecla.lower() == "d" and self.pausado == False:
             if posicion[1] != ANCHO_GRILLA - 3:
-                if posicion[0] != ANCHO_GRILLA - 4 and self.grilla[posicion[0]][posicion[1] + 1] == ["roca"] and self.grilla[posicion[0]][posicion[1] + 2] == []:
+                if (posicion[0] != ANCHO_GRILLA - 4 and 
+                    self.grilla[posicion[0]][posicion[1] + 1] == ["roca"] and
+                      self.grilla[posicion[0]][posicion[1] + 2] == []):
+                    
                     self.grilla[posicion[0]][posicion[1]].remove("luigi")
                     self.grilla[posicion[0]][posicion[1] + 1].remove("roca")
                     self.grilla[posicion[0]][posicion[1] + 1].append("luigi") 
                     self.grilla[posicion[0]][posicion[1] + 2].append("roca") 
                     self.Luigi_juego.posicion = (posicion[0], posicion[1] + 1) 
+
                 elif self.grilla[posicion[0]][posicion[1] + 1] == ["pared"]:
                     pass
                 else:
@@ -230,14 +241,17 @@ class Juego(QWidget):
                     self.grilla[posicion[0]][posicion[1] + 1].append("luigi") 
                     self.Luigi_juego.posicion = (posicion[0], posicion[1] + 1)
         elif tecla.lower() == "a" and self.pausado == False:
-
              if posicion[1] != 0:
-                if posicion[0] != 1  and self.grilla[posicion[0]][posicion[1] - 1] == ["roca"] and self.grilla[posicion[0]][posicion[1] - 2] == []:
+                if (posicion[0] != 1 and
+                     self.grilla[posicion[0]][posicion[1] - 1] == ["roca"] and
+                       self.grilla[posicion[0]][posicion[1] - 2] == []):
+                    
                     self.grilla[posicion[0]][posicion[1]].remove("luigi")
                     self.grilla[posicion[0]][posicion[1] - 1].remove("roca")
                     self.grilla[posicion[0]][posicion[1] - 1].append("luigi") 
                     self.grilla[posicion[0]][posicion[1] - 2].append("roca") 
                     self.Luigi_juego.posicion = (posicion[0], posicion[1] - 1) 
+
                 elif self.grilla[posicion[0]][posicion[1] - 1] == ["pared"]:
                     pass
                 else:
@@ -246,12 +260,16 @@ class Juego(QWidget):
                     self.Luigi_juego.posicion = (posicion[0], posicion[1] - 1)
         elif tecla.lower() == "s" and self.pausado == False:
             if posicion[0] != LARGO_GRILLA - 3:
-                if posicion[0] != LARGO_GRILLA - 4 and self.grilla[posicion[0] + 1][posicion[1]] == ["roca"] and self.grilla[posicion[0] + 2][posicion[1]] == []:
+                if (posicion[0] != LARGO_GRILLA - 4 and 
+                    self.grilla[posicion[0] + 1][posicion[1]] == ["roca"] and 
+                    self.grilla[posicion[0] + 2][posicion[1]] == []):
+
                     self.grilla[posicion[0]][posicion[1]].remove("luigi")
                     self.grilla[posicion[0] + 1][posicion[1]].remove("roca")
                     self.grilla[posicion[0] + 1][posicion[1]].append("luigi") 
                     self.grilla[posicion[0] + 2][posicion[1]].append("roca") 
                     self.Luigi_juego.posicion = (posicion[0] + 1, posicion[1]) 
+
                 elif self.grilla[posicion[0] + 1][posicion[1]] == ["pared"]:
                     pass
                 else:
@@ -304,12 +322,13 @@ class Juego(QWidget):
         else:  
             for booleano in self.booleans:
                 self.booleans[booleano] = False
-    
     def checkear_colisiones(self):
         for fila in self.grilla:
             for columna in fila:
                 if "luigi" in columna:
-                    if "fantasma_vertical" in columna or "fantasma_horizontal" in columna or "fuego" in columna:
+                    if ("fantasma_vertical" in columna or 
+                        "fantasma_horizontal" in columna or "fuego" in columna):
+                        
                         columna.remove("luigi")
                         self.Luigi_juego.vidas -= 1
                         self.Luigi_juego.posicion = (0,0)

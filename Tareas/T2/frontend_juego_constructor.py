@@ -49,17 +49,20 @@ class VentanaJuegoConstructor(QWidget):
         self.boton_estrella.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'osstar.png')))
         self.boton_estrella.tipo = "bloque"
         self.boton_fantasma_horizontal = QPushButton(f"{self.juego_constructor.fantasma_horizontal}")
-        self.boton_fantasma_horizontal.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'white_ghost_left_1.png')))
+        self.boton_fantasma_horizontal.setIcon(QIcon(os.path.join('sprites', 'Personajes', 
+                                                                  'white_ghost_left_1.png')))
         self.boton_fantasma_horizontal.tipo = "entidad"
         self.boton_fantasma_vertical = QPushButton(f"{self.juego_constructor.fantasma_vertical}")
-        self.boton_fantasma_vertical.setIcon(QIcon(os.path.join('sprites', 'Personajes', 'red_ghost_vertical_1.png')))
+        self.boton_fantasma_vertical.setIcon(QIcon(os.path.join('sprites', 'Personajes', 
+                                                                'red_ghost_vertical_1.png')))
         self.boton_fantasma_vertical.tipo = "entidad"
         self.boton_fuego = QPushButton(f"{self.juego_constructor.fuego}")
         self.boton_fuego.setIcon(QIcon(os.path.join('sprites', 'Elementos', 'fire.png')))
         self.boton_fuego.tipo = "bloque"
-        self.botones_elementos_constructor = (self.boton_luigi, self.boton_pared, self.boton_roca, self.boton_estrella, 
-                                         self.boton_fantasma_horizontal, self.boton_fantasma_vertical, self.boton_fuego)
-        
+        self.botones_elementos_constructor = (self.boton_luigi, self.boton_pared, self.boton_roca,
+                                            self.boton_estrella, self.boton_fantasma_horizontal, 
+                                            self.boton_fantasma_vertical, self.boton_fuego)
+     
         for boton in self.botones_elementos_constructor:
             boton.setIconSize(QSize(32, 32))
         #conectar los botones a slot con lambda para registrar los nombres
@@ -117,8 +120,6 @@ class VentanaJuegoConstructor(QWidget):
                 else:
                     boton.show()
 
-            
-
     def armar_grilla(self, modo_juego):
         self.rows = LARGO_GRILLA
         self.columns = ANCHO_GRILLA
@@ -128,7 +129,8 @@ class VentanaJuegoConstructor(QWidget):
             for column in range(self.columns):
                 if row == 0 or row == LARGO_GRILLA - 1 or column == 0 or column == ANCHO_GRILLA - 1:
                     elemento = QLabel()
-                    elemento.setPixmap(QPixmap(os.path.join('sprites', 'Elementos', 'bordermap.png')).scaled(50,50))
+                    elemento.setPixmap(QPixmap(os.path.join('sprites', 
+                                                            'Elementos', 'bordermap.png')).scaled(50,50))
                 elif modo_juego != "Modo Juego":
                     elemento = QPushButton()
                     elemento.id = (row, column)
@@ -140,10 +142,10 @@ class VentanaJuegoConstructor(QWidget):
                     elemento.id = (row, column)
                     elemento.setStyleSheet('background-color: black; border: 1px solid white')
                     elemento.setFixedSize(50, 50)
-                elemento.setContentsMargins(0, 0, 0, 0) #quitar los margenes
+                elemento.setContentsMargins(0, 0, 0, 0)
                 self.grilla.addWidget(elemento, row, column)
 
-    def boton_grilla_clickeado(self):  ##conectar esto con backend!!!!
+    def boton_grilla_clickeado(self):  
         elemento = self.sender()
         self.senal_agregar_elemento.emit(elemento.id, self.nombre_sprite_clickeado)
 
@@ -185,7 +187,8 @@ class VentanaJuegoConstructor(QWidget):
     def limpiar(self):
         for row in range(self.rows):
             for column in range(self.columns):
-                if row != 0 and row != LARGO_GRILLA - 1 and column != 0 and column != ANCHO_GRILLA - 1:
+                if (row != 0 and row != LARGO_GRILLA - 1 and 
+                        column != 0 and column != ANCHO_GRILLA - 1):
                     bloque = self.grilla.itemAtPosition(row, column).widget()
                     bloque.setIcon(QIcon())
                     bloque.setStyleSheet('background-color: black; border: 1px solid white')
@@ -207,7 +210,8 @@ class VentanaJuegoConstructor(QWidget):
                 boton.deleteLater()
             for row in range(self.rows):
                 for column in range(self.columns):
-                    if row != 0 and row != LARGO_GRILLA - 1 and column != 0 and column != ANCHO_GRILLA - 1:
+                    if (row != 0 and row != LARGO_GRILLA - 1 and 
+                            column != 0 and column != ANCHO_GRILLA - 1):
                         bloque = self.grilla.itemAtPosition(row, column).widget()
                         bloque.setEnabled(False)
             self.boton_limpiar.setEnabled(False)

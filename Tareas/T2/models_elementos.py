@@ -1,4 +1,4 @@
-from PyQt5 import QtGui
+
 from PyQt5.QtWidgets import QLabel, QWidget
 from PyQt5.QtCore import QThread, pyqtSignal, QMutex
 from PyQt5.QtGui import QPixmap
@@ -25,7 +25,8 @@ class Fantasma(QThread):
 class FantasmaHorizontal(Fantasma):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.label.setPixmap(QPixmap(os.path.join('sprites', 'Personajes', 'white_ghost_left_1.png')))
+        self.label.setPixmap(QPixmap(os.path.join(
+            'sprites', 'Personajes', 'white_ghost_left_1.png')))
         self.label.setScaledContents(True)
         self.label.setFixedSize(32, 32)
         self.direccion = "derecha" #se parten moviendo a la derecha
@@ -41,7 +42,8 @@ class FantasmaHorizontal(Fantasma):
 class FantasmaVertical(Fantasma):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.label.setPixmap(QPixmap(os.path.join('sprites', 'Personajes', 'red_ghost_vertical_1.png')))
+        self.label.setPixmap(QPixmap(os.path.join(
+            'sprites', 'Personajes', 'red_ghost_vertical_1.png')))
         self.label.setScaledContents(True)
         self.label.setFixedSize(32, 32)
         self.direccion = "arriba" #se parten moviendo hacia arriba
@@ -58,7 +60,8 @@ class Luigi(QWidget):
     def __init__(self, posicion, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.label  = QLabel()
-        self.label.setPixmap(QPixmap(os.path.join('sprites', 'Personajes', 'luigi_rigth_1.png')))
+        self.label.setPixmap(QPixmap(os.path.join(
+            'sprites', 'Personajes', 'luigi_rigth_1.png')))
         self.posicion = posicion
         self.label.setScaledContents(True)
         self.vidas = CANTIDAD_VIDAS
