@@ -35,7 +35,6 @@ def codificar_secuencia(secuencia: List[int]) -> bytearray:
     for elemento in secuencia:
         elemento_bytes = elemento.to_bytes(2, byteorder='big')
         bytearray_retorno.extend(elemento_bytes)
-    print(bytearray_retorno)
     return bytearray_retorno
 
 
@@ -51,6 +50,13 @@ def separar_msg(mensaje: bytearray, secuencia: List[int]) -> List[bytearray]:
     m_bytes_secuencia = bytearray()
     m_reducido = bytearray()
     # Completar
+    for indice in range(len(mensaje)):
+        bytes = mensaje[indice: indice + 1]
+        if indice in secuencia:
+            m_bytes_secuencia.extend(bytes)
+        else:
+            m_reducido.extend(bytes)
+
 
     return [m_bytes_secuencia, m_reducido]
 
@@ -71,9 +77,10 @@ def encriptar(mensaje: dict, secuencia: List[int]) -> bytearray:
 
 if __name__ == "__main__":
     original = serializar_diccionario({"tama": 1})
-    print(original)
     verificar_secuencia(original, [1, 2, 3])
     codificar_secuencia([1, 2, 3])
+    tupla = encriptar(bytearray(b'\x10\x01\x02\x03\xAA'), [2, 1, 0])
+    print(tupla)
     #encriptado = encriptar(original, [1, 5, 10, 3])
     #print(original)
     #print(encriptado)
