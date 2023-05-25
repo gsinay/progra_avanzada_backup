@@ -23,7 +23,6 @@ def separar_msg_encriptado(mensaje: bytearray) -> List[bytearray]:
     secuencia_codificada = bytearray()
     # Completar
     largo = decodificar_largo(mensaje)
-    print(largo)
 
     #mybtessecuencia
     m_bytes = mensaje[4: 4 + largo]
@@ -55,7 +54,21 @@ def decodificar_secuencia(secuencia_codificada: bytearray) -> List[int]:
 
 def desencriptar(mensaje: bytearray) -> bytearray:
     # Completar
-    pass
+    listas_separadas = separar_msg_encriptado(mensaje)
+    secuencia = decodificar_secuencia(listas_separadas[2])
+    bytes_secuencia = listas_separadas[0]
+    m_reducido = listas_separadas[1]
+    bytes_retorno = bytearray()
+    for elemento_range in range(len(m_reducido)):
+        bytes_retorno.extend(m_reducido[elemento_range: elemento_range + 1])
+    
+    for indice in secuencia:
+        elemento_a_append = bytes_secuencia[0]
+        bytes_secuencia = bytes_secuencia[1:]
+        bytes_retorno.insert(indice, elemento_a_append)
+    
+    return bytes_retorno
+
 
 
 if __name__ == "__main__":
@@ -64,5 +77,5 @@ if __name__ == "__main__":
     #diccionario = deserializar_diccionario(desencriptado)
     #print(diccionario)
 
-    print(separar_msg_encriptado(
-            bytearray(b'\x00\x00\x00\x01\x03\x00\x01\x02\xAA\x00\x03')))
+    print(desencriptar(
+            bytearray(b'\x00\x00\x00\x02\x02\x03\x02\x01\x05\x00\x02\x00\x03')))
