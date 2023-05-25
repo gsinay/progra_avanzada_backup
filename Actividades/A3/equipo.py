@@ -1,6 +1,4 @@
 from collections import defaultdict, deque
-
-
 class Jugador:
     def __init__(self, nombre: str, velocidad: int) -> None:
         self.nombre = nombre
@@ -8,8 +6,6 @@ class Jugador:
     
     def __repr__(self) -> None:
         return f'Jugador: {self.nombre}, Velocidad: {self.velocidad}'
-
-
 class Equipo:
     def __init__(self) -> None:
         self.jugadores = dict()
@@ -35,13 +31,10 @@ class Equipo:
                     self.dict_adyacencia[id_jugador].add(vecino)
                     count += 1
         return count
-
-
        
     def mejor_amigo(self, id_jugador: int) -> Jugador:
         jugador = self.jugadores[id_jugador]
         numero = 1000000 #numero grande
-
         if len(self.dict_adyacencia[id_jugador]) == 0:
             return None
         
@@ -53,12 +46,9 @@ class Equipo:
                 numero = resta
                 id_jugador_mejor_amigo = id_vecino
         return self.jugadores[id_jugador_mejor_amigo]
-
-
     def peor_compañero(self, id_jugador: int) -> Jugador:
         jugador = self.jugadores[id_jugador]
         numero = -1000000 #numero chico
-
         if len(self.dict_adyacencia[id_jugador]) == 0:
             return None
         
@@ -82,10 +72,8 @@ class Equipo:
                 if jugador_vecino not in visitados:
                     cola.append(jugador_vecino)
         visitados.remove(id_jugador)
-
         jugador = self.jugadores[id_jugador]
         numero = -10000 #numero chico
-
         if len(visitados) == 0:
             return None
         
@@ -96,7 +84,6 @@ class Equipo:
                 numero = resta
                 jugador_retorno = jugador_conocido
         return jugador_retorno
-
         
     def distancia(self, id_jugador_1: int, id_jugador_2: int) -> int:
         if id_jugador_1 == id_jugador_2:
@@ -123,7 +110,6 @@ class Equipo:
         for camino in visitados:
             if id_jugador_2 not in camino:
                 visitados.remove(camino)
-
         if len(visitados) == 0:
             return -1
         
@@ -131,16 +117,10 @@ class Equipo:
         for camino in visitados:
             if len(camino) < minimo:
                 minimo = len(camino)
-
         return minimo
-
         
-
-
-
         
     
-
 if __name__ == '__main__':
     equipo = Equipo()
     jugadores = {
@@ -154,7 +134,6 @@ if __name__ == '__main__':
         1: [0, 2],
         2: [1],
     }
-
     for idj, jugador in jugadores.items():
         equipo.agregar_jugador(id_jugador=idj, jugador=jugador)
     for idj, vecinos in adyacencia.items():
@@ -168,7 +147,8 @@ if __name__ == '__main__':
     
     print(f'La distancia entre Alicia y Alonso es {equipo.distancia(2, 0)}')
     print(f'La distancia entre Alba y Alex es {equipo.distancia(1, 3)}')
-    
+
+
 
     equipo = Equipo()
     equipo.jugadores = {
@@ -195,7 +175,7 @@ if __name__ == '__main__':
             8: {9},
             9: set()
         }
-    
+
     equipo.dict_adyacencia = defaultdict(set)
     for key, value in adyacencia.items():
         equipo.dict_adyacencia[key] = value
