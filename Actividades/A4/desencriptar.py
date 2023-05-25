@@ -24,17 +24,18 @@ def separar_msg_encriptado(mensaje: bytearray) -> List[bytearray]:
     # Completar
     largo = decodificar_largo(mensaje)
     print(largo)
+
     #mybtessecuencia
     m_bytes = mensaje[4: 4 + largo]
     m_bytes_secuencia.extend(m_bytes)
 
     #secuencia codificada
-    largo_secuencia = largo * 2
+    largo_secuencia = largo  * 2
     bytes = mensaje[-largo_secuencia:]
     secuencia_codificada.extend(bytes)
 
     #mreducido es lo que sobra
-    reducido = mensaje[4 + largo: largo - largo_secuencia]
+    reducido = mensaje[4 + largo: -2 * largo]
     m_reducido.extend(reducido)
 
 
@@ -64,4 +65,4 @@ if __name__ == "__main__":
     #print(diccionario)
 
     print(separar_msg_encriptado(
-            bytearray(b'\x00\x00\x00\x02\x01\x03\x00\x02\x05\x00\x01\x00\x03')))
+            bytearray(b'\x00\x00\x00\x01\x03\x00\x01\x02\xAA\x00\x03')))
