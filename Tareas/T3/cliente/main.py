@@ -25,4 +25,7 @@ if __name__ == '__main__':
 
     ventana_inicio = WaitingRoom()
     logica_cliente = LogicaCliente(host, int(puerto))
+
+    logica_cliente.senal_actualizar_waiting_room.connect(ventana_inicio.actualizar_waiting_room)
+
     sys.exit(app.exec())
