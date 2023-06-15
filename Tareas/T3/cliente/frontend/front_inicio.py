@@ -1,4 +1,6 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QApplication, QVBoxLayout, QHBoxLayout, QPushButton
+from PyQt5.QtWidgets import (QWidget, QLabel, QApplication, QVBoxLayout, QHBoxLayout, QPushButton,
+                             QMessageBox)
+
 from PyQt5.QtGui import QPixmap
 import os
 import sys
@@ -54,7 +56,15 @@ class WaitingRoom(QWidget):
     def partir_juego(self):
         pass
 
+    def servidor_caido(self):
+        QMessageBox.critical(self, "Servidor desconectado", "Se desconectó el servidor, se cerrará el programa")
+        QApplication.instance().quit()
+    
+    def server_lleno(self):
+        self.boton_partir.setEnabled(False)
+        QMessageBox.critical(self, "Sala llena", "La sala esta en capacidad, reinicie el programa e  intene nuevamente mas tarde")
         
+
 
 
              
