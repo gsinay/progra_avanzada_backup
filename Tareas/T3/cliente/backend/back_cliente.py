@@ -24,6 +24,10 @@ class LogicaCliente(QObject):
     senal_condiciones_ok = pyqtSignal(str, list)
     senal_repaint = pyqtSignal(list, bool)
     senal_turno = pyqtSignal(bool, list)
+    senal_paint_dados = pyqtSignal(list)
+    senal_error_turno = pyqtSignal(str)
+    senal_actualizar_vidas = pyqtSignal(list)
+    senal_ganador = pyqtSignal(str)
 
     def __init__(self, host, port, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -65,6 +69,9 @@ class LogicaCliente(QObject):
                         self.senal_error_partir_juego.emit("faltan jugadores")
                     elif mensaje_decodificado[0].lower() == "partir juego":
                         self.partir_juego(mensaje_decodificado[1])
+                    elif mensaje_decodificado[0].lower() == "dados:":
+                        print(f"recibi los dados {mensaje_decodificado[1]}")
+                        self.senal_paint_dados.emit(mensaje_decodificado[1])
                     elif mensaje_decodificado[0].lower() == "turno de:":
                         self.jugador_jugando = mensaje_decodificado[1]
                         print(f"turno de {self.jugador_jugando}")
@@ -73,6 +80,13 @@ class LogicaCliente(QObject):
                     elif mensaje_decodificado[0].lower() == "turno actual:":
                         self.turno_actual = mensaje_decodificado[1]
                         self.jugar_turno([self.jugador_jugando, self.valor_actual, self.turno_actual])
+                    elif mensaje_decodificado[0].lower() == "error_jugada:":
+                        self.senal_error_turno.emit(mensaje_decodificado[1])
+                    elif mensaje_decodificado[0].lower() == "pierde_vida:":
+                        print(f"recibi pierde vida {mensaje_decodificado[1]}")
+                        self.actualizar_vidas_front(mensaje_decodificado[1])
+                    elif mensaje_decodificado[0].lower() == "ganador:":
+                        self.senal_ganador.emit(mensaje_decodificado[1])
 
                     if mensaje_decodificado[0].lower() == "repaint:":
                         self.actualizar_waiting_room(mensaje_decodificado[1], error = "repaint")
@@ -141,6 +155,15 @@ class LogicaCliente(QObject):
     def anunciar_valor(self, valor):
         print(f"en mi turno anuncie este valor: {valor}")
         self.enviar_mensaje(("valor", valor))
+
+    def pasar_turno(self):
+        self.enviar_mensaje(("pasar turno", self.nombre))
+
+    def dudar(self):
+        self.enviar_mensaje(("dudar", self.nombre))
+
+    def actualizar_vidas_front(self, info_vidas):
+        self.senal_actualizar_vidas.emit(info_vidas)
             
 
 if __name__ == "__main__":

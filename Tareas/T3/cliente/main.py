@@ -21,8 +21,6 @@ if __name__ == '__main__':
         parametros = json.load(file)
         parametros["port"] = puerto
         host = parametros["host"]
-    with open("parametros.json", "w") as file:
-        json.dump(parametros, file)
 
     ventana_inicio = WaitingRoom()
     ventana_juego = GameRoom()
@@ -43,6 +41,11 @@ if __name__ == '__main__':
 
     logica_cliente.senal_turno.connect(ventana_juego.turno)
     ventana_juego.senal_anunciar_accion.connect(logica_cliente.anunciar_valor)
-
+    logica_cliente.senal_paint_dados.connect(ventana_juego.paint_dados)
+    logica_cliente.senal_error_turno.connect(ventana_juego.error_turno)
+    ventana_juego.senal_paso_turno.connect(logica_cliente.pasar_turno)
+    ventana_juego.senal_dudar.connect(logica_cliente.dudar)
+    logica_cliente.senal_actualizar_vidas.connect(ventana_juego.actualizar_vidas)
+    logica_cliente.senal_ganador.connect(ventana_juego.anuncio_ganador)
 
     sys.exit(app.exec())

@@ -1,1 +1,4 @@
-{"name": "test", "name2": "test2", "host": "localhost", "port": "5554", "N_PONDERADOR": "5", "NUMERO_VIDAS": "1"}
+{
+"host": "localhost", 
+"N_PONDERADOR": "5", 
+"NUMERO_VIDAS": "2"}

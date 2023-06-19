@@ -14,6 +14,8 @@ with open("parametros.json") as archivo:
 
 class GameRoom(QWidget):
     senal_anunciar_accion = pyqtSignal(str)
+    senal_paso_turno = pyqtSignal()
+    senal_dudar = pyqtSignal()
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.counter_turno = 0
@@ -117,15 +119,48 @@ class GameRoom(QWidget):
         self.label_cantidad.setText("cantidad anunciada: " + str(info_turno[1]))
         self.label_cantidad.resize(self.label_cantidad.sizeHint())
         self.label_turno.setText("turno numero: " + str(info_turno[2]))
-        
 
+    def actualizar_vidas(self, info_vidas):
+        getattr(self, f"vidas_{info_vidas[0]}").setText("vidas: " + str(info_vidas[1]))
+
+
+    def paint_dados(self, set_dados):
+        for i in range(len(set_dados)):
+            valor_dado = set_dados[i]
+            pixel_dado = QPixmap(os.path.join("Sprites", "dices", f"dice_{valor_dado}.png")).scaled(50,50)
+            dado = QLabel(self)
+            dado.setPixmap(pixel_dado)
+            dado.move(400 + 100*i, 200)
+            dado.show()
+        
+        #pintar dados ocultos contrincantes
+        for i in range(3):
+            for j in range(2):
+                pixel_dado = QPixmap(os.path.join("Sprites", "dices", f"dice_background.png")).scaled(50,50)
+                dado = QLabel(self)
+                dado.setPixmap(pixel_dado)
+                if i == 0:
+                    dado.move(100 + 70*j, 500)
+                elif i == 1:
+                    dado.move(800 + 70*j, 500)
+                elif i == 2:
+                    dado.move(400 + 70*j, 870)
+                dado.show()
+
+    def error_turno(self, str):
+        QMessageBox.warning(self, "Error en tu jugada", str)
+            
+        
 
     
     def anunciar_accion(self):
         self.senal_anunciar_accion.emit(self.casilla_valor.text())
 
     def pasar_turno(self):
-        pass
+        self.senal_paso_turno.emit()
+
+    def dudar(self):
+        self.senal_dudar.emit()
 
     def cambiar_dados(self):
         pass
@@ -133,8 +168,10 @@ class GameRoom(QWidget):
     def usar_poder(self):
         pass
 
-    def dudar(self):
-        pass
+    def anuncio_ganador(self, nombre):
+        QMessageBox.information(self, "Ganador", nombre + " ha ganado la partida")
+
+
 
 
     

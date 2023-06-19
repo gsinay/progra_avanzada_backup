@@ -15,8 +15,6 @@ if __name__ == "__main__":
         parametros = json.load(file)
         parametros["port"] = puerto
         host = parametros["host"]
-    with open("parametros.json", "w") as file:
-        json.dump(parametros, file)
     print(f"El serividor esta en el host {host} y puerto {puerto}")
 
     servidor = Servidor(host, int(puerto))

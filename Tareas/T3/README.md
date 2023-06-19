@@ -1,19 +1,13 @@
-# Tarea X: Nombre de la tarea :school_satchel:
+# Tarea 3: DCCachos :school_satchel:
 
 
-Un buen ```README.md``` puede marcar una gran diferencia en la facilidad con la que corregimos una tarea, y consecuentemente cómo funciona su programa, por lo en general, entre más ordenado y limpio sea éste, mejor será 
 
-Para nuestra suerte, GitHub soporta el formato [MarkDown](https://es.wikipedia.org/wiki/Markdown), el cual permite utilizar una amplia variedad de estilos de texto, tanto para resaltar cosas importantes como para separar ideas o poner código de manera ordenada ([pueden ver casi todas las funcionalidades que incluye aquí](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet))
-
-Un buen ```README.md``` no tiene por que ser muy extenso tampoco, hay que ser **concisos** (a menos que lo consideren necesario) pero **tampoco pueden** faltar cosas. Lo importante es que sea claro y limpio 
-
-**Dejar claro lo que NO pudieron implementar y lo que no funciona a la perfección. Esto puede sonar innecesario pero permite que el ayudante se enfoque en lo que sí podría subir su puntaje.**
 
 ## Consideraciones generales :octocat:
+Hasta el momento, la tarea es ejecutable pero con algunas consideraciones. En general, la sala de espera funciona como esperado: Se permite el ingreso de jugadores donde los primeros 4 tienen la capacidad de partir el juego. Luego, si alguno de ellos se desconecta y hay algún otro cliente conectado (es decir, un 5to cliente), a este se le permite entrar a la sala de espera y poder partir la partida. Notamos que __NO__ implementé bots. Luego, solo se puede partir la partida si hay 4 clientes conectados como minimo, sino salta una advertencia.
 
-<Descripción de lo que hace y que **_no_** hace la tarea que entregaron junto
-con detalles de último minuto y consideraciones como por ejemplo cambiar algo
-en cierta línea del código o comentar una función>
+En cuanto a la partida, mientras hayan cuatro jugadores en la sala funciona como esperado en un juego de cachos basico: Hay turnos, se puede dudar y subir la apuesta. Si la acción es "ilegal" (subir la apuesta a un numero menor del ya anunciado o dudar el primer turno), salta una advertencia. Por ahora, no he implementado cambiar dados y usar poder. Cuando queda solamente una persona viva, se anuncia el ganador y se cierra el programa. 
+
 
 ### Cosas implementadas y no implementadas :white_check_mark: :x:
 
@@ -27,11 +21,11 @@ SINO QUE SE DEBERÁ EXPLICAR QUÉ SE REALIZO DETALLADAMENTE EN CADA ITEM.
 ⚠️⚠️
 
 #### Networking: 18 pts (16%)
-##### ❌✅🟠 Protocolo
-##### ❌✅🟠 Correcto uso de sockets
-##### ❌✅🟠 Conexión
-##### ❌✅🟠 Manejo de Clientes
-##### ❌✅🟠 Desconexión Repentina
+__✅ Protocolo__: Se instancian los sockets con AF_INET y SOCK.STREAM tanto en el client-side como el server-side. 
+__✅ Correcto uso de sockets:__ El servidor y cada cliente tienen un parametro que es self.socket, el cual se rellena con la informacion del localhost y puerto ingresado al ejecutar los archivos main tanto del client-side como el server-side. 
+__✅Conexión:__ Los sockets del servidor y cliente se connectan mediante connect y bind. A medida que se suman conecciones al servidor, se ejecutan threads que manejan a cada cliente en pos de que puedan funcionar cada uno de forma simultanea. 
+__✅Manejo de Clientes:__ Se pueden sumar cuantos clientes permita python y la maquina al servidor, pero no todos son sumados al parametro del servidor self.jugadores (algunos se suman a self.jugadores_standby), especificamente cuando las conecciones sobrepasan NUMERO_JUGADORES cantidad de conecciones. 
+__✅ Desconexión Repentina:__ Los jugadores pueden desconectarse sin causar que el servidor se caiga, esto se logra mediante los extensos try and except blocks de tanto los archivos ```server.py``` en la carpeta ```servidor``` y ```back_cliente.py```en la carpeta ```cliente```
 #### Arquitectura Cliente - Servidor: 18 pts (16%)
 ##### ❌✅🟠 Roles
 ##### ❌✅🟠 Consistencia

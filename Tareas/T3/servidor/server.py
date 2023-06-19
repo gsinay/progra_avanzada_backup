@@ -75,10 +75,15 @@ class Servidor:
                         thread_juego = Thread(target=self.partir_juego, args=(socket_cliente,), daemon=True)
                         thread_juego.start()
                     elif type(mensaje_decodificado) is tuple:
-                        print(mensaje_decodificado)
                         if mensaje_decodificado[0] == "valor":
                             self.log(f"Se recibio la accion {mensaje_decodificado[1]} de {self.juego.jugador_en_turno.nombre}")
                             self.accionar_turno("valor", mensaje_decodificado[1])
+                        elif mensaje_decodificado[0] == "pasar turno":
+                            self.log(f"Se recibio la accion {mensaje_decodificado[0]} de {self.juego.jugador_en_turno.nombre}")
+                            self.accionar_turno("pasar turno")
+                        elif mensaje_decodificado[0] == "dudar":
+                            self.log(f"Se recibio la accion {mensaje_decodificado[0]} de {self.juego.jugador_en_turno.nombre}")
+                            self.accionar_turno("dudar")
                 else:
                     raise ConnectionResetError
         except ConnectionResetError:
@@ -129,23 +134,58 @@ class Servidor:
             self.juego = Juego(self.nombre_clientes, self.clientes) #instanciamos un juego
             self.jugando = True
             self.actualizar_cliente_y_front()
+            self.enviar_dados_clientes()
+            #le enviamos los dados a cada cliente
 
         elif len(self.clientes) <= NUMERO_JUGADORES:
             self.broadcast_mensaje_especifico(socket_cliente, ("Faltan Jugadores", self.nombre_clientes))
 
     def accionar_turno(self, accion, cantidad = None):
-        #do something
-        #por ahora solo vamos a subir de turno
-        self.juego.turno += 1
-        if accion == "valor":
-            self.juego.count = int(cantidad)
-        self.actualizar_cliente_y_front()
+        error = False
+        if cantidad is not None:
+            cantidad = int(cantidad)
+        if accion == "valor": #vemos que el valor sea valido
+            if cantidad > 12 or cantidad <= self.juego.count:
+                error = True
+                razon = "valor invalido"
+            else:
+                self.juego.jugar_turno("valor", cantidad)
+        elif accion == "pasar turno": 
+            self.juego.jugar_turno("pasar turno")
+        elif accion == "dudar":
+            if self.juego.turno == 0: #si es el primer turno, no se puede dudar
+                error = True
+                razon = "no se puede dudar en el primer turno"
+            else:
+                self.juego.jugar_turno("dudar")
+                self.broadcast_mensaje_general(("pierde_vida:", [self.juego.jugador_anterior.nombre, self.juego.jugador_anterior.vidas]))
+                self.juego.nueva_ronda()
+                self.checkear_ganador()
+                self.enviar_dados_clientes()
+        if not error:
+            self.actualizar_cliente_y_front()
+        else:
+            self.broadcast_mensaje_especifico(self.juego.jugador_en_turno.socket, ("error_jugada:", razon))
+        
 
     def actualizar_cliente_y_front(self):
         #le señalamos al cliente la informacion
         self.broadcast_mensaje_general(("turno de:",  (self.juego.jugador_en_turno.nombre)))
         self.broadcast_mensaje_general(("valor actual:", self.juego.count))
         self.broadcast_mensaje_general(("turno actual:", self.juego.turno))
+
+    def enviar_dados_clientes(self):
+        for jugador in self.juego.jugadores:
+            self.log(f"Se le envio los dados {jugador.mano} a {jugador.nombre} en la direccion {jugador.socket}")
+            self.broadcast_mensaje_especifico(jugador.socket, ("dados:", jugador.mano))
+
+    def checkear_ganador(self):
+        ganador = self.juego.checkear_ganador()
+        if ganador == False:
+            pass
+        else:
+            self.jugando = False
+            self.broadcast_mensaje_general(("ganador:", ganador.nombre))
                 
 
     def log(self, mensaje: str):

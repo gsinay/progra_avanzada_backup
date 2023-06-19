@@ -1,1 +1,8 @@
-{"host": "localhost", "port": "5554", "N_PONDERADOR": "5", "NUMERO_JUGADORES": 4, "NOMBRES": ["Jugador_1", "Jugador_2", "Jugador_3", "Jugador_4"], "NUMERO_VIDAS": 3, "VALOR_PASO": 2}
+{
+    "host": "localhost",
+    "N_PONDERADOR": "5", 
+    "NUMERO_JUGADORES": 4, 
+    "NOMBRES": ["Jugador_1", "Jugador_2", "Jugador_3", "Jugador_4"], 
+    "NUMERO_VIDAS": 2, 
+    "VALOR_PASO": 7
+}
