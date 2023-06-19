@@ -71,7 +71,7 @@ def encriptar_y_codificar(msg, N: int) -> bytearray:
 def decodificar_y_desencriptar(msg: bytearray, N: int) -> bytearray:
     msg_desencriptado = decodificar(msg)
     msg_desencriptado = desencriptar(msg_desencriptado, N)
-    #deserializamos el mensaje
+    #deserializamos el mensaje en chunks
     msg_desencriptado = pickle.loads(msg_desencriptado)
     return msg_desencriptado
 

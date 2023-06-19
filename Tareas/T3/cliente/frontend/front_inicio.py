@@ -1,11 +1,14 @@
 from PyQt5.QtWidgets import (QWidget, QLabel, QApplication, QVBoxLayout, QHBoxLayout, QPushButton,
                              QMessageBox)
+from PyQt5.QtCore import pyqtSignal
 
 from PyQt5.QtGui import QPixmap
 import os
 import sys
 
 class WaitingRoom(QWidget):
+    senal_partir_juego = pyqtSignal()
+    senal_armar_ventana_juego = pyqtSignal(str, list)
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.init_gui()
@@ -17,7 +20,7 @@ class WaitingRoom(QWidget):
         self.vbox = QVBoxLayout()
         self.boton_partir = QPushButton("Partir")
         self.boton_partir.setStyleSheet("font-size: 20px; color: black;")
-        self.boton_partir.clicked.connect(self.partir_juego)
+        self.boton_partir.clicked.connect(self.check_partir_juego)
         self.vbox.addLayout(self.hbox)
         self.vbox.addWidget(self.boton_partir)
         self.setLayout(self.vbox)
@@ -52,9 +55,37 @@ class WaitingRoom(QWidget):
         self.update()
         self.show()
 
+    def jugador_desconectado(self, nombres):
+        self.clear_layout(self.hbox)
+        self.icons_jugadores = 0
+        self.actualizar_waiting_room(nombres)
+
+
+    def clear_layout(self, layout):
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.setParent(None)
+            else:
+                self.clear_layout(item.layout())
+
+    def repaint(self, nombres, bool):
+        self.clear_layout(self.hbox)
+        self.icons_jugadores = 0
+        self.actualizar_waiting_room(nombres)
+        if bool:
+            self.boton_partir.setEnabled(True)
+            self.label_lleno.setParent(None)
+        
+
     
-    def partir_juego(self):
-        pass
+    def check_partir_juego(self):
+        self.senal_partir_juego.emit()
+
+    def partir_juego(self, nombre_propio, nombres):
+        self.hide()
+        self.senal_armar_ventana_juego.emit(nombre_propio, nombres)
 
     def servidor_caido(self):
         QMessageBox.critical(self, "Servidor desconectado", "Se desconectó el servidor, se cerrará el programa")
@@ -62,7 +93,15 @@ class WaitingRoom(QWidget):
     
     def server_lleno(self):
         self.boton_partir.setEnabled(False)
-        QMessageBox.critical(self, "Sala llena", "La sala esta en capacidad, reinicie el programa e  intene nuevamente mas tarde")
+        self.label_lleno = QLabel("El servidor está lleno, espere a que se libere un cupo")
+        self.label_lleno.resize(200, 200)
+        self.label_lleno.setStyleSheet("font-size: 20px; color: white;")
+        self.vbox.addWidget(self.label_lleno)
+        self.update()
+
+    def error_partir_juego(self, razon):
+        if razon == "faltan jugadores":
+            QMessageBox.warning(self, "Faltan jugadores", "No se puede partir el juego, faltan jugadores")
         
 
 
