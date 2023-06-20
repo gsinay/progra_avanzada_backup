@@ -186,6 +186,7 @@ class Servidor:
         else:
             self.jugando = False
             self.broadcast_mensaje_general(("ganador:", ganador.nombre))
+            self.log(f"El ganador es {ganador.nombre}")
                 
 
     def log(self, mensaje: str):
