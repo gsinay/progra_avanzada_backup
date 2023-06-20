@@ -1,6 +1,6 @@
 # Tarea 3: DCCachos :school_satchel:
 
-HOLA AYUDANTE :). Voy a entregar la tarea con cupones probablemente el viernes, por si alguna razon abren este directorio antes de eso y se encuentran con el read me hasta la mitad es por eso. 
+HOLA AYUDANTE :). Voy a entregar la tarea con cupones probablemente el viernes, por si alguna razon abren este directorio antes de eso y se encuentran con el read me hasta la mitad es por eso. g
 
 
 ## Consideraciones generales :octocat:
