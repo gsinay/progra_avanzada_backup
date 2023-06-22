@@ -85,15 +85,14 @@ Los módulos principal de la tarea a ejecutar son  ```main.py``` tanto del servi
 ### Librerías externas utilizadas
 La lista de librerías externas que utilicé fue la siguiente:
 
-1. 
-3. ```os``
-4. ```random```
-5. ```sys```
-6. ```json```
-7. ```socket```
-8. ```threading```
-9. ```time```
-10. ```PyQt5```: una variedad de metodos de QtCore, QtWidgets y QtGui
+1. ```os```
+2. ```random```
+3. ```sys```
+4. ```json```
+5. ```socket```
+6. ```threading```
+7. ```time```
+8. ```PyQt5```: una variedad de metodos de QtCore, QtWidgets y QtGui
 
 
 
