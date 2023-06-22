@@ -156,8 +156,6 @@ class GameRoom(QWidget):
 
     def error_turno(self, str):
         QMessageBox.warning(self, "Error en tu jugada", str)
-            
-        
 
     
     def anunciar_accion(self):

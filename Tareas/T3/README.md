@@ -50,24 +50,33 @@ __✅ Desencriptación:__ Lo mismo a lo anterior pero al reverso.
 
 __✅ Integración:__ Se combinan los elementos codificacion-encriptacion y decodificacion-desencriptacion en las funciones ```encriptar_y_codificar```y ```desencriptar_y_decodificar```las cuales se usan tanto en ```back_cliente.py```y ```server.py```cada vez que se envia un mensaje (via los metodos broadcast_mensaje_especifico, broadcast_mensaje_general y enviar_mensaje)
 #### Interfaz Gráfica: 22 pts (19%)
-##### ❌✅🟠 Ventana de Inicio
-##### ❌✅🟠 Ventana de juego
+__✅Ventana de Inicio:__ Se define dentro del archivo ```front_inicio.py``` dentro de la carpeta ```frontend```del cliente. Cada vez que se conecta un cliente, se llama a la funcion ```actualizar_waiting_room```, suponiendo que el cliente no está en standby. En caso que si(es decir, es el >4 cliente conectado), se llama la funcion server_lleno de tal modo de inhabilitarle el boton de partir el juego y además se le pone un label avisandole de tal. Cuando se desconecta un cliente, se llama a la funcion jugador_desconectado y repaint para actualizar los íconos de los jugadores en la sala de espera (y al siguiente cliente en standby se la habilitan las funciones para partir juego ya que ahora hay un espacio para el)
+
+__🟠 Ventana de juego:__ Funciona casi a la completitud, excepto por el hecho que el boton usar_poder existe pero solamente de forma visual (no se implementó esto es el juego). La clase de la ventana se encuentra dentro del archivo ```front_juego.py``` dentro de la carpeta ```frontend```del cliente. En esta, se define la informacion  de ronda como atributos de instancia, junto con los labels de la vida de cada jugador (esto mediante la funcion set_attr de tal manera de poder hacerlo dentro de un forloop de los nombres de los jugadores que se llama al instanciar la ventana). Notamos que los jugadores estan en circulo donde cada jugador se visualiza a el mismo arriba de la ventana, y se respeta el orden del circulo para cada jugador. Al recibir la informacion que un jugador se desconectó del server, se llama al atributo self.vidas_nombrejugador de tal manera de displayear 0 vidas constantemente. Los labels de informacion se actualizan despues de cada turno, y los turnos en cada ventana siguen el orden logico de los "puestos" de los jugadores. El jugador solamente puede visualizar sus dados y cambiarlos una vez, sino se gatilla la funcion ```error_cambiar_dados```la cual levanta un  Qmessagebox indicando que no se puede hacer dicha accion. Cuando un jugador quiere dudar siendo que este partio la partida o cuando quiere ingresar un valor invalido tambien se gatilla un Qmessagebox mediante el metodo ```error_turno```.  
+
+
 #### Reglas de DCCachos: 22 pts (19%)
-##### ❌✅🟠 Inicio del juego
-##### ❌✅🟠 Bots
-##### ❌✅🟠 Ronda
-##### ❌✅🟠 Termino del juego
+__✅ Inicio del juego:__ Implementado correctanente. El jugador del turno 0 se elige aleatoriamente (esto eligiendo un numero random edl largo de lista de jugadores en el cual "sliciear" dicha lista en 2), cada jugador es asignado dados aleatorios (mediante el metodo ``` shuffle_dados_general``` de la clase Juego en el archivo ```logica_juego.py```, la cual se instancia en ```server.py```al partir el juego). Los turno siguen el orden de la lista self.jugadores de la clase Juego que se instanció. (Ej: lista_jugadores = [1,2,3,4]. Luego sliceamos con un indice random, digamos el 2 de tal manera que quede lista_jugadores = [3,4,1,2], luego parte el juego el jugdaor 4 y se juega circularmente siguiendo el orden de la lista). El jugador en turno y del turno anterior puede ser detectado ocupando las properties definidas para la clase, la cual hace uso del modulo (%) y el atributo de instancia turno para saber a que indice de la lista de jugadores le toca jugar.
+
+__❌ Bots:__ No implementado. Para partir la partida se necesita que hayan 4 jugadores conectados. 
+
+__🟠 Ronda:__ Casi imlementado en su totalida, excepto por la parte de los poderes. Al momento de pasar o subir una apuesta, el metodo ```jugar_turno```de la clase Juego verifica si el jugador mintió o no. Si mintió, establece que jugador.mintiendo = True, y False e.o.c. Luego, al dudar, se checkea si el jugador anterior estaba mintiendo o no. Si estaba mintiendo, el pierde una vida y se refleja tanto en su atributo de vidas como en su label correspondiente en el front. Si no minitó, luego el jugador que dudó sufre estos efectos. De ahí, la instancia de Juego llama a ```nueva_ronda``` donde se vuelve a remixiar la lista de jugaddores para definir una nueva persona que parta el turno. 
+
+__✅ Termino del juego:__ Después de cada turno, se llama a ```checkear_ganador``` de la clase Juego. En ella, se ve si los jugadores totales - jugadores muertos = 1. En tal caso, hay un ganador que es la unica persona quien queda en Juego.jugadores. Se envía una señal a todos los jugadores en la ventana de juego que tal persona es la ganadora.  
 #### Archivos: 10 pts (9%)
-##### ❌✅🟠 Parámetros (JSON)
-##### ❌✅🟠 main.py
-##### ❌✅🟠 Cripto.py
+__✅Parámetros (JSON):__ Se importan correctamente tanto en el servidor como el cliente donde cada Json tiene los parametros importantes para su rol. 
+
+__✅main.py:__ Se encuentran estos archivos dentro de los directorios base de cliente y servidor. Se puede pasar el puerto mediante consola al hacer uso de sys.argv
+
+__✅ Cripto.py:__ Los archivos crpito.py tanto del cliente y servidor son identicos y se encuentran dentro de las carpetas scrpits de cada rol. En estos, se encuentran las funciones encriptar, codificar, desencriptar, decodificar, y encriptar_y_codificiar y decodificar_y_desencriptar que une ambos procesos. Estas ultimas dos funciones son ocupadas tanto en server.py del servidor y back_cliente.py del cliente para enviar y recibir mensajes.
 #### Bonus: 4 décimas máximo
-##### ❌✅🟠 Cheatcodes
-##### ❌✅🟠 Turno con tiempo
+__❌Cheatcodes:__
+
+__❌Turno con tiempo:__
 
 ## Ejecución :computer:
-El módulo principal de la tarea a ejecutar es  ```archivo.py```. Además se debe crear los siguientes archivos y directorios adicionales:
-1. ```archivo.ext``` en ```ubicación```
+Los módulos principal de la tarea a ejecutar son  ```main.py``` tanto del servidor como del cliente. Es __SUMAMENTE IMPORTANTE__ Ejectutar primero el archivo main.py del servidor una unica vez para levantar el servidor y despues el main del clietne cuantas veces sea necesario. Además se debe crear los siguientes archivos y directorios adicionales:
+1. todos los directorios estaticos(background, dices, extra) con sus respectivos arhivos (background_inicio.png, dice_1.png etc. et.c) dentro del directorio basico edl cliente, es decir, en ```cliente``` a la misma artura de ```main.py```, ```parametros.json```, ```Scripts```, ```frontend```y ```backend```
 2. ```directorio``` en ```ubicación```
 3. ...
 
@@ -76,16 +85,23 @@ El módulo principal de la tarea a ejecutar es  ```archivo.py```. Además se deb
 ### Librerías externas utilizadas
 La lista de librerías externas que utilicé fue la siguiente:
 
-1. ```librería_1```: ```función() / módulo```
-2. ```librería_2```: ```función() / módulo``` (debe instalarse)
-3. ...
+1. 
+3. ```os``
+4. ```random```
+5. ```sys```
+6. ```json```
+7. ```socket```
+8. ```threading```
+9. ```time```
+10. ```PyQt5```: una variedad de metodos de QtCore, QtWidgets y QtGui
+
+
 
 ### Librerías propias
 Por otro lado, los módulos que fueron creados fueron los siguientes:
 
-1. ```librería_1```: Contiene a ```ClaseA```, ```ClaseB```, (ser general, tampoco es necesario especificar cada una)...
-2. ```librería_2```: Hecha para <insertar descripción **breve** de lo que hace o qué contiene>
-3. ...
+1. ```cripto.py```: contiene ```encriptar_y_codificiar´´´, ´´´decodificar_y_desencriptar```las cuales se usa al enviar mensajes
+2. ```logica_juego.py```: contiene las clases ```Juagdor``` y ```Juego```, ambas clases representan la logica de las partidas (debe instalarse). Los jugadores se instancian dentro de la clase Juego y la clase Juego se instancia en server.py al partir el juego.
 
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
@@ -100,31 +116,6 @@ PD: <una última consideración (de ser necesaria) o comentario hecho anteriorme
 -------
 
 
-
-**EXTRA:** si van a explicar qué hace específicamente un método, no lo coloquen en el README mismo. Pueden hacerlo directamente comentando el método en su archivo. Por ejemplo:
-
-```python
-class Corrector:
-
-    def __init__(self):
-          pass
-
-    # Este método coloca un 6 en las tareas que recibe
-    def corregir(self, tarea):
-        tarea.nota  = 6
-        return tarea
-```
-
-Si quieren ser más formales, pueden usar alguna convención de documentación. Google tiene la suya, Python tiene otra y hay muchas más. La de Python es la [PEP287, conocida como reST](https://www.python.org/dev/peps/pep-0287/). Lo más básico es documentar así:
-
-```python
-def funcion(argumento):
-    """
-    Mi función hace X con el argumento
-    """
-    return argumento_modificado
-```
-Lo importante es que expliquen qué hace la función y que si saben que alguna parte puede quedar complicada de entender o tienen alguna función mágica usen los comentarios/documentación para que el ayudante entienda sus intenciones.
 
 ## Referencias de código externo :book:
 
