@@ -4,11 +4,16 @@ import random
 
 with open("parametros.json") as archivo:
     parametros = json.load(archivo)
-    NOMBRES = parametros["NOMBRES"]
+    NOMBRE_1 = parametros["id_1"]
+    NOMBRE_2 = parametros["id_2"]
+    NOMBRE_3 = parametros["id_3"]
+    NOMBRE_4 = parametros["id_4"]
     N_PONDERADOR = int(parametros["N_PONDERADOR"])
     NUMERO_JUGADORES = int(parametros["NUMERO_JUGADORES"])
     NUMERO_VIDAS = int(parametros["NUMERO_VIDAS"])
     VALOR_PASO = int(parametros["VALOR_PASO"])
+
+NOMBRES = [NOMBRE_1, NOMBRE_2, NOMBRE_3, NOMBRE_4]
 
 
 class Jugador:
@@ -19,6 +24,13 @@ class Jugador:
         self.dados_cambiados = False #para saber si ya cambio los dados
         self.pasar = False #para saber si pasó en el turno anterior
         self.mano = list()
+
+    def cambiar_dados(self):
+        self.dados_cambiados = True
+        self.mano = list()
+        for _ in range(2):
+            dado = random.randint(1, 6)
+            self.mano.append(dado)
 
     def __repr__(self):
         return f"{self.nombre}"
@@ -100,6 +112,7 @@ class Juego:
             if jugador.vidas == 0:
                 self.jugadores.remove(jugador)
                 self.jugadores_muertos += 1
+            jugador.dados_cambiados = False
         #elegimos quien parte la ronda
         self.turno = 0
         self.count = 0
@@ -112,7 +125,13 @@ class Juego:
             return self.jugadores[0]
         else:
             return False
-
+        
+    def jugador_desconectado(self, jugador):
+        for jugador in self.jugadores:
+            if jugador.nombre == jugador:
+                jugador.vidas = 0
+        self.jugadores.remove(jugador)
+        
 
 
     

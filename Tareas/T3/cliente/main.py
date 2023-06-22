@@ -36,6 +36,7 @@ if __name__ == '__main__':
     logica_cliente.senal_condiciones_ok.connect(ventana_inicio.partir_juego)
     ventana_inicio.senal_armar_ventana_juego.connect(ventana_juego.init_gui)
     logica_cliente.senal_repaint.connect(ventana_inicio.repaint)
+    ventana_inicio.senal_salir_juego.connect(logica_cliente.disconnect)
 
     #ahora conectamos señales de back con front del juego
 
@@ -47,5 +48,8 @@ if __name__ == '__main__':
     ventana_juego.senal_dudar.connect(logica_cliente.dudar)
     logica_cliente.senal_actualizar_vidas.connect(ventana_juego.actualizar_vidas)
     logica_cliente.senal_ganador.connect(ventana_juego.anuncio_ganador)
+    logica_cliente.senal_jugador_desconectado_en_juego.connect(ventana_juego.jugador_desconectado)
+    ventana_juego.senal_cambiar_dados.connect(logica_cliente.cambiar_dados)
+    logica_cliente.senal_error_cambiar_dados.connect(ventana_juego.error_cambiar_dados)
 
     sys.exit(app.exec())

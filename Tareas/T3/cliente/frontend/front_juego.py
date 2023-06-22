@@ -16,6 +16,7 @@ class GameRoom(QWidget):
     senal_anunciar_accion = pyqtSignal(str)
     senal_paso_turno = pyqtSignal()
     senal_dudar = pyqtSignal()
+    senal_cambiar_dados = pyqtSignal()
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.counter_turno = 0
@@ -100,10 +101,11 @@ class GameRoom(QWidget):
         
         self.botones = {self.boton_anunciar_accion, 
                         self.boton_pasar_turno, 
-                        self.boton_cambiar_dados, 
                         self.boton_usar_poder, 
                         self.boton_dudar
                         }
+        self.boton_cambiar_dados.setEnabled(True)
+        
         self.show()
 
     def turno(self, booleano_turno, info_turno):
@@ -147,6 +149,11 @@ class GameRoom(QWidget):
                     dado.move(400 + 70*j, 870)
                 dado.show()
 
+    def jugador_desconectado(self, nombre):
+        QMessageBox.warning(self, "Jugador desconectado", nombre + " se ha desconectado, se partirá una nueva ronda")
+        #le asignamos 0 vidas a su label como si estuviera muerto
+        getattr(self, f"vidas_{nombre}").setText("vidas: 0")
+
     def error_turno(self, str):
         QMessageBox.warning(self, "Error en tu jugada", str)
             
@@ -163,7 +170,10 @@ class GameRoom(QWidget):
         self.senal_dudar.emit()
 
     def cambiar_dados(self):
-        pass
+        self.senal_cambiar_dados.emit()
+
+    def error_cambiar_dados(self):
+        QMessageBox.warning(self, "Error en tu jugada", "Ya has cambiado los dados anteriormente")
 
     def usar_poder(self):
         pass

@@ -22,12 +22,14 @@ class LogicaCliente(QObject):
     senal_jugador_desconectado = pyqtSignal(list)
     senal_error_partir_juego = pyqtSignal(str)
     senal_condiciones_ok = pyqtSignal(str, list)
-    senal_repaint = pyqtSignal(list, bool)
+    senal_repaint = pyqtSignal(list, bool, bool)
     senal_turno = pyqtSignal(bool, list)
     senal_paint_dados = pyqtSignal(list)
     senal_error_turno = pyqtSignal(str)
     senal_actualizar_vidas = pyqtSignal(list)
     senal_ganador = pyqtSignal(str)
+    senal_jugador_desconectado_en_juego = pyqtSignal(str)
+    senal_error_cambiar_dados = pyqtSignal()
 
     def __init__(self, host, port, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -36,6 +38,8 @@ class LogicaCliente(QObject):
         self.nombre = None
         self.socket_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.standby = False
+        self.estuvo_en_standby = False
+        self.jugando = False
         try:
             self.socket_cliente.connect((self.host, self.port))
             print("Conectado al servidor")
@@ -56,12 +60,14 @@ class LogicaCliente(QObject):
                 if self.nombre == None and mensaje_decodificado[0].lower() == "nombre:" :  
                     self.nombre = mensaje_decodificado[1]
                     print(f"Mi nombre es {self.nombre}")
+                    self.standby = False
                 else:
                     if mensaje_decodificado[0].lower() == "jugadores:": #si recibimos jugador nuevo actualizamos el waiting room
                         self.actualizar_waiting_room(mensaje_decodificado[1])
                     elif mensaje_decodificado[0].lower() == "servidor lleno": #si el jugador llega a una sala llena. 
                         self.actualizar_waiting_room(mensaje_decodificado[1], error = "server lleno")
                         self.standby = True
+                        self.estuvo_en_standby = True
                     elif "desconectado:" in mensaje_decodificado[0].lower(): #si se desconecta un jugador
                         print(f"client disconnected")
                         self.actualizar_waiting_room(mensaje_decodificado[1], error = "disconnected")
@@ -87,7 +93,11 @@ class LogicaCliente(QObject):
                         self.actualizar_vidas_front(mensaje_decodificado[1])
                     elif mensaje_decodificado[0].lower() == "ganador:":
                         self.senal_ganador.emit(mensaje_decodificado[1])
-
+                    elif mensaje_decodificado[0].lower() == "desconectado_en_juego:":
+                        if self.standby == False:
+                            self.senal_jugador_desconectado_en_juego.emit(mensaje_decodificado[1])
+                    elif mensaje_decodificado[0].lower() == "error_jugada:" and mensaje_decodificado[1] == "ya cambiaste los dados":
+                        self.senal_error_cambiar_dados.emit()
                     if mensaje_decodificado[0].lower() == "repaint:":
                         self.actualizar_waiting_room(mensaje_decodificado[1], error = "repaint")
                         print("repainting window")
@@ -116,18 +126,19 @@ class LogicaCliente(QObject):
         return mensaje
         
     def actualizar_waiting_room(self, nombres, error = False):
-        time.sleep(1)
-        self.senal_actualizar_waiting_room.emit(nombres)
-        if error == "server lleno":
-            self.senal_server_lleno.emit()
-        elif error == "disconnected":
-            self.senal_jugador_desconectado.emit(nombres)
-        elif error == "repaint":
-            if self.standby == True:
-                self.standby = False
-                self.senal_repaint.emit(nombres, True)
-            else:
-                self.senal_repaint.emit(nombres, False)
+        if not self.jugando:
+            time.sleep(1)
+            self.senal_actualizar_waiting_room.emit(nombres)
+            if error == "server lleno":
+                self.senal_server_lleno.emit()
+            elif error == "disconnected":
+                self.senal_jugador_desconectado.emit(nombres)
+            elif error == "repaint":
+                if self.standby == True:
+                    self.standby = False
+                    self.senal_repaint.emit(nombres, True, self.estuvo_en_standby)
+                else:
+                    self.senal_repaint.emit(nombres, False, self.estuvo_en_standby)
 
     def enviar_mensaje(self, mensaje):
         bytes_mensaje = encriptar_y_codificar(mensaje, N_PONDERADOR)
@@ -145,6 +156,7 @@ class LogicaCliente(QObject):
         indice_nombre = nombres.index(self.nombre)
         nombres = nombres[indice_nombre:] + nombres[:indice_nombre]
         self.senal_condiciones_ok.emit(self.nombre, nombres)
+        self.jugando = True
 
     def jugar_turno(self, info_de_turno):
         if info_de_turno[0] == self.nombre:
@@ -164,6 +176,12 @@ class LogicaCliente(QObject):
 
     def actualizar_vidas_front(self, info_vidas):
         self.senal_actualizar_vidas.emit(info_vidas)
+
+    def disconnect(self): #el disconnect se considera como un "error", causa crash en el cliente y el servidor lo atrapa
+        raise ConnectionError
+    
+    def cambiar_dados(self):
+        self.enviar_mensaje(("cambiar dados", self.nombre))
             
 
 if __name__ == "__main__":

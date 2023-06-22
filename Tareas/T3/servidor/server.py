@@ -7,9 +7,14 @@ from logica_juego import Juego
 
 with open("parametros.json") as archivo:
     parametros = json.load(archivo)
-    NOMBRES = parametros["NOMBRES"]
+    NOMBRE_1 = parametros["id_1"]
+    NOMBRE_2 = parametros["id_2"]
+    NOMBRE_3 = parametros["id_3"]
+    NOMBRE_4 = parametros["id_4"]
     N_PONDERADOR = int(parametros["N_PONDERADOR"])
     NUMERO_JUGADORES = int(parametros["NUMERO_JUGADORES"])
+
+NOMBRES = [NOMBRE_1, NOMBRE_2, NOMBRE_3, NOMBRE_4]
 
 
 
@@ -84,6 +89,8 @@ class Servidor:
                         elif mensaje_decodificado[0] == "dudar":
                             self.log(f"Se recibio la accion {mensaje_decodificado[0]} de {self.juego.jugador_en_turno.nombre}")
                             self.accionar_turno("dudar")
+                        elif mensaje_decodificado[0] == "cambiar dados":
+                            self.cambiar_dados(mensaje_decodificado[1], socket_cliente) 
                 else:
                     raise ConnectionResetError
         except ConnectionResetError:
@@ -103,6 +110,9 @@ class Servidor:
                 self.broadcast_mensaje_general(("repaint:", self.nombre_clientes))
                 thread_cliente = Thread(target=self.manejar_clientes, args=(self.clientes[-1], direccion_cliente), daemon=True)
                 thread_cliente.start()
+            elif self.jugando == True:
+                self.kick_jugador(nombre_cliente)
+                self.broadcast_mensaje_general(("desconectado_en_juego:", nombre_cliente))
 
         socket_cliente.close()
 
@@ -166,13 +176,31 @@ class Servidor:
             self.actualizar_cliente_y_front()
         else:
             self.broadcast_mensaje_especifico(self.juego.jugador_en_turno.socket, ("error_jugada:", razon))
-        
+    
+    def kick_jugador(self, nombre):
+        self.juego.jugador_desconectado(nombre)
+        self.juego.nueva_ronda()
+        self.checkear_ganador()
+        self.enviar_dados_clientes()
+        self.actualizar_cliente_y_front()
 
     def actualizar_cliente_y_front(self):
         #le señalamos al cliente la informacion
         self.broadcast_mensaje_general(("turno de:",  (self.juego.jugador_en_turno.nombre)))
         self.broadcast_mensaje_general(("valor actual:", self.juego.count))
         self.broadcast_mensaje_general(("turno actual:", self.juego.turno))
+
+    def cambiar_dados(self, nombre_cliente, socket_cliente):
+        for jugador in self.juego.jugadores:
+            if jugador.nombre == nombre_cliente and jugador.dados_cambiados == False:
+                jugador.cambiar_dados()
+                self.log(f"Se le cambiaron los dados a {jugador.nombre} en la direccion {jugador.socket}")
+                self.broadcast_mensaje_especifico(socket_cliente, ("dados:", jugador.mano))
+                break
+            elif jugador.nombre == nombre_cliente and jugador.dados_cambiados == True:
+                self.broadcast_mensaje_especifico(socket_cliente, ("error_jugada:", "Ya cambiaste los dados"))
+                break
+    
 
     def enviar_dados_clientes(self):
         for jugador in self.juego.jugadores:

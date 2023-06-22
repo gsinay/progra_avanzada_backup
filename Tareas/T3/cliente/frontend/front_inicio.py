@@ -9,6 +9,7 @@ import sys
 class WaitingRoom(QWidget):
     senal_partir_juego = pyqtSignal()
     senal_armar_ventana_juego = pyqtSignal(str, list)
+    senal_salir_juego = pyqtSignal()
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.init_gui()
@@ -21,8 +22,12 @@ class WaitingRoom(QWidget):
         self.boton_partir = QPushButton("Partir")
         self.boton_partir.setStyleSheet("font-size: 20px; color: black;")
         self.boton_partir.clicked.connect(self.check_partir_juego)
+        self.boton_salir = QPushButton("Salir")
+        self.boton_salir.setStyleSheet("font-size: 20px; color: black;")
+        self.boton_salir.clicked.connect(self.salir_juego)
         self.vbox.addLayout(self.hbox)
         self.vbox.addWidget(self.boton_partir)
+        self.vbox.addWidget(self.boton_salir)
         self.setLayout(self.vbox)
 
         self.setGeometry(200, 200, 600, 750)
@@ -70,14 +75,18 @@ class WaitingRoom(QWidget):
             else:
                 self.clear_layout(item.layout())
 
-    def repaint(self, nombres, bool):
+    def repaint(self, nombres, bool_standby, bool_estuvo_en_standby):
         self.clear_layout(self.hbox)
         self.icons_jugadores = 0
         self.actualizar_waiting_room(nombres)
-        if bool:
+        if bool_standby:
+            self.boton_partir.setEnabled(True)
+        if bool_estuvo_en_standby:
             self.boton_partir.setEnabled(True)
             self.label_lleno.setParent(None)
         
+    def salir_juego(self):
+        self.senal_salir_juego.emit()
 
     
     def check_partir_juego(self):
