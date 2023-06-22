@@ -8,8 +8,8 @@ class Yolanda:
 
     def __init__(self, host, port):
         self.base = f"http://{host}:{port}"
-        self.regex_validador_fechas = '\d{1,2}\sde\s[a-zA-Z]+\sde\s(19\d{2}|20\d{2}|\d{2})' # TODO: Completar
-        self.regex_extractor_signo = ''  # TODO: Completar
+        self.regex_validador_fechas = '^\d{1,2}\s+de\s+[a-zA-Z]+\s+de\s+(19|20)?\d{2}$' # TODO: Completar
+        self.regex_extractor_signo = '^(?:Los|Las)\s+([a-zA-Z]+)\s+pueden\s+.+\.$'  # TODO: Completar
 
     def saludar(self) -> dict:
         # TODO: Completar
