@@ -1,7 +1,6 @@
 # Tarea 3: DCCachos :school_satchel:
 
-HOLA AYUDANTE :). Voy a entregar la tarea con cupones probablemente el viernes, por si alguna razon abren este directorio antes de eso y se encuentran con el read me hasta la mitad es por eso. g
-
+Hola Ayudante:) 
 
 ## Consideraciones generales :octocat:
 Hasta el momento, la tarea es ejecutable pero con algunas consideraciones. En general, la sala de espera funciona como esperado: Se permite el ingreso de jugadores donde los primeros 4 tienen la capacidad de partir el juego. Luego, si alguno de ellos se desconecta y hay algún otro cliente conectado (es decir, un 5to cliente), a este se le permite entrar a la sala de espera y poder partir la partida. Notamos que __NO__ implementé bots. Luego, solo se puede partir la partida si hay 4 clientes conectados como minimo, sino salta una advertencia.
@@ -77,9 +76,6 @@ __❌Turno con tiempo:__
 ## Ejecución :computer:
 Los módulos principal de la tarea a ejecutar son  ```main.py``` tanto del servidor como del cliente. Es __SUMAMENTE IMPORTANTE__ Ejectutar primero el archivo main.py del servidor una unica vez para levantar el servidor y despues el main del clietne cuantas veces sea necesario. Además se debe crear los siguientes archivos y directorios adicionales:
 1. todos los directorios estaticos(background, dices, extra) con sus respectivos arhivos (background_inicio.png, dice_1.png etc. et.c) dentro del directorio basico edl cliente, es decir, en ```cliente``` a la misma artura de ```main.py```, ```parametros.json```, ```Scripts```, ```frontend```y ```backend```
-2. ```directorio``` en ```ubicación```
-3. ...
-
 
 ## Librerías :books:
 ### Librerías externas utilizadas
