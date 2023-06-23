@@ -101,15 +101,19 @@ Por otro lado, los módulos que fueron creados fueron los siguientes:
 
 1. ```cripto.py```: contiene ```encriptar_y_codificiar´´´, ´´´decodificar_y_desencriptar```las cuales se usa al enviar mensajes
 2. ```logica_juego.py```: contiene las clases ```Juagdor``` y ```Juego```, ambas clases representan la logica de las partidas (debe instalarse). Los jugadores se instancian dentro de la clase Juego y la clase Juego se instancia en server.py al partir el juego.
+3. ```server.py``` dentro de ```servidor``` contiene a la clase Servidor que se instancia en el main del servidor. Este se encarga de todo lo relacionado a la comunicacion con clientes y manejo de datos. 
+```back_cliente.py```dentro de la carpeta ```backend``` de ```cliente``` contiene a la clase LogicaCliente la cual se instancia en el main del cliente y se encarga de comunicarse con el servidor mediante sockets para recibir datos de la partida
+```front_inicio.py``` y ```front_juego.py```, las cuales se encargan de las ventanas PyQt5 del cliente. Estas se instancian en el main y se muestran/hidean dependiendo de la informacion que va recibiendo el jugador del server del estadod el juego. Se comunican con __VARIAS__ señales a la logica del juego para habilitar botones, mandar y recibir informacion, mostrar popups, etc.
 
 ## Supuestos y consideraciones adicionales :thinking:
 Los supuestos que realicé durante la tarea son los siguientes:
 
-1. <Descripción/consideración 1 y justificación del por qué es válido/a> 
-2. <Descripción/consideración 2 y justificación del por qué es válido/a>
-3. ...
+1. Los jugadores juegan turnos de manera circular, como si estuvieran en una mesa de poker
+2. Los jugadores unicamente pueden salir del juego a decision propia (i.e. el boton salir) cuando se termina la partida (para que no hayan jugadores que "chackreen" el juego). Si salen mediante quit del terminal el servidor lo atrapa como un error.
+3. Los jugadores en sale de espera "standby" entran a la sala de espera "habilitada" en el orden que van lelgando (i.e. si hay dos jugadores en sala de espera antes de la partida del juego, si se desconecta uno de los jugadores que esta por jugar, el primer jugadaor en standby en haber llegdo será el que toma su puesto)
+4. Una vez partido el juego los jugadores en standby no pueden ingresar a el, aunque haya una desconección 
+5. Se necesitan 4 jugadores para partir el juego (pues no implementé bots)
 
-PD: <una última consideración (de ser necesaria) o comentario hecho anteriormente que se quiera **recalcar**>
 
 
 -------
@@ -119,7 +123,9 @@ PD: <una última consideración (de ser necesaria) o comentario hecho anteriorme
 ## Referencias de código externo :book:
 
 Para realizar mi tarea saqué código de:
-1. \<link de código>: este hace \<lo que hace> y está implementado en el archivo <nombre.py> en las líneas <número de líneas> y hace <explicación breve de que hace>
+1. En general, ocupé muuuchos métodos, atributos, clases, etc. de PyQt5. Por ejemplo: QmessageBox.  En general, toda la información de estas clases y como ocuparlas las encontré en la documentación oficial de PyQt5 que se encuenra en <https://doc.qt.io/qt.html#qtforpython>.
+2. Uso de Rstrip para eliminar los trailing zeros de los bytearrays: <https://www.w3schools.com/python/ref_string_rstrip.asp>
+
 
 
 

@@ -26,6 +26,7 @@ class Servidor:
         self.nombre_clientes = list()
         self.clientes_standby = list()
         self.jugando = False
+        self.lock = Lock()
         self.armar_servidor()
 
     def armar_servidor(self):
@@ -111,6 +112,7 @@ class Servidor:
                 thread_cliente = Thread(target=self.manejar_clientes, args=(self.clientes[-1], direccion_cliente), daemon=True)
                 thread_cliente.start()
             elif self.jugando == True:
+                print("Se desconecto un jugador en medio de la partida")
                 self.kick_jugador(nombre_cliente)
                 self.broadcast_mensaje_general(("desconectado_en_juego:", nombre_cliente))
 
@@ -178,11 +180,12 @@ class Servidor:
             self.broadcast_mensaje_especifico(self.juego.jugador_en_turno.socket, ("error_jugada:", razon))
     
     def kick_jugador(self, nombre):
-        self.juego.jugador_desconectado(nombre)
-        self.juego.nueva_ronda()
-        self.checkear_ganador()
-        self.enviar_dados_clientes()
-        self.actualizar_cliente_y_front()
+        with self.lock:
+            self.juego.jugador_desconectado(nombre)
+            self.juego.nueva_ronda()
+            self.checkear_ganador()
+            self.enviar_dados_clientes()
+            self.actualizar_cliente_y_front()
 
     def actualizar_cliente_y_front(self):
         #le señalamos al cliente la informacion
@@ -210,7 +213,7 @@ class Servidor:
     def checkear_ganador(self):
         ganador = self.juego.checkear_ganador()
         if ganador == False:
-            pass
+            self.log("No hay ganador")
         else:
             self.jugando = False
             self.broadcast_mensaje_general(("ganador:", ganador.nombre))

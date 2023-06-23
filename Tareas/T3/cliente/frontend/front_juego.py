@@ -1,7 +1,7 @@
 
 from PyQt5.QtWidgets import (QWidget, QLabel, QApplication, QVBoxLayout, QHBoxLayout, QPushButton,
                              QMessageBox, QLineEdit)
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QTimer, QCoreApplication
 
 from PyQt5.QtGui import QPixmap
 import os
@@ -82,6 +82,7 @@ class GameRoom(QWidget):
         self.boton_anunciar_accion = QPushButton("anunciar accion", self)
         self.boton_anunciar_accion.move(600, 800)
         self.casilla_valor = QLineEdit(self)
+        self.casilla_valor.setPlaceholderText("ingrese valor acá")
         self.casilla_valor.move(800, 800)
         self.boton_pasar_turno = QPushButton("pasar turno", self)
         self.boton_pasar_turno.move(600, 850)
@@ -160,6 +161,7 @@ class GameRoom(QWidget):
     
     def anunciar_accion(self):
         self.senal_anunciar_accion.emit(self.casilla_valor.text())
+        self.casilla_valor.setText("")
 
     def pasar_turno(self):
         self.senal_paso_turno.emit()
@@ -178,6 +180,19 @@ class GameRoom(QWidget):
 
     def anuncio_ganador(self, nombre):
         QMessageBox.information(self, "Ganador", nombre + " ha ganado la partida")
+        for boton in self.botones:
+            boton.setEnabled(False)
+        self.boton_cambiar_dados.setEnabled(False)
+        self.boton_salir = QPushButton("salir", self)
+        self.boton_salir.move(700, 900)
+        self.boton_salir.clicked.connect(self.quit)
+        self.boton_salir.show()
+
+    def quit(self):
+        print("Raise connection error para manejar el quit")
+        raise ConnectionError
+    
+
 
 
 

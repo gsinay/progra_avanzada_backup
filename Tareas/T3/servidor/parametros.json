@@ -2,10 +2,10 @@
     "host": "localhost",
     "N_PONDERADOR": "5", 
     "NUMERO_JUGADORES": 4, 
-    "id_1": "gabe", 
-    "id_2": "lythiers",
-    "id_3": "Jugador_3",
-    "id_4": "Jugador_4", 
+    "id_1": "DCC", 
+    "id_2": "ICS",
+    "id_3": "EYP",
+    "id_4": "FIS", 
     "NUMERO_VIDAS": 2, 
     "VALOR_PASO": 7
 }

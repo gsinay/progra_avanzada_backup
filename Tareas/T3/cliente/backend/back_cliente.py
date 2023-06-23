@@ -178,6 +178,7 @@ class LogicaCliente(QObject):
         self.senal_actualizar_vidas.emit(info_vidas)
 
     def disconnect(self): #el disconnect se considera como un "error", causa crash en el cliente y el servidor lo atrapa
+        print("Raise ConnectionError a proposito para manejar el disconnect")
         raise ConnectionError
     
     def cambiar_dados(self):

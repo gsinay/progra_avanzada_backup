@@ -106,12 +106,10 @@ class Juego:
                 self.turno += 1
 
     def nueva_ronda(self):
-        self.jugadores_muertos = 0
         #vemos si algun jugador perdio. Si es asi, lo eliminamos
         for jugador in self.jugadores:
             if jugador.vidas == 0:
                 self.jugadores.remove(jugador)
-                self.jugadores_muertos += 1
             jugador.dados_cambiados = False
         #elegimos quien parte la ronda
         self.turno = 0
@@ -121,16 +119,16 @@ class Juego:
         self.jugadores = self.jugadores[numero_random:] + self.jugadores[:numero_random]
 
     def checkear_ganador(self):
-        if len(self.jugadores) - self.jugadores_muertos == 0:
+        if len(self.jugadores) == 1:
             return self.jugadores[0]
         else:
             return False
         
-    def jugador_desconectado(self, jugador):
+    def jugador_desconectado(self, nombre_jugador):
         for jugador in self.jugadores:
-            if jugador.nombre == jugador:
+            if jugador.nombre == nombre_jugador:
                 jugador.vidas = 0
-        self.jugadores.remove(jugador)
+                self.jugadores.remove(jugador)
         
 
 
