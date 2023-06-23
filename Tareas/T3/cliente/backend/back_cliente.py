@@ -30,6 +30,7 @@ class LogicaCliente(QObject):
     senal_ganador = pyqtSignal(str)
     senal_jugador_desconectado_en_juego = pyqtSignal(str)
     senal_error_cambiar_dados = pyqtSignal()
+    senal_pierde_vida = pyqtSignal(str)
 
     def __init__(self, host, port, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -89,7 +90,7 @@ class LogicaCliente(QObject):
                     elif mensaje_decodificado[0].lower() == "error_jugada:":
                         self.senal_error_turno.emit(mensaje_decodificado[1])
                     elif mensaje_decodificado[0].lower() == "pierde_vida:":
-                        print(f"recibi pierde vida {mensaje_decodificado[1]}")
+                        self.senal_pierde_vida.emit(mensaje_decodificado[1][0])
                         self.actualizar_vidas_front(mensaje_decodificado[1])
                     elif mensaje_decodificado[0].lower() == "ganador:":
                         self.senal_ganador.emit(mensaje_decodificado[1])

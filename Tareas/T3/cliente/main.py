@@ -51,5 +51,6 @@ if __name__ == '__main__':
     logica_cliente.senal_jugador_desconectado_en_juego.connect(ventana_juego.jugador_desconectado)
     ventana_juego.senal_cambiar_dados.connect(logica_cliente.cambiar_dados)
     logica_cliente.senal_error_cambiar_dados.connect(ventana_juego.error_cambiar_dados)
+    logica_cliente.senal_pierde_vida.connect(ventana_juego.pierde_vida)
 
     sys.exit(app.exec())

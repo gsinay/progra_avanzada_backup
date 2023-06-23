@@ -178,6 +178,8 @@ class GameRoom(QWidget):
     def usar_poder(self):
         pass
 
+    def pierde_vida(self, nombre):
+        QMessageBox.warning(self, "Fin de ronda", f"{nombre} ha perdido una vida")
     def anuncio_ganador(self, nombre):
         QMessageBox.information(self, "Ganador", nombre + " ha ganado la partida")
         for boton in self.botones:
