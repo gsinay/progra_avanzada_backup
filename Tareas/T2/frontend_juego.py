@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import (QWidget, QLabel, QGridLayout,
-                             QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox,
+                             QPushButton, QHBox, QVBoxLayout, QMessageBox,
                              QApplication)
 from PyQt5.QtMultimedia import QSound
 from PyQt5.QtGui import QPixmap
