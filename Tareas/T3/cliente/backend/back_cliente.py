@@ -187,5 +187,5 @@ class LogicaCliente(QObject):
             
 
 if __name__ == "__main__":
-    cliente_prueba = LogicaCliente("localhost", 9999)
+    cliente_prueba = LogicaCliente("localhost", 9999) 
 
